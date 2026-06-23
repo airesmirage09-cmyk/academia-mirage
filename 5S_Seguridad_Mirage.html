@@ -1400,8 +1400,7 @@ function submitExam() {
     xp(150,'¡APROBADO! +150 XP');
     btns.innerHTML='';
     setTimeout(()=>{
-      document.getElementById('diploma-wrap').style.display='block';
-      document.getElementById('diploma-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+      showDiploma(String(pct));
     },400);
     showBadges(correct);
   } else {

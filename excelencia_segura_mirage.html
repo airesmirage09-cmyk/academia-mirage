@@ -1493,8 +1493,7 @@ button, input, select, textarea { font-family: 'Montserrat', sans-serif !importa
       btnsEl.innerHTML = '';
       showEarnedBadges(correct);
       setTimeout(() => {
-        const sec = document.getElementById('diploma-section');
-        if(sec) { sec.style.display = 'block'; sec.scrollIntoView({behavior:'smooth', block:'start'}); }
+        showDiploma(String(pct));
       }, 400);
     } else {
       btnsEl.innerHTML = '<button class="btn btn-outline" onclick="goPage(\'m1\')">📖 Repasar contenido</button><button class="btn btn-accent" onclick="resetExam()">🔄 Repetir evaluación</button>';
