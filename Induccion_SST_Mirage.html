@@ -1266,7 +1266,12 @@ function showDiploma(pct){
   html += '<div class="const-actions">';
   html += '<button class="const-btn const-btn-red" onclick="downloadConstancia()">Descargar constancia</button>';
   html += '<button class="const-btn const-btn-ghost" onclick="printConstancia()">Imprimir</button>';
-  html += '</div></div></div>';
+  html += '</div>';
+  html += '<div style="background:#F0FFF4;border-top:2px solid #059669;padding:1rem 2rem;text-align:center;">';
+  html += '<p style="font-size:13px;color:#047857;margin-bottom:.75rem;font-weight:600;">Una vez que hayas concluido todo el contenido del curso, haz clic para registrarlo como completado al 100%</p>';
+  html += '<button onclick="marcarCompletado()" id="btnCompletado" style="padding:.65rem 1.75rem;background:#059669;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:Montserrat,sans-serif;display:inline-flex;align-items:center;gap:.5rem;">✓ CURSO COMPLETADO</button>';
+  html += '</div>';
+  html += '</div></div>';
   var wrap = document.getElementById('diplomaWrap');
   if(wrap) wrap.innerHTML = html;
   if(sec) sec.scrollIntoView({behavior:'smooth'});
@@ -1281,6 +1286,27 @@ function downloadConstancia(){
   a.href = img.src;
   a.download = 'Constancia_SST_Mirage.png';
   a.click();
+}
+
+
+
+function marcarCompletado(){
+  var btn = document.querySelector('[onclick="marcarCompletado()"]');
+  if(btn){ btn.textContent = '✓ Completado al 100%'; btn.style.background='#065F46'; btn.disabled=true; btn.style.cursor='default'; }
+  try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'induccion_sst'}, '*'); }catch(e){}
+}
+function marcarCompletado_orig(){
+  var btn = document.getElementById('btnCompletado');
+  if(btn){
+    btn.innerHTML = '&#10003; Completado';
+    btn.style.background = '#047857';
+    btn.disabled = true;
+    btn.style.cursor = 'default';
+  }
+  try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'induccion_sst'}, '*'); }catch(e){}
+  setTimeout(function(){
+    try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'induccion_sst'}, '*'); }catch(e){}
+  }, 1000);
 }
 
 function printConstancia(){

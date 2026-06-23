@@ -1603,7 +1603,13 @@ function showDiploma(pct){
   h += '<div style="display:flex;gap:.65rem;padding:.9rem 2rem;background:#F4F4F4;border-radius:0 0 12px 12px;justify-content:center;">';
   h += '<button onclick="downloadConstancia()" style="padding:.62rem 1.4rem;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:#EA0029;color:#fff;font-family:Montserrat,sans-serif;">Descargar constancia</button>';
   h += '<button onclick="printConstancia()" style="padding:.62rem 1.4rem;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:#222;border:1.5px solid rgba(0,0,0,.14);font-family:Montserrat,sans-serif;">Imprimir</button>';
-  h += '</div></div></div>';
+
+  h += '</div>';
+  h += '<div style="background:#F0FFF4;border-top:2px solid #059669;padding:1rem 2rem;text-align:center;">';
+  h += '<p style="font-size:13px;color:#047857;margin-bottom:.75rem;font-weight:600;font-family:Montserrat,sans-serif;">Una vez que hayas concluido todo el contenido del curso, haz clic para registrarlo como completado al 100%</p>';
+  h += '<button onclick="marcarCompletado()" id="btnCompletado" style="padding:.65rem 1.75rem;background:#059669;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:Montserrat,sans-serif;display:inline-flex;align-items:center;gap:.5rem;">&#10003; CURSO COMPLETADO</button>';
+  h += '</div>';
+  h += '</div></div>';
   var wrap = document.getElementById('diplomaWrap');
   if(wrap) wrap.innerHTML = h;
   try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'safestart'}, '*'); }catch(e){}
@@ -1614,6 +1620,27 @@ function downloadConstancia(){
   var a=document.createElement('a'); a.href=img.src;
   a.download='Constancia_SAFESTART_Mirage.png'; a.click();
 }
+
+
+function marcarCompletado(){
+  var btn = document.querySelector('[onclick="marcarCompletado()"]');
+  if(btn){ btn.textContent = '✓ Completado al 100%'; btn.style.background='#065F46'; btn.disabled=true; btn.style.cursor='default'; }
+  try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'safestart'}, '*'); }catch(e){}
+}
+function marcarCompletado_orig(){
+  var btn = document.getElementById('btnCompletado');
+  if(btn){
+    btn.innerHTML = '&#10003; Completado';
+    btn.style.background = '#047857';
+    btn.disabled = true;
+    btn.style.cursor = 'default';
+  }
+  try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'safestart'}, '*'); }catch(e){}
+  setTimeout(function(){
+    try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'safestart'}, '*'); }catch(e){}
+  }, 1000);
+}
+
 function printConstancia(){
   var img=document.getElementById('constImgEl'); if(!img) return;
   var w=window.open('');
