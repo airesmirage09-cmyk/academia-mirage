@@ -92,6 +92,10 @@ nav{flex:1;overflow-y:auto;padding:.5rem 0;}
 .qopt.correct{background:var(--success-bg);border-color:var(--success);color:#0D5C35;font-weight:600;}
 .qopt.wrong{background:#FDECEA;border-color:var(--red);color:#8B1A12;}
 .qopt.disabled{cursor:not-allowed;opacity:.7;}
+.exam-feedback{margin-top:.6rem;padding:.65rem 1rem;border-radius:6px;font-size:13px;line-height:1.55;animation:fadeIn .3s ease;}
+.exam-feedback.feedback-correct{background:var(--success-bg);border-left:3px solid var(--success);color:#0D5C35;}
+.exam-feedback.feedback-wrong{background:#FDECEA;border-left:3px solid var(--red);color:#8B1A12;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 .qopt.sel{border-color:var(--black);background:#F0F0F0;font-weight:600;}
 .quiz-fb{margin-top:.85rem;padding:.85rem 1.1rem;border-radius:10px;font-size:13px;line-height:1.5;display:none;}
 .quiz-fb.show{display:block;}
@@ -1378,13 +1382,33 @@ function submitExam() {
     return;
   }
   let correct=0;
+  const feedbacks5S={
+    1:'La respuesta correcta es <b>b)</b>. <b>SEIRI (Seleccionar)</b> significa separar lo necesario de lo innecesario. Los elementos que no se usan en el área deben retirarse o marcarse para eliminación.',
+    2:'La respuesta correcta es <b>c)</b>. Aplicar <b>SEITON (Ordenar)</b> en el almacén implica identificar cada posición de rack y etiquetar las herramientas: "un lugar para cada cosa y cada cosa en su lugar".',
+    3:'La respuesta correcta es <b>b)</b>. <b>SEISO (Limpiar)</b> va más allá de la estética: al limpiar se detectan fugas, daños, cables expuestos y otras condiciones inseguras que podrían pasar desapercibidas.',
+    4:'La respuesta correcta es <b>c)</b>. La <b>tarjeta ROJA</b> de inspección 5S señala que el área no cumple los estándares, existe un riesgo y se requiere acción correctiva inmediata. No puede ignorarse.',
+    5:'La respuesta correcta es <b>b)</b>. <b>SHITSUKE (Disciplina)</b> es cumplir los estándares todos los días, sin excepciones. Los líderes deben demostrarlo con sus propios actos, no solo con palabras.',
+    6:'La respuesta correcta es <b>b)</b>. En Mirage, ningún resultado productivo o comercial está por encima de la seguridad de las personas. Esta prioridad es absoluta en toda la organización.',
+    7:'La respuesta correcta es <b>c)</b>. Si un colaborador nuevo no tiene el material de inducción, falló <b>SEIKETSU (Estandarizar)</b>: el proceso de inducción no estaba documentado ni estandarizado para todos.',
+    8:'La respuesta correcta es <b>c)</b>. Ante una ruta de evacuación bloqueada, la acción inmediata es <b>despejarla y colocar tarjeta de inspección</b>. No se puede posponer: es un riesgo de vida en emergencias.',
+    9:'La respuesta correcta es <b>b)</b>. La filosofía 5S en Mirage no busca apariencia: busca <b>personas disciplinadas y procesos eficientes</b>. El orden y la limpieza son consecuencia de la cultura, no el objetivo.',
+    10:'La respuesta correcta es <b>c)</b>. La solución 5S es <b>diseñar un proceso estándar compartido</b> con responsables, formato y tiempo de resolución. Sancionar o ampliar espacio sin estandarizar no resuelve el problema de fondo.'
+  };
   for(let i=1;i<=10;i++) {
     const right = examCorrect[i];
     const user = examMap[i];
     const opts = document.querySelectorAll('#eq'+i+' .qopt');
     opts.forEach(o=>{ o.classList.remove('sel'); o.classList.add('disabled'); });
-    if(user===right) { opts[user.charCodeAt(0)-97].classList.add('correct'); correct++; }
+    const isCorrect = user===right;
+    if(isCorrect) { opts[user.charCodeAt(0)-97].classList.add('correct'); correct++; }
     else { opts[user.charCodeAt(0)-97].classList.add('wrong'); opts[right.charCodeAt(0)-97].classList.add('correct'); }
+    // Mostrar feedback
+    const eqEl=document.getElementById('eq'+i);
+    const fb=document.createElement('div');
+    fb.className='exam-feedback '+(isCorrect?'feedback-correct':'feedback-wrong');
+    fb.innerHTML=(isCorrect?'✅ ':'❌ ')+feedbacks5S[i];
+    eqEl.appendChild(fb);
+  }
   }
   const pct = (correct/10)*100;
   const pass = pct>=80;
@@ -1413,6 +1437,7 @@ function submitExam() {
 function resetExam() {
   for(let i=1;i<=10;i++) delete examMap[i];
   document.querySelectorAll('#page-exam .qopt').forEach(o=>o.classList.remove('correct','wrong','disabled','sel'));
+  document.querySelectorAll('#page-exam .exam-feedback').forEach(f=>f.remove());
   nav('exam');
 }
 

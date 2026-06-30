@@ -345,6 +345,10 @@ nav{flex:1;overflow-y:auto;padding:.4rem 0;}
 .qopt.correct{background:var(--M-dark-xs);border-color:var(--M-dark);color:var(--M-dark);font-weight:600;}
 .qopt.wrong{background:var(--M-red-xs);border-color:var(--M-red);color:var(--M-red);}
 .qopt.disabled{cursor:not-allowed;}
+.exam-feedback{margin-top:.6rem;padding:.65rem 1rem;border-radius:6px;font-size:13px;line-height:1.55;animation:fadeIn .3s ease;}
+.exam-feedback.feedback-correct{background:var(--M-dark-xs);border-left:3px solid var(--M-dark);color:var(--M-dark);}
+.exam-feedback.feedback-wrong{background:var(--M-red-xs);border-left:3px solid var(--M-red);color:#b00020;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
 /* ── RESULT ── */
 .result-wrap{text-align:center;padding:2.5rem;}
@@ -1208,13 +1212,32 @@ function submitExam(){
   examDone=true;
   // Correct answers: eq1=b(1),eq2=c(2),eq3=b(1),eq4=b(1),eq5=c(2),eq6=b(1),eq7=c(2),eq8=b(1),eq9=c(2),eq10=c(2)
   const answers={eq1:1,eq2:2,eq3:1,eq4:1,eq5:2,eq6:1,eq7:2,eq8:1,eq9:2,eq10:2};
+  const feedbacks={
+    eq1:'✅ La respuesta correcta es <b>b)</b>. Un <b>acto inseguro</b> es una decisión o conducta del trabajador que viola procedimientos de seguridad. La condición insegura, en cambio, se refiere al entorno físico peligroso.',
+    eq2:'✅ La respuesta correcta es <b>c)</b>. La <b>NOM-017-STPS</b> establece que el EPP debe usarse cuando los riesgos no pueden eliminarse ni reducirse suficientemente con medidas de ingeniería o administrativas. La empresa debe proporcionarlo, capacitar y supervisar su uso.',
+    eq3:'✅ La respuesta correcta es <b>b)</b>. Para fuego eléctrico se usan extintores <b>tipo BC</b> (CO₂ o polvo químico seco) porque no conducen electricidad. Nunca uses agua en incendios eléctricos: genera riesgo de electrocución.',
+    eq4:'✅ La respuesta correcta es <b>b)</b>. Un piso mojado sin señalización es una <b>condición insegura</b> (problema del entorno). La acción correcta es señalizar de inmediato y limpiar, pues las caídas por pisos resbaladizos son la causa #1 de accidentes en planta.',
+    eq5:'✅ La respuesta correcta es <b>c)</b>. Ante un montacargas en operación debes <b>detenerte y ceder el paso</b>. Mantén al menos 3 metros de distancia lateral y circula solo por zonas señalizadas para peatones.',
+    eq6:'✅ La respuesta correcta es <b>b)</b>. La señal <b>azul</b> indica obligación: uso de EPP específico u otras acciones mandatorias. Rojo = prohibición, Amarillo = advertencia, Verde = emergencia/evacuación.',
+    eq7:'✅ La respuesta correcta es <b>c)</b>. La <b>brigada de evacuación</b> guía al personal hacia los puntos de reunión de forma ordenada. La brigada contra incendios combate el fuego y la de primeros auxilios atiende lesionados.',
+    eq8:'✅ La respuesta correcta es <b>b)</b>. El uso de celular en el área de trabajo está <b>prohibido</b>. Distrae la atención y constituye un acto inseguro que pone en riesgo al propio trabajador y a sus compañeros.',
+    eq9:'✅ La respuesta correcta es <b>c)</b>. <b>Incidente</b> = evento sin lesión ni daño (near miss). <b>Accidente</b> = evento que sí produce lesión o daño. Reportar los incidentes es clave para prevenir accidentes futuros.',
+    eq10:'✅ La respuesta correcta es <b>c)</b>. La <b>NOM-035-STPS-2018</b> regula la identificación, análisis y prevención de factores de riesgo psicosocial (estrés laboral, violencia, carga de trabajo). Aplica a empresas con 50 o más trabajadores.'
+  };
   let score=0;
   for(const qid in answers){
     const sel=examSel[qid];
     const opts=document.getElementById(qid).querySelectorAll('.qopt');
     opts.forEach(o=>o.classList.add('disabled'));
-    if(sel&&sel.idx===answers[qid]){score++;sel.el.classList.add('correct');}
+    const isCorrect=sel&&sel.idx===answers[qid];
+    if(isCorrect){score++;sel.el.classList.add('correct');}
     else{if(sel)sel.el.classList.add('wrong');opts[answers[qid]].classList.add('correct');}
+    // Mostrar feedback
+    const container=document.getElementById(qid);
+    const fb=document.createElement('div');
+    fb.className='exam-feedback '+(isCorrect?'feedback-correct':'feedback-wrong');
+    fb.innerHTML=isCorrect?feedbacks[qid].replace('✅','✅'):('❌ '+feedbacks[qid].replace('✅',''));
+    container.parentElement.appendChild(fb);
   }
   const pct=Math.round(score/10*100);
   const pass=pct>=80;
@@ -1244,6 +1267,7 @@ function retryExam(){
   document.getElementById('exam-result').style.display='none';
   document.getElementById('submitBtn').disabled=true;
   document.querySelectorAll('.exam-q .qopt').forEach(o=>{o.classList.remove('sel','correct','wrong','disabled');});
+  document.querySelectorAll('.exam-feedback').forEach(f=>f.remove());
 }
 
 function showDiploma(pct){

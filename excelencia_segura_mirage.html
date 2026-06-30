@@ -213,6 +213,9 @@
   .quiz-feedback.show { display: block; }
   .quiz-feedback.ok { background: var(--success-light); border: 1px solid #90CCA8; color: #0D5C35; }
   .quiz-feedback.fail { background: #FDECEA; border: 1px solid #F5A9A4; color: #8B1A12; }
+  .quiz-feedback.feedback-correct { display: block; background: var(--success-light); border-left: 3px solid #1A7A4A; color: #0D5C35; animation: fadeIn .3s ease; }
+  .quiz-feedback.feedback-wrong { display: block; background: #FDECEA; border-left: 3px solid #EA0029; color: #8B1A12; animation: fadeIn .3s ease; }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
   /* ── SCENARIO ─────────────────────────────── */
   .scenario-box {
@@ -1461,6 +1464,18 @@ button, input, select, textarea { font-family: 'Montserrat', sans-serif !importa
       return;
     }
     // Reveal correct/wrong for all questions
+    const feedbacksSS = {
+      1: 'La respuesta correcta es <b>b)</b>. El objetivo principal de <b>SAFESTART™</b> es ayudar a las personas a evitar los errores e incidentes que no querían cometer, desarrollando conciencia de sus propios estados de riesgo.',
+      2: 'La respuesta correcta es <b>c)</b>. SAFESTART™ aplica en <b>4 ámbitos</b>: el trabajo, fuera de él, al conducir y en el hogar. Los estados de riesgo ocurren en todos estos contextos, no solo en la planta.',
+      3: 'La respuesta correcta es <b>c)</b>. <b>Estrés</b> NO es uno de los 4 estados de riesgo SAFESTART™. Los cuatro estados son: <b>Prisa, Frustración, Complacencia y Fatiga</b>. El estrés puede generar otros estados, pero no es uno de ellos.',
+      4: 'La respuesta correcta es <b>b)</b>. La <b>complacencia</b> es peligrosa porque la excesiva familiaridad con el peligro hace que nos preocupemos menos por él. "Ya lo he hecho mil veces" reduce la atención al riesgo real.',
+      5: 'La respuesta correcta es <b>b)</b>. "Mente no en la tarea" incluye andar en <b>piloto automático</b> y no estar al tanto de los riesgos presentes. El trabajador actúa mecánicamente sin procesar el entorno.',
+      6: 'La respuesta correcta es <b>c)</b>. <b>Línea de fuego</b> es el error crítico relacionado con la posición del cuerpo: ubicarse en la trayectoria de energía peligrosa (maquinaria, objetos en movimiento, fluidos a presión).',
+      7: 'La respuesta correcta es <b>c)</b>. La primera técnica TREC establece que debes <b>concentrarte en el estado</b> antes de iniciar una tarea de riesgo: identificar si estás en Prisa, Frustración, Complacencia o Fatiga para corregirlo.',
+      8: 'La respuesta correcta es <b>b)</b>. SAFESTART™ trata principalmente sobre <b>mantener los riesgos en mente y a la vista</b>, y crear conciencia sobre situaciones de peligro. No es un sistema de reglas sino de autoconciencia.',
+      9: 'La respuesta correcta es <b>b)</b>. Como supervisor, TREC 3 indica que debes <b>buscar en otros los patrones de estado</b> que aumentan el riesgo de lesiones: reconocer cuándo un compañero está en un estado de riesgo.',
+      10: 'La respuesta correcta es <b>c)</b>. El operador en turno nocturno después de 8 horas se encuentra principalmente en estado de <b>Fatiga</b>: comete errores sin darse cuenta porque su capacidad de atención y reacción está reducida.'
+    };
     let correct = 0;
     for(let i=1; i<=10; i++) {
       const userChoice = examAnsweredMap[i];
@@ -1470,13 +1485,18 @@ button, input, select, textarea { font-family: 'Montserrat', sans-serif !importa
       opts.forEach(o => { o.classList.remove('selected-ans'); o.classList.add('disabled'); });
       const userIdx = userChoice.charCodeAt(0)-97;
       const rightIdx = rightChoice.charCodeAt(0)-97;
-      if(userChoice === rightChoice) {
+      const isCorrect = userChoice === rightChoice;
+      if(isCorrect) {
         opts[userIdx].classList.add('correct');
         correct++;
       } else {
         opts[userIdx].classList.add('wrong');
         opts[rightIdx].classList.add('correct');
       }
+      // Llenar el div de feedback ya existente
+      const fbEl = document.getElementById('fb-ex'+i);
+      fbEl.className = 'quiz-feedback ' + (isCorrect ? 'feedback-correct' : 'feedback-wrong');
+      fbEl.innerHTML = (isCorrect ? '✅ ' : '❌ ') + feedbacksSS[i];
     }
     const pct = (correct/10)*100;
     const pass = pct >= 80;
