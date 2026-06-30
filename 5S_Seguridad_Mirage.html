@@ -1409,7 +1409,6 @@ function submitExam() {
     fb.innerHTML=(isCorrect?'✅ ':'❌ ')+feedbacks5S[i];
     eqEl.appendChild(fb);
   }
-  }
   const pct = (correct/10)*100;
   const pass = pct>=80;
   const c = document.getElementById('rcircle');
