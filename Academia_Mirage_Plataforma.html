@@ -790,7 +790,8 @@ const THUMBS = {
 };
 
 // Firebase REST
-  if(!IS_FB()) return null;
+  async function fbGet(path){
+   if(!IS_FB()) return null;
   try{ const r=await fetch(FB_URL+path+'.json'); return await r.json(); }catch(e){ return null; }
 }
 async function fbSet(path,data){
