@@ -1429,17 +1429,23 @@ function showConstancia(courseId){
     'induccion_sst': 'Induccion de Seguridad y Salud en el Trabajo',
     '5s_seguridad':  '5S y Seguridad',
     'safestart':     'SAFESTART - Excelencia Segura',
+    'ciberseguridad': 'Ciberseguridad en el Trabajo',
   };
   var imgSrc = imgs[courseId] || imgs['induccion_sst'];
   var courseName = names[courseId] || 'Curso Academia Mirage';
+  var needsTitleFix = (courseId !== 'induccion_sst') && (imgSrc === imgs['induccion_sst']);
   var nombre = CU && CU.name ? CU.name : 'Colaborador Mirage';
   var d = new Date();
   var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   var fecha = d.getDate() + ' de ' + meses[d.getMonth()] + ' de ' + d.getFullYear();
   document.getElementById('mTitle').textContent = 'Constancia de Terminacion';
   var h = '<div style="max-width:860px;margin:0 auto;">';
-  h += '<div style="border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.18);">';
+  h += '<div style="border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.18);position:relative;">';
   h += '<img id="constImgModal" src="' + imgSrc + '" style="width:100%;display:block;" alt="Constancia">';
+  if(needsTitleFix){
+    h += '<div style="position:absolute;top:43%;left:8%;width:84%;height:16%;background:#fff;"></div>';
+    h += '<div style="position:absolute;top:43%;left:8%;width:84%;text-align:center;font-family:Montserrat,sans-serif;font-weight:800;color:#EA0029;text-transform:uppercase;font-size:22px;line-height:1.25;">'+courseName+'</div>';
+  }
   h += '<div style="background:#fff;padding:1.25rem 2rem;border-top:3px solid #EA0029;">';
   h += '<div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">';
   h += '<div>';
