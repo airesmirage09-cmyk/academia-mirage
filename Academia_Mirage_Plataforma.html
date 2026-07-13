@@ -1441,10 +1441,23 @@ function showConstancia(courseId){
   document.getElementById('mTitle').textContent = 'Constancia de Terminacion';
   var h = '<div style="max-width:860px;margin:0 auto;">';
   h += '<div style="border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.18);position:relative;">';
-  h += '<img id="constImgModal" src="' + imgSrc + '" style="width:100%;display:block;" alt="Constancia">';
+  var courseDescObj = COURSES.find(function(c){return c.id===courseId;});
+  var courseDesc = courseDescObj ? courseDescObj.desc : '';
   if(needsTitleFix){
-    h += '<div style="position:absolute;top:28.5%;left:8%;width:84%;height:9.5%;background:#fff;"></div>';
-    h += '<div style="position:absolute;top:28.5%;left:8%;width:84%;height:9.5%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:Montserrat,sans-serif;font-weight:800;color:#EA0029;text-transform:uppercase;font-size:19px;line-height:1.2;">'+courseName+'</div>';
+    h += '<div style="background:#fff;padding:2.4rem 2.2rem 1.8rem;text-align:center;">';
+    h += '<div style="width:56px;height:4px;background:#EA0029;margin:0 auto 1.1rem;border-radius:2px;"></div>';
+    h += '<div style="font-family:Montserrat,sans-serif;font-weight:900;font-size:11px;letter-spacing:2px;color:#76777A;text-transform:uppercase;margin-bottom:.6rem;">ACADEMIA MIRAGE</div>';
+    h += '<div style="font-family:Montserrat,sans-serif;font-weight:900;font-size:32px;color:#111;letter-spacing:.5px;">CONSTANCIA</div>';
+    h += '<div style="font-family:Montserrat,sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;color:#EA0029;text-transform:uppercase;margin-top:.2rem;margin-bottom:1.4rem;">&mdash; DE TERMINACI&Oacute;N DE CURSO &mdash;</div>';
+    h += '<div style="font-family:Montserrat,sans-serif;font-size:13px;color:#555;margin-bottom:.6rem;">Se otorga la presente constancia por haber acreditado el curso de:</div>';
+    h += '<div style="font-family:Montserrat,sans-serif;font-weight:800;font-size:23px;color:#EA0029;text-transform:uppercase;line-height:1.25;margin-bottom:1rem;">'+courseName+'</div>';
+    h += '<div style="font-family:Montserrat,sans-serif;font-size:13px;color:#666;max-width:440px;margin:0 auto 1.5rem;line-height:1.55;">'+courseDesc+'</div>';
+    h += '<div style="width:220px;border-top:1px dashed rgba(234,0,41,.35);margin:0 auto 1.2rem;"></div>';
+    h += '<div style="display:inline-flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:#111;margin-bottom:.5rem;color:#EA0029;font-size:20px;font-weight:900;">&#10003;</div>';
+    h += '<div style="font-family:Montserrat,sans-serif;font-weight:800;font-size:9px;letter-spacing:1px;color:#111;text-transform:uppercase;">Academia Mirage</div>';
+    h += '</div>';
+  } else {
+    h += '<img id="constImgModal" src="' + imgSrc + '" style="width:100%;display:block;" alt="Constancia">';
   }
   h += '<div style="background:#fff;padding:1.25rem 2rem;border-top:3px solid #EA0029;">';
   h += '<div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">';
