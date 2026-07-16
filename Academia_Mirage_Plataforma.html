@@ -493,6 +493,7 @@ tbody tr:hover td{background:#FAFAFA;}
 </style>
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="cards.css">
+  <link rel="stylesheet" href="gamification.css">
 </head>
 <body>
 
@@ -621,6 +622,26 @@ tbody tr:hover td{background:#FAFAFA;}
       </div>
     </div>
 
+    <!-- GAMIFICACION -->
+<div class="view" id="v-gamification">
+  <div class="sec" style="margin-bottom:1.5rem;">
+    <div class="sec-l">
+      <div class="sec-icon">🎮</div>
+      <div class="sec-txt"><h2>Mi Progreso Gamificado</h2><p>Niveles, insignias, logros, racha y ranking</p></div>
+    </div>
+  </div>
+  <div class="gam-section"><div class="gam-uc" id="gam-usercard"></div></div>
+  <div class="gam-section"><h2>⚡ Experiencia (XP)</h2><div class="gam-xp" id="gam-xpbar"></div></div>
+  <div class="gam-section"><h2>🔥 Racha de aprendizaje</h2><div id="gam-streak" class="gam-streak"></div></div>
+  <div class="gam-section"><h2>🏅 Insignias</h2><p class="gam-sub">Las que ya obtuviste y las que puedes desbloquear.</p><div class="gam-badges-grid" id="gam-badges"></div></div>
+  <div class="gam-section"><h2>🌟 Logros</h2><div class="gam-ach-list" id="gam-achievements"></div></div>
+  <div class="gam-section"><h2>🗺️ Rutas Profesionales</h2><p class="gam-sub">Tu crecimiento dentro de Mirage por especialidad.</p><div class="gam-paths-grid" id="gam-paths"></div></div>
+  <div class="gam-section"><h2>🏆 Ranking General</h2><p class="gam-sub">Top 10 colaboradores por XP.</p><div id="gam-ranking-general"></div></div>
+  <div class="gam-section"><h2>📊 Ranking por Área</h2><div id="gam-ranking-area"></div></div>
+  <div class="gam-section"><h2>🎁 Próximas Recompensas</h2><div class="gam-rewards-grid" id="gam-rewards"></div></div>
+  <div class="gam-section"><h2>🔔 Notificaciones recientes</h2><div id="gam-notifications"></div></div>
+</div>
+
     <!-- CATÁLOGO -->
     <div class="view" id="v-catalog">
       <div class="sec" style="margin-bottom:1rem;">
@@ -656,6 +677,7 @@ tbody tr:hover td{background:#FAFAFA;}
           </div>
         </div>
         <div>
+          <div class="gam-teaser" id="gam-teaser"></div>
           <div class="card">
             <div class="ctitle"><div class="ct-l">🏆 Mis Diplomas</div></div>
             <div class="dg" id="dipGrid"></div>
@@ -1082,7 +1104,7 @@ async function renderDash(){
   const inP=Object.values(prog).filter(p=>p.status==='in_progress').length;
   const pct=COURSES.length?Math.round(done/COURSES.length*100):0;
   document.getElementById('wbName').textContent=CU.name.split(' ')[0];
-  if(window.MirageHomeExtras){ window.MirageHomeExtras.init({done:done, inP:inP, pct:pct, xp:(CU.xp||0), prog:prog}); } else { document.getElementById('wbStats').innerHTML = '<div class="dh-kpi"><div class="kn">'+done+'</div><div class="kl">Completados</div></div>'; }
+  if(window.MirageHomeExtras){ window.MirageHomeExtras.init({done:done, inP:inP, pct:pct, xp:(CU.xp||0), prog:prog}); } if(window.MirageGamification){ window.MirageGamification.onRender(); } else { document.getElementById('wbStats').innerHTML = '<div class="dh-kpi"><div class="kn">'+done+'</div><div class="kl">Completados</div></div>'; }
   //
   // Motivation message
   const mot = document.getElementById('motMsg');
@@ -1566,5 +1588,6 @@ async function renderAll(){ await renderDash(); }
 
   <script src="home.js"></script>
   <script src="cards.js"></script>
+  <script src="gamification.js"></script>
 </body>
 </html>
