@@ -2,10 +2,10 @@
 .mh-animate{opacity:0;transform:translateY(16px);transition:opacity .5s ease, transform .5s ease;}
 .mh-animate.in-view{opacity:1;transform:translateY(0);}
 @media (prefers-reduced-motion: reduce){.mh-animate{opacity:1;transform:none;transition:none;}}
-.dh-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;}
-.dh-kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:.9rem 1rem;transition:transform .25s ease, background .25s ease;}
+.dh-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;}
+.dh-kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:.6rem .7rem;transition:transform .25s ease, background .25s ease;}
 .dh-kpi:hover{transform:translateY(-3px);background:rgba(255,255,255,.1);}
-.dh-kpi .kn{font-size:1.6rem;font-weight:700;color:#fff;line-height:1.1;}
+.dh-kpi .kn{font-size:1.25rem;font-weight:700;color:#fff;line-height:1.1;}
 .dh-kpi .kl{font-size:.72rem;margin-top:.2rem;letter-spacing:.02em;}
 .mh-featured{position:relative;border-radius:var(--r-lg);overflow:hidden;min-height:260px;margin-bottom:1.75rem;border:1px solid var(--border);box-shadow:var(--sh-sm);background:var(--black);}
 .mh-feat-slide{position:absolute;inset:0;display:flex;align-items:flex-end;opacity:0;transition:opacity .6s ease;background-size:cover;background-position:center;}
@@ -49,6 +49,6 @@
 .mh-footer-links{display:flex;gap:1.25rem;flex-wrap:wrap;}
 .mh-footer-links a{color:var(--text-3);text-decoration:none;}
 .mh-footer-links a:hover{color:var(--red);}
-@media (max-width:1024px){.mh-row{grid-template-columns:1fr;}.dh-kpis{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:1024px){.mh-row{grid-template-columns:1fr;}}
 @media (max-width:768px){.mh-feat-body{max-width:100%;padding:1.4rem;}.mh-cats{grid-template-columns:repeat(2,1fr);}.mh-ach{grid-template-columns:repeat(2,1fr);}}
 @media (max-width:480px){.dh-kpis{grid-template-columns:repeat(2,1fr);gap:.6rem;}.mh-feat-body h2{font-size:1.2rem;}.mh-cats{grid-template-columns:1fr 1fr;}.mh-footer{flex-direction:column;align-items:flex-start;}}
