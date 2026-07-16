@@ -269,7 +269,7 @@
   }
 
   function rankRow(r, i, myId){
-    var av = r.photo ? '<img src="'+r.photo+'">' : '<span>'+esc((r.name||'?').charAt(0))+'</span>';
+    var av = (r.photo && r.photo.length < 150000) ? '<img src="'+r.photo+'">' : '<span>'+esc((r.name||'?').charAt(0))+'</span>';
     return '<div class="gam-rank-row'+(r.id===myId?' me':'')+'">' +
       '<div class="gam-rank-pos">'+(i+1)+'</div>' +
       '<div class="gam-rank-av">'+av+'</div>' +
