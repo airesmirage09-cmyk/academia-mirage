@@ -494,6 +494,7 @@ tbody tr:hover td{background:#FAFAFA;}
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="cards.css">
   <link rel="stylesheet" href="gamification.css">
+<link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
@@ -546,6 +547,7 @@ tbody tr:hover td{background:#FAFAFA;}
       <button class="n-btn on" onclick="goView('dash')" id="nb-dash"><span>🏠</span><span>Inicio</span></button>
       <button class="n-btn" onclick="goView('catalog')" id="nb-catalog"><span>📚</span><span>Cursos</span></button>
       <button class="n-btn" onclick="goView('profile')" id="nb-profile"><span>🎓</span><span>Mi Perfil</span></button>
+      <button class="n-btn" onclick="goView('smartdash')" id="nb-smartdash"><span>📊</span><span>Dashboard</span></button>
       <button class="n-btn" onclick="goView('admin')" id="nb-admin" style="display:none;"><span>⚙️</span><span>Administración</span></button>
     </div>
     <div class="n-right">
@@ -642,7 +644,116 @@ tbody tr:hover td{background:#FAFAFA;}
   <div class="gam-section"><h2>🔔 Notificaciones recientes</h2><div id="gam-notifications"></div></div>
 </div>
 
-    <!-- CATÁLOGO -->
+    <!-- DASHBOARD INTELIGENTE DEL COLABORADOR -->
+<div class="view" id="v-smartdash">
+  <!-- Encabezado personalizado -->
+  <div class="sd-header sd-section" id="sd-header"></div>
+
+  <!-- KPIs principales -->
+  <div class="sd-section">
+    <div class="sd-grid sd-kpis" id="sd-kpis"></div>
+  </div>
+
+  <!-- Mi progreso -->
+  <div class="sd-card sd-section">
+    <h2>📊 Mi Progreso</h2>
+    <div class="sd-progress-wrap" id="sd-progress"></div>
+  </div>
+
+  <!-- Continuar aprendiendo -->
+  <div class="sd-section">
+    <h2>▶️ Continuar Aprendiendo</h2>
+    <div class="sd-grid sd-continue-grid" id="sd-continue"></div>
+  </div>
+
+  <div class="sd-grid" style="grid-template-columns:1fr 1fr;" id="sd-two-col-1">
+    <div class="sd-card">
+      <h2>🗺️ Rutas de Aprendizaje</h2>
+      <div class="sd-paths-list" id="sd-paths"></div>
+    </div>
+    <div class="sd-card">
+      <h2>🏅 Insignias y Logros</h2>
+      <p class="sd-sub">Tus insignias mas recientes y las proximas a desbloquear.</p>
+      <div class="sd-badges-row" id="sd-badges"></div>
+    </div>
+  </div>
+
+  <div class="sd-grid" style="grid-template-columns:1fr 1fr;" id="sd-two-col-2">
+    <div class="sd-card">
+      <h2>📅 Calendario</h2>
+      <div id="sd-calendar"></div>
+    </div>
+    <div class="sd-card">
+      <h2>🕒 Actividad Reciente</h2>
+      <div class="sd-timeline" id="sd-timeline"></div>
+    </div>
+  </div>
+
+  <div class="sd-card sd-section">
+    <h2>🎓 Certificados</h2>
+    <div id="sd-certificates"></div>
+  </div>
+
+  <div class="sd-section" id="sd-reco-wrap">
+    <div class="sd-reco" id="sd-reco"></div>
+  </div>
+
+  <div class="sd-grid" style="grid-template-columns:1fr 1fr;" id="sd-two-col-3">
+    <div class="sd-card">
+      <h2>🎯 Objetivos del Mes</h2>
+      <div id="sd-objectives"></div>
+    </div>
+    <div class="sd-card">
+      <h2>📈 Mi Desempeno</h2>
+      <div class="sd-grid sd-perf-grid" id="sd-performance"></div>
+    </div>
+  </div>
+
+  <div class="sd-card sd-section">
+    <h2>🏆 Ranking Personal</h2>
+    <div class="sd-rank-hero" id="sd-ranking"></div>
+  </div>
+
+  <div class="sd-card sd-section">
+    <h2>⏱️ Tiempo de Aprendizaje</h2>
+    <div class="sd-grid sd-time-grid" id="sd-time"></div>
+  </div>
+
+  <div class="sd-grid" style="grid-template-columns:1fr 1fr;" id="sd-two-col-4">
+    <div class="sd-card">
+      <h2>🔔 Notificaciones</h2>
+      <div id="sd-notifications"></div>
+    </div>
+    <div class="sd-card">
+      <h2>⚡ Accesos Rapidos</h2>
+      <div class="sd-grid sd-quick-grid" id="sd-quicklinks"></div>
+    </div>
+  </div>
+
+  <!-- Mi Desarrollo Profesional -->
+  <div class="sd-dev-banner sd-section">
+    <h2>🚀 Mi Desarrollo Profesional</h2>
+    <p class="sd-sub" style="color:#c8c8c8;">Tu aprendizaje visto como plan de carrera, no solo como una lista de cursos.</p>
+    <div class="sd-dev-obj-list" id="sd-dev-objective"></div>
+  </div>
+  <div class="sd-grid sd-dev-grid sd-section">
+    <div class="sd-card">
+      <h2>📈 Competencias Desarrolladas</h2>
+      <div class="sd-radar-wrap" id="sd-dev-radar"></div>
+      <div class="sd-radar-legend" id="sd-dev-radar-legend"></div>
+    </div>
+    <div class="sd-card">
+      <h2>🚀 Proximo Paso Recomendado</h2>
+      <div class="sd-next-step" id="sd-dev-nextstep"></div>
+    </div>
+  </div>
+  <div class="sd-card sd-section">
+    <h2>🏅 Mi Evolucion</h2>
+    <div class="sd-evo-timeline" id="sd-dev-evolution"></div>
+  </div>
+</div>
+
+<!-- CATÁLOGO -->
     <div class="view" id="v-catalog">
       <div class="sec" style="margin-bottom:1rem;">
         <div class="sec-l">
@@ -1120,7 +1231,7 @@ async function renderDash(){
   const inP=Object.values(prog).filter(p=>p.status==='in_progress').length;
   const pct=COURSES.length?Math.round(done/COURSES.length*100):0;
   document.getElementById('wbName').textContent=CU.name.split(' ')[0];
-  if(window.MirageHomeExtras){ window.MirageHomeExtras.init({done:done, inP:inP, pct:pct, xp:(CU.xp||0), prog:prog}); } if(window.MirageGamification){ window.MirageGamification.onRender(); } else { document.getElementById('wbStats').innerHTML = '<div class="dh-kpi"><div class="kn">'+done+'</div><div class="kl">Completados</div></div>'; }
+  if(window.MirageHomeExtras){ window.MirageHomeExtras.init({done:done, inP:inP, pct:pct, xp:(CU.xp||0), prog:prog}); } if(window.MirageGamification){ window.MirageGamification.onRender(); } if(window.MirageSmartDash){ window.MirageSmartDash.onRender(); } else { document.getElementById('wbStats').innerHTML = '<div class="dh-kpi"><div class="kn">'+done+'</div><div class="kl">Completados</div></div>'; }
   //
   // Motivation message
   const mot = document.getElementById('motMsg');
@@ -1605,5 +1716,6 @@ async function renderAll(){ await renderDash(); }
   <script src="home.js"></script>
   <script src="cards.js"></script>
   <script src="gamification.js"></script>
+<script src="dashboard.js"></script>
 </body>
 </html>

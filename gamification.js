@@ -438,5 +438,28 @@
     }catch(e){ /* nunca romper el resto de la plataforma por un error aqui */ }
   }
 
-  window.MirageGamification = { onRender: onRender };
+    async function getState(){
+    if(typeof CU === 'undefined' || !CU || typeof COURSES === 'undefined') return null;
+    try{
+      var prog = await getProgress(CU.id);
+      var ctx = buildContext(CU, prog);
+      var badges = computeBadges(ctx);
+      var achievements = computeAchievements(ctx);
+      var paths = computePaths(ctx);
+      var rows = await buildRanking();
+      var myIdx = -1;
+      for(var i=0;i<rows.length;i++){ if(rows[i].id === CU.id){ myIdx = i; break; } }
+      return {
+        ctx: ctx,
+        badges: badges,
+        achievements: achievements,
+        paths: paths,
+        ranking: rows,
+        myRank: (myIdx>=0 ? myIdx+1 : null),
+        totalRanked: rows.length
+      };
+    }catch(e){ return null; }
+  }
+
+window.MirageGamification = { onRender: onRender, getState: getState };
 })();
