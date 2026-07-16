@@ -491,6 +491,7 @@ tbody tr:hover td{background:#FAFAFA;}
   .footer-main{grid-template-columns:1fr;gap:2rem;}
 }
 </style>
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
 
@@ -589,6 +590,12 @@ tbody tr:hover td{background:#FAFAFA;}
         <div class="cc-grid" id="d-cont-grid"></div>
       </div>
 
+      <!-- Curso destacado (nuevo) -->
+      <div id="mh-featured" class="mh-animate"></div>
+
+      <!-- Categorias (nuevo) -->
+      <div id="mh-categories" class="mh-cats mh-animate"></div>
+
       <!-- Todos -->
       <div style="margin-top:1.75rem;">
         <div class="sec">
@@ -598,6 +605,18 @@ tbody tr:hover td{background:#FAFAFA;}
           </div>
         </div>
         <div class="cc-grid" id="d-all-grid"></div>
+
+      <!-- Logros (nuevo) -->
+      <div id="mh-achievements" class="mh-ach mh-animate"></div>
+
+      <!-- Noticias + Calendario (nuevo) -->
+      <div class="mh-row mh-animate">
+        <div id="mh-news"></div>
+        <div id="mh-calendar"></div>
+      </div>
+
+      <!-- Footer (nuevo) -->
+      <div id="mh-footer" class="mh-footer"></div>
       </div>
     </div>
 
@@ -1062,11 +1081,8 @@ async function renderDash(){
   const inP=Object.values(prog).filter(p=>p.status==='in_progress').length;
   const pct=COURSES.length?Math.round(done/COURSES.length*100):0;
   document.getElementById('wbName').textContent=CU.name.split(' ')[0];
-  document.getElementById('wbStats').innerHTML=`
-    <div class="dh-kpi"><div class="kn">${done}</div><div class="kl" style="color:rgba(255,255,255,.8);">Completados</div></div>
-    <div class="dh-kpi"><div class="kn">${inP}</div><div class="kl" style="color:rgba(255,255,255,.8);">En progreso</div></div>
-    <div class="dh-kpi"><div class="kn">${CU.xp||0}</div><div class="kl">XP Total</div></div>
-    <div class="dh-kpi"><div class="kn">${pct}%</div><div class="kl" style="color:rgba(255,255,255,.8);">Avance</div></div>`;
+  if(window.MirageHomeExtras){ window.MirageHomeExtras.init({done:done, inP:inP, pct:pct, xp:(CU.xp||0), prog:prog}); } else { document.getElementById('wbStats').innerHTML = '<div class="dh-kpi"><div class="kn">'+done+'</div><div class="kl">Completados</div></div>'; }
+  //
   // Motivation message
   const mot = document.getElementById('motMsg');
   const motBanner = document.getElementById('motBanner');
@@ -1547,5 +1563,6 @@ async function renderAll(){ await renderDash(); }
   </div>
 </footer>
 
+  <script src="home.js"></script>
 </body>
 </html>
