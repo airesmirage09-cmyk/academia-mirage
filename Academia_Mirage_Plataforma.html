@@ -940,6 +940,12 @@ function switchTab(tab,btn){
   document.getElementById('t-login').style.display=tab==='login'?'block':'none';
   document.getElementById('t-reg').style.display=tab==='reg'?'block':'none';
 }
+async function hashPass(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(str)));
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+}
+function isHashedPass(s){ return typeof s === 'string' && /^[0-9a-f]{64}$/i.test(s); }
+
 async function login(){
   const email=document.getElementById('li-email').value.trim();
   const pass=document.getElementById('li-pass').value;
@@ -949,7 +955,16 @@ async function login(){
   showLoading(IS_FB()?'Verificando credenciales...':'Iniciando sesion...');
   const u=await findUser(email);
   hideLoading();
-  if(!u||u.pass!==pass){ errEl.textContent='Correo o contrasena incorrectos'; return; }
+  if(!u){ errEl.textContent='Correo o contrasena incorrectos'; return; }
+  var __stored = u.pass || '';
+  var __ok = false;
+  if(isHashedPass(__stored)){
+    __ok = (await hashPass(pass)) === __stored;
+  } else {
+    __ok = (__stored === pass);
+    if(__ok){ try{ u.pass = await hashPass(pass); await saveUser(u); }catch(e){} }
+  }
+  if(!__ok){ errEl.textContent='Correo o contrasena incorrectos'; return; }
   CU=u; LS.set('session', email); boot();
 }
 async function register(){
@@ -964,7 +979,8 @@ async function register(){
   showLoading(IS_FB()?'Registrando en la nube...':'Creando cuenta...');
   const exists=await findUser(email);
   if(exists){ hideLoading(); errEl.textContent='Este correo ya esta registrado'; return; }
-  const nu={id:'u'+Date.now(),name,email:email.toLowerCase().trim(),pass,area,role:'user',since:new Date().toISOString().split('T')[0],xp:0};
+  const __passHash = await hashPass(pass);
+  const nu={id:'u'+Date.now(),name,email:email.toLowerCase().trim(),pass:__passHash,area,role:'user',since:new Date().toISOString().split('T')[0],xp:0};
   await saveUser(nu);
   hideLoading();
   CU=nu; LS.set('session', nu.email); toast('Bienvenido a Academia Mirage, '+name.split(' ')[0]+'!'); boot();
