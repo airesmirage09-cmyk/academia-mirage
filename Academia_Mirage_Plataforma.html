@@ -496,6 +496,7 @@ tbody tr:hover td{background:#FAFAFA;}
   <link rel="stylesheet" href="gamification.css">
 <link rel="stylesheet" href="dashboard.css">
   <link rel="stylesheet" href="rh-dashboard.css">
+  <link rel="stylesheet" href="knowledge.css">
 </head>
 <body>
 
@@ -549,6 +550,7 @@ tbody tr:hover td{background:#FAFAFA;}
       <button class="n-btn" onclick="goView('catalog')" id="nb-catalog"><span>📚</span><span>Cursos</span></button>
       <button class="n-btn" onclick="goView('profile')" id="nb-profile"><span>🎓</span><span>Mi Perfil</span></button>
       <button class="n-btn" onclick="goView('smartdash')" id="nb-smartdash"><span>📊</span><span>Dashboard</span></button>
+      <button class="n-btn" onclick="goView('knowledge')" id="nb-knowledge"><span>📖</span><span>Centro de Conocimiento</span></button>
       <button class="n-btn" onclick="goView('rhdash')" id="nb-rhdash" style="display:none;"><span>📈</span><span>RH Ejecutivo</span></button>
       <button class="n-btn" onclick="goView('admin')" id="nb-admin" style="display:none;"><span>⚙️</span><span>Administración</span></button>
     </div>
@@ -756,6 +758,7 @@ tbody tr:hover td{background:#FAFAFA;}
 </div>
 
 <div class="view" id="v-rhdash"><div class="rh-toolbar"><div class="rh-toolbar-title"><h1>RH Ejecutivo</h1><span>Centro de analitica de aprendizaje - Academia Mirage</span></div><div class="rh-toolbar-actions"><input class="rh-search" id="rh-global-search" placeholder="Buscar colaborador, curso, area..."><button class="rh-btn rh-btn-ghost" id="rh-export-csv">Exportar CSV</button><button class="rh-btn rh-btn-ghost" id="rh-export-print">Imprimir / PDF</button><button class="rh-btn rh-btn-primary" id="rh-refresh">Actualizar</button></div></div><div class="rh-tabs" id="rh-tabs"></div><div id="rh-global-search-results"></div><div id="rh-panels"><div class="rh-panel on" data-panel="resumen" id="rh-p-resumen"></div><div class="rh-panel" data-panel="kpis" id="rh-p-kpis"></div><div class="rh-panel" data-panel="analytics" id="rh-p-analytics"></div><div class="rh-panel" data-panel="heatmap" id="rh-p-heatmap"></div><div class="rh-panel" data-panel="curso" id="rh-p-curso"></div><div class="rh-panel" data-panel="colaborador" id="rh-p-colaborador"></div><div class="rh-panel" data-panel="aprendizaje" id="rh-p-aprendizaje"></div><div class="rh-panel" data-panel="certificaciones" id="rh-p-certificaciones"></div><div class="rh-panel" data-panel="ranking" id="rh-p-ranking"></div><div class="rh-panel" data-panel="gamificacion" id="rh-p-gamificacion"></div><div class="rh-panel" data-panel="calendario" id="rh-p-calendario"></div><div class="rh-panel" data-panel="alertas" id="rh-p-alertas"></div><div class="rh-panel" data-panel="reportes" id="rh-p-reportes"></div><div class="rh-panel" data-panel="instructores" id="rh-p-instructores"></div><div class="rh-panel" data-panel="talento" id="rh-p-talento"></div><div class="rh-panel" data-panel="direccion" id="rh-p-direccion"></div><div class="rh-panel" data-panel="asistente" id="rh-p-asistente"></div></div></div>
+<div class="view" id="v-knowledge"><div class="kc-toolbar"><div><h1>Centro de Conocimiento</h1><span>Biblioteca Digital y Learning Friday - todo el conocimiento de Mirage en un solo lugar</span></div><input class="kc-search" id="kc-search" placeholder="Buscar documentos, temas, autores..."></div><div class="kc-subtabs" id="kc-subtabs"><button class="kc-subtab on" data-sub="biblioteca">📚 Biblioteca Digital</button><button class="kc-subtab" data-sub="learning">🎤 Learning Friday</button></div><div class="kc-section on" data-sub="biblioteca"><div class="kc-admin-bar" id="kc-admin-bar-bib"></div><div class="kc-block"><div class="kc-block-head"><h2>Contenido Destacado</h2></div><div id="kc-featured"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Nuevos Recursos</h2><small>Ultimos 14 dias</small></div><div id="kc-new"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Categorias</h2></div><div id="kc-categories"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Explorar documentos</h2><small id="kc-results-count"></small></div><div id="kc-filters"></div><div id="kc-doc-grid"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Mis Favoritos</h2></div><div id="kc-favorites"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Historial reciente</h2></div><div id="kc-history"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Recomendado para ti</h2></div><div id="kc-recommended"></div></div></div><div class="kc-section" data-sub="learning"><div class="kc-admin-bar" id="kc-admin-bar-lf"></div><div class="kc-lf-banner"><div><h1>Learning Friday</h1><p>Conferencias, ponentes y aprendizaje compartido cada semana en Mirage.</p></div><div id="kc-lf-next"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Historial de sesiones</h2></div><div id="kc-lf-past"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Ponentes</h2></div><div id="kc-lf-speakers"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Calendario</h2></div><div class="kc-cal-list" id="kc-lf-calendar"></div></div><div class="kc-block"><div class="kc-block-head"><h2>Recomendado para ti</h2></div><div id="kc-lf-recommended"></div></div></div></div>
 <!-- CATÁLOGO -->
     <div class="view" id="v-catalog">
       <div class="sec" style="margin-bottom:1rem;">
@@ -1193,6 +1196,7 @@ function goView(id){
   if(b) b.classList.add('on');
   if(id==='admin')   renderAdmin();
   if(id==='rhdash'){ if(window.MirageRHDash) window.MirageRHDash.onRender(); }
+  if(id==='knowledge'){ if(window.MirageKC) window.MirageKC.onRender(); }
   if(id==='profile') renderProfile();
   if(id==='catalog') renderCatalog();
 }
@@ -1725,5 +1729,7 @@ async function renderAll(){ await renderDash(); }
 <script src="dashboard.js"></script>
 <script src="rh-data.js"></script>
 <script src="rh-dashboard.js"></script>
+<script src="knowledge-data.js"></script>
+<script src="knowledge.js"></script>
 </body>
 </html>
