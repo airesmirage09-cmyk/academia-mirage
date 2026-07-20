@@ -28,6 +28,16 @@
       slidesHtml += '<div class="mh-feat-slide'+(i===0?' active':'')+'" data-idx="'+i+'" style="'+bgStyle+'">' + '<div class="mh-feat-body">' + '<span class="mh-feat-tag">Curso destacado</span>' + '<h2>'+esc(c.full||c.name)+'</h2>' + '<p>'+esc(c.desc||'')+'</p>' + '<button class="mh-feat-btn" data-course="'+esc(c.id)+'">Iniciar Curso</button>' + '</div></div>';
       dotsHtml += '<button class="mh-feat-dot'+(i===0?' active':'')+'" data-idx="'+i+'" aria-label="Curso '+(i+1)+'"></button>';
     }
+    var extra=[
+      {title:'Política de Calidad', img:'Banner politica de calidad.png'},
+      {title:'Misión de Mirage', img:'Banner mision mirage.png'},
+      {title:'Visión de Mirage', img:'Banner vision mirage.png'}
+    ];
+    for(var e=0;e<extra.length;e++){
+      var idxE=list.length+e; var it=extra[e];
+      slidesHtml += '<div class="mh-feat-slide mh-feat-slide-plain" data-idx="'+idxE+'" style="background-image:url(\''+it.img+'\');" title="'+esc(it.title)+'"></div>';
+      dotsHtml += '<button class="mh-feat-dot" data-idx="'+idxE+'" aria-label="'+esc(it.title)+'"></button>';
+    }
     el.innerHTML = slidesHtml + '<div class="mh-feat-dots">'+dotsHtml+'</div>';
     var idx=0;
     function goTo(n){
@@ -43,11 +53,11 @@
   }
   function renderCategories(){
     var el=document.getElementById('mh-categories'); if(!el || typeof COURSES==='undefined') return;
-    var icons={'Seguridad':'\uD83E\uDDBA','Calidad':'\uD83C\uDFC6','Etica':'\u2696\uFE0F','\u00c9tica':'\u2696\uFE0F','Ciberseguridad':'\uD83D\uDD10','Liderazgo':'\uD83E\uDDED','Desarrollo':'\uD83C\uDF31','Tecnologia':'\uD83D\uDCBB','Tecnolog\u00eda':'\uD83D\uDCBB','Operaciones':'\u2699\uFE0F'};
+    var icons={'Seguridad':'🦺','Calidad':'🏆','Etica':'⚖️','Ética':'⚖️','Ciberseguridad':'🔐','Liderazgo':'🧭','Desarrollo':'🌱','Tecnologia':'💻','Tecnología':'💻','Operaciones':'⚙️'};
     var counts={}; var order=[];
     for(var i=0;i<COURSES.length;i++){ var tag=COURSES[i].tag||'General'; if(!counts[tag]){counts[tag]=0; order.push(tag);} counts[tag]++; }
     var html='';
-    for(var j=0;j<order.length;j++){ var t=order[j]; html += '<div class="mh-cat-card" data-tag="'+esc(t)+'">' + '<span class="mh-cat-ico">'+(icons[t]||'\uD83D\uDCC1')+'</span>' + '<h4>'+esc(t)+'</h4>' + '<p>'+counts[t]+' curso'+(counts[t]===1?'':'s')+'</p>' + '</div>'; }
+    for(var j=0;j<order.length;j++){ var t=order[j]; html += '<div class="mh-cat-card" data-tag="'+esc(t)+'">' + '<span class="mh-cat-ico">'+(icons[t]||'📁')+'</span>' + '<h4>'+esc(t)+'</h4>' + '<p>'+counts[t]+' curso'+(counts[t]===1?'':'s')+'</p>' + '</div>'; }
     el.innerHTML = html;
     el.querySelectorAll('.mh-cat-card').forEach(function(card){ card.addEventListener('click', function(){ var grid=document.getElementById('d-all-grid'); if(grid && grid.scrollIntoView) grid.scrollIntoView({behavior:'smooth', block:'start'}); }); });
   }
@@ -58,21 +68,21 @@
   }
   function renderNews(){
     var el=document.getElementById('mh-news'); if(!el) return;
-    var items=[{icon:'\uD83C\uDD95', text:'Nuevo curso disponible \u2014 Ya est\u00e1 activo el curso de Cultura de la Legalidad.'}];
-    var html='<h3>\uD83D\uDCF0 Noticias Mirage</h3>';
+    var items=[{icon:'🆕', text:'Nuevo curso disponible — Ya está activo el curso de Cultura de la Legalidad.'}];
+    var html='<h3>📰 Noticias Mirage</h3>';
     for(var i=0;i<items.length;i++){ html += '<div class="mh-news-item"><span class="mh-news-ico">'+items[i].icon+'</span><p>'+esc(items[i].text)+'</p></div>'; }
     el.innerHTML = '<div class="mh-panel">'+html+'</div>';
   }
   function renderCalendar(){
     var el=document.getElementById('mh-calendar'); if(!el) return;
     var items=[{day:'31', mon:'JUL', text:'Learning Friday'}];
-    var html='<h3>\uD83D\uDCC5 Pr\u00f3ximas fechas</h3>';
+    var html='<h3>📅 Próximas fechas</h3>';
     for(var i=0;i<items.length;i++){ html += '<div class="mh-cal-item"><div class="mh-cal-date">'+items[i].day+'<small>'+items[i].mon+'</small></div><p>'+esc(items[i].text)+'</p></div>'; }
     el.innerHTML = '<div class="mh-panel">'+html+'</div>';
   }
   function renderFooter(){
     var el=document.getElementById('mh-footer'); if(!el) return;
-    el.innerHTML = '<div>Academia Mirage &middot; Versi\u00f3n 1.0</div>' + '<div class="mh-footer-links">' + '<a href="mailto:capacitacion@mirage.com">Contacto RH</a>' + '<a href="#">Pol\u00edticas</a>' + '<a href="#">Privacidad</a>' + '</div>';
+    el.innerHTML = '<div>Academia Mirage &middot; Versión 1.0</div>' + '<div class="mh-footer-links">' + '<a href="mailto:capacitacion@mirage.com">Contacto RH</a>' + '<a href="#">Políticas</a>' + '<a href="#">Privacidad</a>' + '</div>';
   }
   function setupAnimations(){
     var els=document.querySelectorAll('.mh-animate');
