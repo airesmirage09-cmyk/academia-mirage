@@ -86,7 +86,9 @@
 
   async function getUserLibraryState(userId){
     var d = await readNode('/userLibrary/'+userId, 'userLibrary_'+userId);
-    return d || { favorites: [], history: [] };
+    // Firebase omite arrays/objetos vacios al guardar, asi que 'd' puede existir
+    // sin 'favorites' o 'history' -- siempre devolvemos ambas llaves.
+    return { favorites: (d && d.favorites) || [], history: (d && d.history) || [] };
   }
   async function saveUserLibraryState(userId, state){
     await writeNode('/userLibrary/'+userId, state, 'userLibrary_'+userId);
