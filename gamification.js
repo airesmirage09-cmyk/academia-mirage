@@ -461,5 +461,5 @@
     }catch(e){ return null; }
   }
 
-window.MirageGamification = { onRender: onRender, getState: getState };
+window.MirageGamification = { onRender: onRender, getState: getState, buildContext: buildContext, computeBadges: computeBadges, computePaths: computePaths, computeAchievements: computeAchievements };
 })();
