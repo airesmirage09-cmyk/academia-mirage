@@ -1,0 +1,212 @@
+/* ============================================================================
+   RH-DASHBOARD.CSS — Dashboard Ejecutivo de Recursos Humanos (Academia Mirage)
+   Identidad Mirage: rojo (#ea0004), negro, blancos y grises. Tarjetas
+   flotantes, sombras suaves, mucho espacio, iconografía minimalista.
+============================================================================ */
+
+#v-rhdash{ padding:28px 32px 60px; background:#f4f4f6; min-height:100vh; }
+#v-rhdash *{ box-sizing:border-box; }
+
+/* ---------- Encabezado / Toolbar ---------- */
+.rh-toolbar{
+  display:flex; align-items:center; justify-content:space-between; gap:18px;
+  flex-wrap:wrap; background:#0b0b0c; color:#fff; border-radius:18px;
+  padding:22px 26px; margin-bottom:22px; box-shadow:0 10px 30px rgba(0,0,0,.18);
+  animation: rhFadeIn .5s ease both;
+}
+.rh-toolbar-title{ display:flex; flex-direction:column; gap:4px; }
+.rh-toolbar-title h1{ font-size:22px; margin:0; font-weight:800; letter-spacing:.2px; }
+.rh-toolbar-title span{ font-size:12.5px; color:#c9c9cc; }
+.rh-toolbar-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.rh-search{
+  background:#1c1c1e; border:1px solid #303032; border-radius:12px; padding:10px 14px;
+  color:#fff; font-size:13px; min-width:220px; outline:none;
+}
+.rh-search::placeholder{ color:#8b8b8e; }
+.rh-btn{
+  border:none; border-radius:12px; padding:10px 16px; font-size:13px; font-weight:700;
+  cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; white-space:nowrap;
+}
+.rh-btn:hover{ transform:translateY(-1px); }
+.rh-btn-primary{ background:#ea0004; color:#fff; }
+.rh-btn-primary:hover{ box-shadow:0 6px 16px rgba(234,0,4,.35); }
+.rh-btn-ghost{ background:#1c1c1e; color:#fff; border:1px solid #333; }
+.rh-btn-ghost:hover{ background:#242426; }
+
+/* ---------- Tabs internas ---------- */
+.rh-tabs{
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px; background:#fff;
+  border-radius:16px; padding:10px; box-shadow:0 4px 16px rgba(0,0,0,.06);
+}
+.rh-tab{
+  border:none; background:transparent; color:#555; padding:9px 15px; border-radius:10px;
+  font-size:12.5px; font-weight:700; cursor:pointer; transition:.15s ease; white-space:nowrap;
+}
+.rh-tab:hover{ background:#f2f2f4; color:#111; }
+.rh-tab.on{ background:#ea0004; color:#fff; }
+
+.rh-panel{ display:none; animation: rhFadeIn .35s ease both; }
+.rh-panel.on{ display:block; }
+
+/* ---------- Grid genérico de tarjetas ---------- */
+.rh-grid{ display:grid; gap:18px; }
+.rh-grid-4{ grid-template-columns:repeat(4,1fr); }
+.rh-grid-3{ grid-template-columns:repeat(3,1fr); }
+.rh-grid-2{ grid-template-columns:repeat(2,1fr); }
+
+.rh-card{
+  background:#fff; border-radius:18px; padding:20px; box-shadow:0 4px 18px rgba(0,0,0,.06);
+  border:1px solid #eee; animation: rhFadeIn .45s ease both;
+}
+.rh-card h3{ margin:0 0 14px; font-size:14.5px; font-weight:800; color:#111; }
+.rh-card h3 small{ font-weight:600; color:#999; font-size:11.5px; margin-left:6px; }
+
+/* ---------- KPI resumen ejecutivo ---------- */
+.rh-kpi{
+  background:#fff; border-radius:18px; padding:18px 20px; box-shadow:0 4px 18px rgba(0,0,0,.06);
+  border:1px solid #eee; display:flex; flex-direction:column; gap:8px; position:relative; overflow:hidden;
+  animation: rhKpiIn .5s ease both;
+}
+.rh-kpi::before{
+  content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:#ea0004;
+}
+.rh-kpi-top{ display:flex; align-items:center; justify-content:space-between; }
+.rh-kpi-icon{ font-size:20px; }
+.rh-kpi-num{ font-size:30px; font-weight:800; color:#111; line-height:1; }
+.rh-kpi-label{ font-size:12px; color:#777; font-weight:600; }
+.rh-kpi-trend{ font-size:11.5px; font-weight:700; display:inline-flex; align-items:center; gap:4px; }
+.rh-kpi-trend.up{ color:#0a8a3c; }
+.rh-kpi-trend.down{ color:#c00; }
+.rh-kpi-trend.flat{ color:#999; }
+
+/* ---------- Barras / progreso ---------- */
+.rh-bar-wrap{ background:#eee; border-radius:8px; height:9px; overflow:hidden; }
+.rh-bar-fill{ height:100%; background:#ea0004; border-radius:8px; transition:width .6s ease; }
+.rh-bar-fill.good{ background:#0a8a3c; }
+.rh-bar-fill.warn{ background:#e6a400; }
+
+.rh-indicator{ display:flex; flex-direction:column; gap:6px; padding:14px 0; border-bottom:1px solid #f0f0f0; }
+.rh-indicator:last-child{ border-bottom:none; }
+.rh-indicator-top{ display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#222; }
+.rh-indicator-top span:last-child{ color:#ea0004; }
+
+/* ---------- Heat map ---------- */
+.rh-heatmap{ display:flex; flex-direction:column; gap:8px; }
+.rh-heat-row{ display:grid; grid-template-columns:160px 1fr 60px; gap:12px; align-items:center; }
+.rh-heat-label{ font-size:12.5px; font-weight:700; color:#333; }
+.rh-heat-bar{ height:26px; border-radius:8px; background:#eee; overflow:hidden; }
+.rh-heat-fill{ height:100%; border-radius:8px; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; color:#fff; font-size:11px; font-weight:800; transition:width .6s ease; }
+.rh-heat-fill.alto{ background:#0a8a3c; }
+.rh-heat-fill.medio{ background:#e6a400; }
+.rh-heat-fill.bajo{ background:#ea0004; }
+.rh-heat-val{ text-align:right; font-size:12.5px; font-weight:800; color:#111; }
+
+/* ---------- Chips / filtros de área ---------- */
+.rh-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+.rh-chip{
+  border:1px solid #ddd; background:#fff; color:#444; padding:7px 14px; border-radius:999px;
+  font-size:12px; font-weight:700; cursor:pointer; transition:.15s ease;
+}
+.rh-chip:hover{ border-color:#ea0004; color:#ea0004; }
+.rh-chip.on{ background:#111; color:#fff; border-color:#111; }
+
+/* ---------- Semáforo de riesgo ---------- */
+.rh-risk-row{ display:grid; grid-template-columns:22px 1fr 120px 100px 100px; gap:12px; align-items:center; padding:11px 4px; border-bottom:1px solid #f2f2f2; font-size:12.5px; }
+.rh-risk-row:last-child{ border-bottom:none; }
+.rh-dot{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+.rh-dot.rojo{ background:#ea0004; }
+.rh-dot.amarillo{ background:#e6a400; }
+.rh-dot.verde{ background:#0a8a3c; }
+.rh-risk-name{ font-weight:700; color:#111; }
+.rh-risk-name small{ display:block; font-weight:500; color:#999; font-size:11px; }
+
+/* ---------- Tabla genérica (cursos, certificaciones) ---------- */
+.rh-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+.rh-table th{ text-align:left; color:#999; font-size:11px; text-transform:uppercase; letter-spacing:.4px; padding:8px 10px; border-bottom:2px solid #f0f0f0; }
+.rh-table td{ padding:10px; border-bottom:1px solid #f4f4f4; color:#222; }
+.rh-table tr:hover td{ background:#fafafa; }
+.rh-pill{ display:inline-block; padding:3px 9px; border-radius:999px; font-size:10.5px; font-weight:800; }
+.rh-pill.oblig{ background:#fde7e7; color:#ea0004; }
+.rh-pill.opt{ background:#eee; color:#666; }
+
+/* ---------- Ranking ---------- */
+.rh-rank-row{ display:flex; align-items:center; gap:12px; padding:10px 4px; border-bottom:1px solid #f2f2f2; }
+.rh-rank-row:last-child{ border-bottom:none; }
+.rh-rank-pos{ width:22px; text-align:center; font-weight:800; color:#ea0004; font-size:13px; }
+.rh-rank-avatar{ width:34px; height:34px; border-radius:50%; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; overflow:hidden; flex-shrink:0; }
+.rh-rank-avatar img{ width:100%; height:100%; object-fit:cover; }
+.rh-rank-name{ font-size:13px; font-weight:700; color:#111; flex:1; }
+.rh-rank-name small{ display:block; font-weight:500; color:#999; font-size:11px; }
+.rh-rank-val{ font-weight:800; color:#111; font-size:13.5px; }
+
+/* ---------- Radar (competencias) ---------- */
+.rh-radar-wrap{ display:flex; gap:22px; flex-wrap:wrap; align-items:center; justify-content:center; }
+.rh-radar-legend{ display:flex; flex-direction:column; gap:6px; font-size:12px; color:#444; }
+.rh-radar-legend span{ font-weight:800; color:#ea0004; }
+
+/* ---------- Alertas ---------- */
+.rh-alert{ display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border-radius:12px; margin-bottom:10px; font-size:12.5px; }
+.rh-alert.alta{ background:#fdeceb; border-left:4px solid #ea0004; }
+.rh-alert.media{ background:#fff6e6; border-left:4px solid #e6a400; }
+.rh-alert.info{ background:#eef3ff; border-left:4px solid #2b6cff; }
+.rh-alert b{ text-transform:uppercase; font-size:10px; letter-spacing:.4px; }
+
+/* ---------- Calendario / próximamente ---------- */
+.rh-empty{ text-align:center; padding:34px 10px; color:#999; }
+.rh-empty .rh-empty-icon{ font-size:30px; margin-bottom:8px; }
+.rh-empty b{ color:#666; }
+
+/* ---------- Asistente IA ---------- */
+.rh-ai-box{ background:#0b0b0c; border-radius:18px; padding:20px; color:#fff; }
+.rh-ai-suggestions{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.rh-ai-chip{ background:#1c1c1e; border:1px solid #303032; color:#ddd; border-radius:999px; padding:7px 12px; font-size:11.5px; cursor:pointer; }
+.rh-ai-chip:hover{ background:#2a2a2c; }
+.rh-ai-input-row{ display:flex; gap:8px; margin-top:10px; }
+.rh-ai-input{ flex:1; background:#1c1c1e; border:1px solid #303032; border-radius:10px; padding:10px 12px; color:#fff; font-size:13px; outline:none; }
+.rh-ai-answer{ background:#1c1c1e; border-radius:12px; padding:14px; margin-top:12px; font-size:13px; line-height:1.5; border-left:3px solid #ea0004; }
+
+/* ---------- Simulado / próximamente badge ---------- */
+.rh-tag-sim{ display:inline-block; background:#efefef; color:#888; font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px; margin-left:8px; text-transform:uppercase; letter-spacing:.3px; }
+.rh-tag-real{ display:inline-block; background:#e8f7ee; color:#0a8a3c; font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px; margin-left:8px; text-transform:uppercase; letter-spacing:.3px; }
+
+/* ---------- Búsqueda de colaborador ---------- */
+.rh-employee-result{ display:flex; align-items:center; gap:12px; padding:10px; border-radius:12px; cursor:pointer; }
+.rh-employee-result:hover{ background:#f6f6f6; }
+.rh-employee-detail{ margin-top:16px; }
+.rh-employee-detail-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:14px; }
+.rh-mini-stat{ background:#f7f7f8; border-radius:12px; padding:14px; text-align:center; }
+.rh-mini-stat b{ display:block; font-size:20px; color:#111; }
+.rh-mini-stat span{ font-size:11px; color:#888; }
+
+/* ---------- Dirección General ---------- */
+.rh-exec-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.rh-exec-card{ background:#0b0b0c; color:#fff; border-radius:18px; padding:22px; text-align:center; }
+.rh-exec-card b{ display:block; font-size:32px; margin:6px 0; }
+.rh-exec-card span{ font-size:12px; color:#c9c9cc; }
+
+/* ---------- Animaciones ---------- */
+@keyframes rhFadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes rhKpiIn{ from{ opacity:0; transform:scale(.96); } to{ opacity:1; transform:scale(1); } }
+@media (prefers-reduced-motion: reduce){
+  .rh-toolbar, .rh-card, .rh-kpi, .rh-panel{ animation:none !important; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1200px){
+  .rh-grid-4{ grid-template-columns:repeat(2,1fr); }
+  .rh-grid-3{ grid-template-columns:repeat(2,1fr); }
+  .rh-exec-grid{ grid-template-columns:repeat(2,1fr); }
+  .rh-employee-detail-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:820px){
+  #v-rhdash{ padding:16px; }
+  .rh-grid-4, .rh-grid-3, .rh-grid-2, .rh-exec-grid{ grid-template-columns:1fr; }
+  .rh-heat-row{ grid-template-columns:110px 1fr 46px; }
+  .rh-risk-row{ grid-template-columns:16px 1fr 70px; }
+  .rh-risk-row span:nth-child(4), .rh-risk-row span:nth-child(5){ display:none; }
+  .rh-employee-detail-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:520px){
+  .rh-toolbar{ flex-direction:column; align-items:flex-start; }
+  .rh-search{ min-width:100%; }
+}
