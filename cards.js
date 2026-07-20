@@ -36,6 +36,7 @@
   // Redefine mkCard con el diseno premium. Se carga despues del script principal,
   // por lo que esta version reemplaza a la original sin tocar el archivo base.
   // Firma y valor de retorno identicos: mkCard(c, prog) -> HTMLElement .cc
+  window.CARD_EXTRA = CARD_EXTRA;
   window.mkCard = function(c, prog){
     var p = prog[c.id] || {};
     var st = p.status || 'not_started';
