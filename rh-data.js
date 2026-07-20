@@ -121,7 +121,10 @@
       var doneIds = (ctx && ctx.done) ? ctx.done : Object.keys(prog).filter(function(k){ return prog[k] && prog[k].status==='completed'; });
       var hours = ctx ? (ctx.hours||0) : 0;
       var xp = (typeof u.xp === 'number') ? u.xp : (ctx? (ctx.xp||0) : 0);
-      var level = ctx ? (ctx.level||1) : 1;
+      // ctx.level es un objeto {index,name,icon,...}; para RH nos interesa el numero y el nombre.
+      var levelObj = (ctx && ctx.level && typeof ctx.level === 'object') ? ctx.level : null;
+      var level = levelObj ? (levelObj.index||1) : (typeof (ctx&&ctx.level)==='number' ? ctx.level : 1);
+      var levelName = levelObj ? (levelObj.name||('Nivel '+level)) : ('Nivel '+level);
 
       var lastDate = null;
       var sumPct = 0, pctCount = 0;
@@ -170,7 +173,7 @@
       enriched.push({
         id: u.id, name: u.name || 'Colaborador', area: u.area || 'Sin área',
         role: u.role || 'user', email: u.email || '', photo: u.photo || '',
-        xp: xp, level: level, hours: hours,
+        xp: xp, level: level, levelName: levelName, hours: hours,
         doneCount: doneIds.length, totalCourses: courses.length, doneIds: doneIds,
         avgPct: pctCount ? Math.round(sumPct/pctCount) : 0,
         obligDone: obligDone, obligTotal: obligCourses.length,

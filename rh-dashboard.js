@@ -250,7 +250,7 @@
     var results = list.slice(0,8).map(function(u){
       return '<div class="rh-employee-result" data-uid="'+esc(u.id)+'">' +
         '<div class="rh-rank-avatar">'+esc((u.name||'?').charAt(0))+'</div>' +
-        '<div><b>'+esc(u.name)+'</b><div style="font-size:11.5px;color:#999;">'+esc(u.area)+' &middot; Nivel '+u.level+'</div></div>' +
+        '<div><b>'+esc(u.name)+'</b><div style="font-size:11.5px;color:#999;">'+esc(u.area)+' &middot; '+esc(u.levelName||('Nivel '+u.level))+'</div></div>' +
       '</div>';
     }).join('');
     set('rh-colaborador-results', results || emptyState('🔍','Sin resultados','No se encontraron colaboradores.'));
@@ -267,7 +267,7 @@
         '<div class="rh-mini-stat"><b>'+u.avgPct+'%</b><span>Promedio</span></div>' +
         '<div class="rh-mini-stat"><b>'+u.badgesCount+'</b><span>Insignias</span></div>' +
         '<div class="rh-mini-stat"><b>'+u.xp+'</b><span>XP</span></div>' +
-        '<div class="rh-mini-stat"><b>'+u.level+'</b><span>Nivel</span></div>' +
+        '<div class="rh-mini-stat"><b>'+u.level+'</b><span>Nivel ('+esc(u.levelName||'')+')</span></div>' +
         '<div class="rh-mini-stat"><b>'+u.doneCount+'</b><span>Certificados</span></div>' +
         '<div class="rh-mini-stat"><b>'+u.pathsDone+'/'+u.pathsTotal+'</b><span>Rutas</span></div>' +
       '</div>' +
