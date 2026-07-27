@@ -21,6 +21,29 @@
 <body>
   <div id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" sc-camel-view-box="0 0 240 240"><rect width="240" height="240" fill="#0B0B0D"></rect><path d="M60 96l24-24 18 30 18-30 24 24-18 72h-48z" fill="#EE0033"></path><text x="120" y="196" font-family="Archivo,Arial,sans-serif" font-size="26" font-weight="800" font-style="italic" fill="#ffffff" text-anchor="middle">MIRAGE</text></svg></div>
   <div id="__bundler_loading">Unpacking...</div>
+  <script>
+  (function(){
+    var __sent = false;
+    function __checkDone(){
+      if(__sent) return;
+      try{
+        for(var i=0;i<localStorage.length;i++){
+          var k = localStorage.key(i);
+          var raw = localStorage.getItem(k);
+          if(!raw || raw.indexOf('aprobados') === -1) continue;
+          var d = JSON.parse(raw);
+          if(d && Array.isArray(d.aprobados) && d.aprobados.length >= 10){
+            __sent = true;
+            try{ window.parent.postMessage({type:'COURSE_COMPLETED', courseId:'liderazgo_organizacional'}, '*'); }catch(e){}
+            break;
+          }
+        }
+      }catch(e){}
+    }
+    setInterval(__checkDone, 2000);
+    window.addEventListener('storage', __checkDone);
+  })();
+  </script>
 
   <script>
     
