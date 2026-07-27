@@ -46,6 +46,34 @@
   </script>
 
   <script>
+  (function(){
+    try{
+      var params = new URLSearchParams(window.location.search);
+      var nombre = params.get('nombre');
+      if(nombre && nombre.trim()){
+        nombre = nombre.trim();
+        var initials = nombre.split(/\s+/).map(function(w){ return w.charAt(0).toUpperCase(); }).slice(0,2).join('');
+        function __patchNombre(){
+          var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          var n;
+          while(n = walker.nextNode()){
+            var v = n.nodeValue;
+            if(v.indexOf('Ana Robles') !== -1){
+              n.nodeValue = v.split('Ana Robles').join(nombre);
+            } else if(v.trim() === 'AR' && v.length < 6){
+              n.nodeValue = initials;
+            }
+          }
+        }
+        __patchNombre();
+        var __mo = new MutationObserver(function(){ __patchNombre(); });
+        __mo.observe(document.body, {childList:true, subtree:true, characterData:true});
+      }
+    }catch(e){}
+  })();
+  </script>
+
+  <script>
     
 document.addEventListener('DOMContentLoaded', async function() {
   const loading = document.getElementById('__bundler_loading');
