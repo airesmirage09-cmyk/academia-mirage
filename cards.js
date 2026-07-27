@@ -30,6 +30,12 @@
       objectives: ['Identificar y evitar conflictos de interes', 'Actuar con anticorrupcion y transparencia', 'Cuidar la confidencialidad y el uso adecuado de recursos'],
       skills: ['Etica e integridad', 'Cumplimiento normativo', 'Valores 5C Mirage'],
       badge: 'Nuevo'
+    },
+    liderazgo_organizacional: {
+      instructor: 'Equipo de Capacitacion Mirage',
+      objectives: ['Aplicar liderazgo situacional y transformacional en el equipo', 'Fortalecer la inteligencia emocional y la gestion de personas', 'Liderar procesos de cambio organizacional con un plan de 90 dias'],
+      skills: ['Liderazgo', 'Gestion de equipos', 'Gestion del cambio'],
+      badge: 'Nuevo'
     }
   };
 
