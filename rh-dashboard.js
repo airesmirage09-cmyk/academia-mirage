@@ -273,7 +273,23 @@
       '</div>' +
       '<div style="margin-top:16px;font-size:12.5px;color:#666;">Ultima actividad registrada: '+(u.lastDate?esc(u.lastDate):'sin registro')+' ('+(u.daysInactive!=null?u.daysInactive+' dias':'—')+')</div>' +
     '</div>';
-    set('rh-colaborador-detail', html);
+    var doneIds = u.doneIds || [];
+    var certsHtml;
+    if(doneIds.length){
+      certsHtml = '<div class="rh-card" style="margin-top:16px;"><h3>Constancias disponibles</h3>' +
+        doneIds.map(function(cid){
+          var c = (d.courses||[]).filter(function(x){return x.id===cid;})[0];
+          var label = c ? (c.full||c.name) : cid;
+          return '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #f2f2f2;font-size:12.5px;">' +
+            '<span>'+esc(label)+'</span>' +
+            '<button class="rh-btn rh-btn-ghost rh-dl-const" data-uid="'+esc(u.id)+'" data-cid="'+esc(cid)+'" style="padding:.32rem .75rem;font-size:11.5px;white-space:nowrap;">⬇️ Descargar constancia</button>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    } else {
+      certsHtml = '<div class="rh-card" style="margin-top:16px;"><h3>Constancias disponibles</h3>' + emptyState('🎓','Sin constancias','Este colaborador aun no ha completado ningun curso.') + '</div>';
+    }
+    set('rh-colaborador-detail', html + certsHtml);
   }
 
   function renderColaborador(d){
@@ -294,6 +310,14 @@
       resultsBox.addEventListener('click', function(e){
         var row = e.target.closest ? e.target.closest('.rh-employee-result') : null;
         if(row) renderColaboradorDetail(d, row.getAttribute('data-uid'));
+      });
+    }
+    var detailBox = el('rh-colaborador-detail');
+    if(detailBox && !detailBox.__wiredDl){
+      detailBox.__wiredDl = true;
+      detailBox.addEventListener('click', function(e){
+        var b = e.target.closest ? e.target.closest('.rh-dl-const') : null;
+        if(b && window.adminDownloadConstancia){ window.adminDownloadConstancia(b.getAttribute('data-uid'), b.getAttribute('data-cid')); }
       });
     }
   }
