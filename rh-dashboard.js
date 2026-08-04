@@ -289,7 +289,18 @@
     } else {
       certsHtml = '<div class="rh-card" style="margin-top:16px;"><h3>Constancias disponibles</h3>' + emptyState('🎓','Sin constancias','Este colaborador aun no ha completado ningun curso.') + '</div>';
     }
-    set('rh-colaborador-detail', html + certsHtml);
+    var doneIdsForRem = u.doneIds || [];
+    var pendingOblig = (d.courses||[]).filter(function(c){ return c.req && doneIdsForRem.indexOf(c.id)===-1; });
+    var pendNames = pendingOblig.map(function(c){ return c.full||c.name; });
+    var defaultMsg = pendNames.length ?
+      ('Hola '+u.name+', te recordamos que tienes pendiente'+(pendNames.length>1?'s':'')+' el curso'+(pendNames.length>1?'s':'')+' obligatorio'+(pendNames.length>1?'s':'')+' en Academia Mirage: '+pendNames.join(', ')+'. Por favor completalo(s) lo antes posible.') :
+      ('Hola '+u.name+', te recordamos seguir avanzando en tus cursos de Academia Mirage.');
+    var remHtml = '<div class="rh-card" style="margin-top:16px;"><h3>Enviar recordatorio</h3>' +
+      (pendNames.length ? ('<div style="font-size:11.5px;color:#999;margin-bottom:8px;">Obligatorios pendientes: '+esc(pendNames.join(', '))+'</div>') : '<div style="font-size:11.5px;color:#999;margin-bottom:8px;">Sin cursos obligatorios pendientes.</div>') +
+      '<textarea id="rh-rem-text" class="rh-search" style="width:100%;min-height:80px;color:#111;background:#f9f9f9;border-color:#e4e4e4;font-family:inherit;font-size:12.5px;padding:10px;resize:vertical;">'+esc(defaultMsg)+'</textarea>' +
+      '<div style="margin-top:10px;display:flex;align-items:center;gap:10px;"><button class="rh-btn rh-btn-primary rh-send-rem" data-uid="'+esc(u.id)+'">📢 Enviar recordatorio</button><span id="rh-rem-status" style="font-size:11.5px;color:#999;"></span></div>' +
+    '</div>';
+    set('rh-colaborador-detail', html + certsHtml + remHtml);
   }
 
   function renderColaborador(d){
@@ -317,7 +328,20 @@
       detailBox.__wiredDl = true;
       detailBox.addEventListener('click', function(e){
         var b = e.target.closest ? e.target.closest('.rh-dl-const') : null;
-        if(b && window.adminDownloadConstancia){ window.adminDownloadConstancia(b.getAttribute('data-uid'), b.getAttribute('data-cid')); }
+        if(b && window.adminDownloadConstancia){ window.adminDownloadConstancia(b.getAttribute('data-uid'), b.getAttribute('data-cid')); return; }
+        var sb = e.target.closest ? e.target.closest('.rh-send-rem') : null;
+        if(sb && window.adminSendReminder){
+          var ta = document.getElementById('rh-rem-text');
+          var statusEl = document.getElementById('rh-rem-status');
+          var text = ta ? ta.value : '';
+          if(!text || !text.trim()){ if(statusEl) statusEl.textContent = 'Escribe un mensaje.'; return; }
+          sb.disabled = true;
+          if(statusEl) statusEl.textContent = 'Enviando...';
+          window.adminSendReminder(sb.getAttribute('data-uid'), text).then(function(ok){
+            sb.disabled = false;
+            if(statusEl) statusEl.textContent = ok ? 'Recordatorio enviado.' : 'No se pudo enviar.';
+          });
+        }
       });
     }
   }
@@ -600,6 +624,27 @@
     if(csvBtn && !csvBtn.__wired){ csvBtn.__wired = true; csvBtn.onclick = function(){ if(STATE.data) downloadCSV(STATE.data); }; }
     var printBtn = el('rh-export-print');
     if(printBtn && !printBtn.__wired){ printBtn.__wired = true; printBtn.onclick = function(){ window.print(); }; }
+    var remindBtn = el('rh-remind-all');
+    if(remindBtn && !remindBtn.__wired){
+      remindBtn.__wired = true;
+      remindBtn.onclick = async function(){
+        var data = STATE.data; if(!data) return;
+        var targets = data.users.filter(function(u){ return (u.obligTotal - u.obligDone) > 0; });
+        if(!targets.length){ alert('No hay colaboradores con cursos obligatorios pendientes.'); return; }
+        var ok = confirm('Se enviara un recordatorio a '+targets.length+' colaborador(es) con cursos obligatorios pendientes. Continuar?');
+        if(!ok) return;
+        remindBtn.disabled = true;
+        var sent = 0;
+        for(var i=0;i<targets.length;i++){
+          var u = targets[i];
+          var pend = (data.courses||[]).filter(function(c){ return c.req && u.doneIds.indexOf(c.id)===-1; }).map(function(c){ return c.full||c.name; });
+          var msg = 'Hola '+u.name+', te recordamos que tienes pendiente'+(pend.length>1?'s':'')+' el curso'+(pend.length>1?'s':'')+' obligatorio'+(pend.length>1?'s':'')+' en Academia Mirage: '+pend.join(', ')+'. Por favor completalo(s) lo antes posible.';
+          try{ if(window.adminSendReminder) await window.adminSendReminder(u.id, msg); sent++; }catch(e){}
+        }
+        remindBtn.disabled = false;
+        alert('Recordatorio enviado a '+sent+' de '+targets.length+' colaborador(es).');
+      };
+    }
   }
 
   async function onRender(force){
