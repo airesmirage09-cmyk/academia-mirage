@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{background:#F1F2F4;font-family:'Source Sans 3',system-ui,sans-serif;color:#111214;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#D8232A}a:hover{color:#A5121A}
+button{font-family:inherit}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#CFD3D9;border-radius:8px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(216,35,42,.55)}70%{box-shadow:0 0 0 12px rgba(216,35,42,0)}}
+</style>
+</helmet>
+
+<div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#F1F2F4">
+
+  <div style="flex:none;display:flex;align-items:center;gap:clamp(10px,2vw,22px);padding:0 clamp(12px,2vw,20px);height:64px;background:#111214;color:#fff">
+    <div style="display:flex;align-items:center;gap:10px;flex:none">
+      <div style="width:9px;height:26px;background:#D8232A"></div>
+      <span style="font:800 17px/1 'Archivo',sans-serif;letter-spacing:.18em">MIRAGE</span>
+    </div>
+    <div style="width:1px;height:26px;background:rgba(255,255,255,.18);flex:none"></div>
+    <div style="flex:none;font:600 13px/1.2 'Archivo',sans-serif;letter-spacing:.02em;color:rgba(255,255,255,.82);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34vw">Seguridad, Salud y Medio Ambiente</div>
+    <div style="flex:1;display:flex;align-items:center;gap:12px;min-width:60px">
+      <div style="flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.16);overflow:hidden;max-width:420px">
+        <div style="height:100%;background:#D8232A;border-radius:6px;transition:width .35s ease;width:{{pct}}%"></div>
+      </div>
+      <span style="font:700 12px/1 'Archivo',sans-serif;color:rgba(255,255,255,.7)">{{pct}}%</span>
+    </div>
+    <button onClick="{{toggleNarr}}" style="flex:none;border:1px solid rgba(255,255,255,.22);background:{{narrBg}};color:#fff;font:600 12px/1 'Archivo',sans-serif;letter-spacing:.04em;padding:9px 13px;border-radius:6px;cursor:pointer">GUION</button>
+    <button onClick="{{toggleMenu}}" style="flex:none;border:1px solid rgba(255,255,255,.22);background:{{menuBg}};color:#fff;font:600 12px/1 'Archivo',sans-serif;letter-spacing:.04em;padding:9px 13px;border-radius:6px;cursor:pointer">MÓDULOS</button>
+  </div>
+
+  <div style="flex:1;display:flex;min-height:0">
+
+    <sc-if value="{{menuOpen}}" hint-placeholder-val="{{true}}">
+      <div style="flex:none;width:296px;max-width:78vw;background:#fff;border-right:1px solid #E2E5E9;overflow-y:auto;padding:16px 0 40px">
+        <div style="padding:6px 20px 14px;font:700 11px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#8C929B">CONTENIDO DEL CURSO</div>
+        <sc-for list="{{menu}}" as="m" hint-placeholder-count="9">
+          <div style="border-top:1px solid #EDEFF2">
+            <button onClick="{{m.go}}" style="width:100%;display:flex;align-items:center;gap:11px;padding:12px 18px;background:{{m.bg}};border:0;border-left:3px solid {{m.bar}};text-align:left;cursor:pointer">
+              <span style="flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:{{m.badgeBg}};color:{{m.badgeFg}};font:700 11px/1 'Archivo',sans-serif">{{m.badge}}</span>
+              <span style="flex:1;font:600 13.5px/1.3 'Archivo',sans-serif;color:#111214">{{m.title}}</span>
+              <span style="flex:none;font:600 11px/1 'Source Sans 3',sans-serif;color:#8C929B">{{m.mins}}</span>
+            </button>
+            <sc-for list="{{m.items}}" as="it" hint-placeholder-count="0">
+              <button onClick="{{it.go}}" style="width:100%;display:flex;align-items:center;gap:10px;padding:7px 18px 7px 50px;background:{{it.bg}};border:0;text-align:left;cursor:pointer">
+                <span style="flex:none;width:7px;height:7px;border-radius:50%;background:{{it.dot}}"></span>
+                <span style="flex:1;font:{{it.font}} 12.5px/1.35 'Source Sans 3',sans-serif;color:{{it.fg}}">{{it.label}}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+      <div style="flex:1;overflow-y:auto" data-screen-label="{{title}}">
+        <div style="width:100%;max-width:1000px;margin:0 auto;padding:clamp(20px,3.4vw,42px) clamp(16px,3.4vw,36px) 48px;animation:fadeUp .32s ease both" key="{{screenKey}}">
+
+          <sc-if value="{{showHead}}" hint-placeholder-val="{{true}}">
+            <div style="margin-bottom:22px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                <span style="width:22px;height:3px;background:#D8232A"></span>
+                <span style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#8C929B;text-transform:uppercase">{{kicker}}</span>
+              </div>
+              <h1 style="margin:0;font:700 clamp(24px,3.6vw,38px)/1.15 'Archivo',sans-serif;letter-spacing:-.01em;text-wrap:pretty">{{title}}</h1>
+              <sc-if value="{{lead}}" hint-placeholder-val="{{false}}">
+                <p style="margin:12px 0 0;max-width:70ch;font:400 clamp(15px,1.7vw,18px)/1.55 'Source Sans 3',sans-serif;color:#4A5058;text-wrap:pretty">{{lead}}</p>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_cover}}" hint-placeholder-val="{{true}}">
+            <div style="background:#111214;border-radius:14px;overflow:hidden;position:relative;color:#fff;padding:clamp(30px,5vw,64px);min-height:min(74vh,560px);display:flex;flex-direction:column;justify-content:space-between">
+              <div style="position:absolute;inset:0;background:linear-gradient(115deg,rgba(216,35,42,.28) 0%,rgba(17,18,20,0) 58%);pointer-events:none"></div>
+              <div style="position:absolute;right:-60px;bottom:-60px;width:340px;height:340px;border:44px solid rgba(216,35,42,.16);border-radius:50%;pointer-events:none"></div>
+              <div style="position:relative;display:flex;align-items:center;gap:12px">
+                <div style="width:10px;height:30px;background:#D8232A"></div>
+                <span style="font:800 20px/1 'Archivo',sans-serif;letter-spacing:.2em">MIRAGE</span>
+              </div>
+              <div style="position:relative;max-width:min(100%,760px)">
+                <div style="display:inline-block;white-space:nowrap;background:#D8232A;color:#fff;font:700 11px/1 'Archivo',sans-serif;letter-spacing:.16em;padding:8px 12px;border-radius:4px;margin-bottom:20px">CURSO OBLIGATORIO · 60–90 MIN</div>
+                <h1 style="margin:0;max-width:13em;font:800 clamp(34px,6.4vw,72px)/1.02 'Archivo',sans-serif;letter-spacing:-.025em;text-wrap:balance">Seguridad, Salud y Medio Ambiente</h1>
+                <p style="margin:20px 0 0;font:600 clamp(16px,2.1vw,21px)/1.4 'Source Sans 3',sans-serif;color:#D8232A;max-width:24em">"En MIRAGE, la seguridad comienza conmigo".</p>
+              </div>
+              <div style="position:relative;display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:34px">
+                <button onClick="{{next}}" style="border:0;background:#D8232A;color:#fff;font:700 14px/1 'Archivo',sans-serif;letter-spacing:.06em;padding:17px 30px;border-radius:7px;cursor:pointer">COMENZAR CURSO</button>
+                <button onClick="{{goMap}}" style="border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font:700 14px/1 'Archivo',sans-serif;letter-spacing:.06em;padding:17px 26px;border-radius:7px;cursor:pointer">VER MAPA DEL CURSO</button>
+                <span style="font:400 13px/1.4 'Source Sans 3',sans-serif;color:rgba(255,255,255,.55);max-width:34ch">9 módulos · actividades interactivas · evaluación final con 80% mínimo aprobatorio.</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_map}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px">
+              <sc-for list="{{mapCards}}" as="c" hint-placeholder-count="9">
+                <button onClick="{{c.go}}" style="text-align:left;cursor:pointer;background:#fff;border:1px solid #E2E5E9;border-top:4px solid {{c.bar}};border-radius:11px;padding:18px 18px 20px;display:flex;flex-direction:column;gap:9px" style-hover="border-color:#D8232A;box-shadow:0 8px 22px rgba(17,18,20,.09)">
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <span style="font:800 26px/1 'Archivo',sans-serif;color:{{c.numFg}}">{{c.num}}</span>
+                    <span style="white-space:nowrap;font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#8C929B;background:#F1F2F4;padding:6px 9px;border-radius:20px">{{c.mins}}</span>
+                  </div>
+                  <div style="font:700 16px/1.25 'Archivo',sans-serif;text-wrap:pretty">{{c.title}}</div>
+                  <div style="font:400 13.5px/1.5 'Source Sans 3',sans-serif;color:#5A6069;text-wrap:pretty">{{c.desc}}</div>
+                  <div style="margin-top:4px;font:700 11px/1 'Archivo',sans-serif;letter-spacing:.1em;color:#D8232A">{{c.act}}</div>
+                </button>
+              </sc-for>
+            </div>
+            <div style="margin-top:16px;background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:22px;align-items:center">
+              <div style="font:700 13px/1.3 'Archivo',sans-serif">Duración total estimada: <span style="color:#D8232A">108 minutos con videos</span></div>
+              <div style="font:400 13.5px/1.5 'Source Sans 3',sans-serif;color:#5A6069;flex:1;min-width:240px">Lecciones de 5 a 10 minutos, más 9 videos de 1:15 a 4:00. Sin los videos, el curso corre en 78 minutos. Puedes pausar y retomar desde el menú de módulos; tu avance se conserva.</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_welcome}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px">
+              <sc-for list="{{cards}}" as="c" hint-placeholder-count="3">
+                <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:20px">
+                  <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#D8232A;margin-bottom:10px">{{c.k}}</div>
+                  <div style="font:700 16.5px/1.25 'Archivo',sans-serif;margin-bottom:7px">{{c.title}}</div>
+                  <div style="font:400 14px/1.55 'Source Sans 3',sans-serif;color:#5A6069;text-wrap:pretty">{{c.text}}</div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{foto}}" hint-placeholder-val="{{false}}">
+              <div style="margin-top:16px;border:1.5px dashed #C3C8CF;border-radius:11px;background:#E9EBEE;aspect-ratio:21/7;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;padding:20px;text-align:center">
+                <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#8C929B">FOTOGRAFÍA SUGERIDA</div>
+                <div style="font:400 14px/1.5 'Source Sans 3',sans-serif;color:#6B7078;max-width:60ch">{{foto}}</div>
+              </div>
+            </sc-if>
+          </sc-if>
+
+          <sc-if value="{{t_intro}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;align-items:start">
+              <div style="background:#111214;color:#fff;border-radius:11px;padding:26px">
+                <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#D8232A;margin-bottom:12px">OBJETIVO DE APRENDIZAJE</div>
+                <div style="font:600 17.5px/1.45 'Source Sans 3',sans-serif;text-wrap:pretty">{{obj}}</div>
+                <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14);font:600 12px/1 'Archivo',sans-serif;letter-spacing:.08em;color:rgba(255,255,255,.6)">DURACIÓN {{mins}}</div>
+              </div>
+              <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:24px 26px">
+                <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#8C929B;margin-bottom:14px">EN ESTA LECCIÓN VERÁS</div>
+                <sc-for list="{{bullets}}" as="b" hint-placeholder-count="3">
+                  <div style="display:flex;gap:11px;padding:9px 0;border-bottom:1px solid #F0F1F3">
+                    <span style="flex:none;width:6px;height:6px;border-radius:50%;background:#D8232A;margin-top:8px"></span>
+                    <span style="font:400 15px/1.5 'Source Sans 3',sans-serif;color:#33383F;text-wrap:pretty">{{b}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_visual}}" hint-placeholder-val="{{false}}">
+            <sc-if value="{{foto}}" hint-placeholder-val="{{false}}">
+              <div style="margin-bottom:16px;border:1.5px dashed #C3C8CF;border-radius:11px;background:#E9EBEE;aspect-ratio:21/7;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;padding:20px;text-align:center">
+                <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#8C929B">FOTOGRAFÍA SUGERIDA</div>
+                <div style="font:400 14px/1.5 'Source Sans 3',sans-serif;color:#6B7078;max-width:60ch">{{foto}}</div>
+              </div>
+            </sc-if>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:14px">
+              <sc-for list="{{cards}}" as="c" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:20px;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="flex:none;min-width:28px;height:28px;padding:0 8px;border-radius:6px;background:{{c.badgeBg}};color:{{c.badgeFg}};display:grid;place-items:center;font:700 12px/1 'Archivo',sans-serif;letter-spacing:.06em">{{c.k}}</span>
+                  </div>
+                  <div style="font:700 16.5px/1.25 'Archivo',sans-serif;text-wrap:pretty">{{c.title}}</div>
+                  <div style="font:400 14px/1.55 'Source Sans 3',sans-serif;color:#5A6069;text-wrap:pretty">{{c.text}}</div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_compare}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:14px">
+              <sc-for list="{{cols}}" as="col" hint-placeholder-count="2">
+                <div style="background:#fff;border:1px solid #E2E5E9;border-top:4px solid {{col.bar}};border-radius:11px;padding:22px">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">
+                    <span style="width:22px;height:22px;border-radius:50%;background:{{col.bar}};color:#fff;display:grid;place-items:center;font:700 13px/1 'Archivo',sans-serif">{{col.mark}}</span>
+                    <span style="font:700 17px/1.2 'Archivo',sans-serif">{{col.title}}</span>
+                  </div>
+                  <div style="font:400 13.5px/1.5 'Source Sans 3',sans-serif;color:#8C929B;margin-bottom:12px">{{col.sub}}</div>
+                  <sc-for list="{{col.items}}" as="it" hint-placeholder-count="3">
+                    <div style="display:flex;gap:10px;padding:8px 0;border-top:1px solid #F0F1F3">
+                      <span style="flex:none;color:{{col.bar}};font:700 14px/1.5 'Source Sans 3',sans-serif">{{col.mark}}</span>
+                      <span style="font:400 14.5px/1.5 'Source Sans 3',sans-serif;color:#33383F;text-wrap:pretty">{{it}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_case}}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;overflow:hidden">
+              <div style="background:#111214;color:#fff;padding:14px 22px;font:700 11px/1 'Archivo',sans-serif;letter-spacing:.16em">CASO MIRAGE</div>
+              <div style="padding:22px">
+                <div style="border:1.5px dashed #C3C8CF;border-radius:9px;background:#E9EBEE;aspect-ratio:21/6;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:16px;text-align:center;margin-bottom:18px">
+                  <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#8C929B">FOTOGRAFÍA SUGERIDA</div>
+                  <div style="font:400 13.5px/1.5 'Source Sans 3',sans-serif;color:#6B7078;max-width:60ch">{{foto}}</div>
+                </div>
+                <p style="margin:0;font:400 17px/1.6 'Source Sans 3',sans-serif;color:#262B31;max-width:74ch;text-wrap:pretty">{{caseText}}</p>
+                <div style="margin-top:18px;background:#FDF2F2;border-left:4px solid #D8232A;padding:14px 18px;border-radius:0 8px 8px 0">
+                  <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#D8232A;margin-bottom:6px">QUÉ APRENDEMOS</div>
+                  <div style="font:600 15.5px/1.5 'Source Sans 3',sans-serif;color:#262B31;text-wrap:pretty">{{takeaway}}</div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_flip}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:12px">
+              <sc-for list="{{fcards}}" as="c" hint-placeholder-count="6">
+                <button onClick="{{c.go}}" style="text-align:left;cursor:pointer;background:#fff;border:1px solid {{c.bd}};border-radius:11px;padding:17px 18px;display:flex;flex-direction:column;gap:7px" style-hover="border-color:#111214">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+                    <span style="font:700 15.5px/1.25 'Archivo',sans-serif;text-wrap:pretty">{{c.title}}</span>
+                    <span style="flex:none;width:22px;height:22px;border-radius:50%;background:{{c.abg}};color:{{c.afg}};display:grid;place-items:center;font:700 15px/1 'Archivo',sans-serif">{{c.arrow}}</span>
+                  </div>
+                  <div style="font:600 12px/1.3 'Source Sans 3',sans-serif;color:#D8232A">{{c.sub}}</div>
+                  <sc-if value="{{c.open}}" hint-placeholder-val="{{false}}">
+                    <div style="margin-top:4px;padding-top:10px;border-top:1px solid #EDEFF2;font:400 14px/1.55 'Source Sans 3',sans-serif;color:#5A6069;text-wrap:pretty">{{c.body}}</div>
+                  </sc-if>
+                </button>
+              </sc-for>
+            </div>
+            <div style="margin-top:12px;font:400 13px/1.4 'Source Sans 3',sans-serif;color:#8C929B">Toca cada tarjeta para desplegar el detalle.</div>
+          </sc-if>
+
+          <sc-if value="{{t_hotspot}}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:16px">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px">
+                <div style="font:700 12px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#8C929B">ACTIVIDAD INTERACTIVA · PUNTOS SENSIBLES</div>
+                <div style="font:700 13px/1 'Archivo',sans-serif;color:#D8232A">{{foundCount}} de {{ptTotal}} riesgos identificados</div>
+              </div>
+              <div style="position:relative;border:1.5px dashed #C3C8CF;border-radius:9px;background:#E9EBEE;aspect-ratio:16/9;overflow:hidden">
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:22px;text-align:center;pointer-events:none">
+                  <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#9AA0A8">ILUSTRACIÓN / FOTOGRAFÍA SUGERIDA</div>
+                  <div style="font:400 14px/1.5 'Source Sans 3',sans-serif;color:#7A8089;max-width:56ch">{{foto}}</div>
+                </div>
+                <sc-for list="{{pts}}" as="p" hint-placeholder-count="6">
+                  <button onClick="{{p.go}}" style="position:absolute;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;border:3px solid #fff;background:{{p.bg}};color:#fff;font:700 14px/1 'Archivo',sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.28);animation:{{p.anim}};left:{{p.x}}%;top:{{p.y}}%">{{p.mark}}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{openPt}}" hint-placeholder-val="{{false}}">
+                <div style="margin-top:14px;background:#FDF2F2;border-left:4px solid #D8232A;padding:15px 18px;border-radius:0 8px 8px 0">
+                  <div style="font:700 15.5px/1.3 'Archivo',sans-serif;margin-bottom:5px">{{openPtLabel}}</div>
+                  <div style="font:400 14.5px/1.55 'Source Sans 3',sans-serif;color:#4A5058;text-wrap:pretty">{{openPtText}}</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{allFound}}" hint-placeholder-val="{{false}}">
+                <div style="margin-top:12px;background:#0E7A4A;color:#fff;padding:14px 18px;border-radius:8px;font:600 15px/1.45 'Source Sans 3',sans-serif">Muy bien: identificaste todos los riesgos de la escena. Detectarlos a tiempo es lo que evita el accidente.</div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_rows}}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:18px 20px 22px">
+              <div style="font:700 12px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#8C929B;margin-bottom:14px">{{actLabel}}</div>
+              <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+                <div style="padding:14px 0;border-top:1px solid #EDEFF2;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+                  <div style="flex:1;min-width:220px;font:400 15.5px/1.45 'Source Sans 3',sans-serif;color:#262B31;text-wrap:pretty">{{r.text}}</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:8px">
+                    <sc-for list="{{r.opts}}" as="o" hint-placeholder-count="2">
+                      <button onClick="{{o.go}}" style="cursor:pointer;border:1.5px solid {{o.bd}};background:{{o.bg}};color:{{o.fg}};font:600 13px/1 'Source Sans 3',sans-serif;padding:11px 14px;border-radius:7px">{{o.label}}</button>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{r.fb}}" hint-placeholder-val="{{false}}">
+                    <div style="flex-basis:100%;font:600 13.5px/1.45 'Source Sans 3',sans-serif;color:{{r.fbFg}};text-wrap:pretty">{{r.fb}}</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{rowsDone}}" hint-placeholder-val="{{false}}">
+                <div style="margin-top:14px;background:{{doneBg}};color:#fff;padding:14px 18px;border-radius:8px;font:600 15px/1.45 'Source Sans 3',sans-serif">{{doneMsg}}</div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_pick}}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:18px 20px 22px">
+              <div style="font:700 12px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#8C929B;margin-bottom:14px">{{actLabel}}</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px">
+                <sc-for list="{{options}}" as="o" hint-placeholder-count="6">
+                  <button onClick="{{o.go}}" style="text-align:left;cursor:pointer;border:1.5px solid {{o.bd}};background:{{o.bg}};border-radius:10px;padding:15px 16px;display:flex;gap:11px;align-items:flex-start">
+                    <span style="flex:none;width:22px;height:22px;border-radius:{{o.radius}};border:1.5px solid {{o.boxBd}};background:{{o.boxBg}};color:#fff;display:grid;place-items:center;font:700 12px/1 'Archivo',sans-serif">{{o.mark}}</span>
+                    <span style="font:600 14.5px/1.4 'Source Sans 3',sans-serif;color:{{o.fg}};text-wrap:pretty">{{o.text}}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+                <button onClick="{{check}}" style="cursor:pointer;border:0;background:#111214;color:#fff;font:700 13px/1 'Archivo',sans-serif;letter-spacing:.08em;padding:14px 22px;border-radius:7px">COMPROBAR</button>
+                <span style="font:400 13px/1.4 'Source Sans 3',sans-serif;color:#8C929B">{{pickHint}}</span>
+              </div>
+              <sc-if value="{{fb}}" hint-placeholder-val="{{false}}">
+                <div style="margin-top:14px;background:{{fbBg}};color:#fff;padding:15px 18px;border-radius:8px">
+                  <div style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.14em;margin-bottom:6px;opacity:.85">{{fbTitle}}</div>
+                  <div style="font:600 15px/1.5 'Source Sans 3',sans-serif;text-wrap:pretty">{{fb}}</div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_scenario}}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:20px 22px 24px">
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;margin-bottom:14px">
+                <div style="font:700 12px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#8C929B">{{actLabel}}</div>
+                <sc-if value="{{qn}}" hint-placeholder-val="{{false}}">
+                  <div style="font:700 12px/1 'Archivo',sans-serif;color:#D8232A">{{qn}}</div>
+                </sc-if>
+              </div>
+              <sc-if value="{{situation}}" hint-placeholder-val="{{false}}">
+                <div style="background:#F5F6F8;border-radius:9px;padding:16px 18px;margin-bottom:16px;font:400 15.5px/1.55 'Source Sans 3',sans-serif;color:#33383F;text-wrap:pretty">{{situation}}</div>
+              </sc-if>
+              <div style="font:700 19px/1.35 'Archivo',sans-serif;margin-bottom:14px;text-wrap:pretty">{{question}}</div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{options}}" as="o" hint-placeholder-count="3">
+                  <button onClick="{{o.go}}" style="text-align:left;cursor:pointer;border:1.5px solid {{o.bd}};background:{{o.bg}};border-radius:9px;padding:15px 17px;display:flex;gap:12px;align-items:center">
+                    <span style="flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid {{o.boxBd}};background:{{o.boxBg}};color:#fff;display:grid;place-items:center;font:700 12px/1 'Archivo',sans-serif">{{o.mark}}</span>
+                    <span style="font:600 15px/1.4 'Source Sans 3',sans-serif;color:{{o.fg}};text-wrap:pretty">{{o.text}}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <sc-if value="{{fb}}" hint-placeholder-val="{{false}}">
+                <div style="margin-top:15px;background:{{fbBg}};color:#fff;padding:15px 18px;border-radius:8px">
+                  <div style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.14em;margin-bottom:6px;opacity:.85">{{fbTitle}}</div>
+                  <div style="font:600 15px/1.5 'Source Sans 3',sans-serif;text-wrap:pretty">{{fb}}</div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_video}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+              <span style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#fff;background:#111214;padding:8px 11px;border-radius:5px">USO: {{vidUse}}</span>
+              <span style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#fff;background:#D8232A;padding:8px 11px;border-radius:5px;white-space:nowrap">DURACIÓN SUGERIDA {{vidDur}}</span>
+              <span style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:{{valFg}};background:{{valBg}};border:1px solid {{valBd}};padding:8px 11px;border-radius:5px">{{valLabel}}</span>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:16px;margin-bottom:14px">
+              <div style="position:relative;border:2px dashed #D8232A;border-radius:9px;background:#111214;aspect-ratio:16/9;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;padding:22px;text-align:center">
+                <div style="width:64px;height:64px;border-radius:50%;background:#D8232A;display:grid;place-items:center;color:#fff;font:700 22px/1 'Archivo',sans-serif">▶</div>
+                <div style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#D8232A">ESPACIO EDITABLE PARA VIDEO</div>
+                <div style="font:600 16px/1.4 'Source Sans 3',sans-serif;color:#fff;max-width:52ch;text-wrap:pretty">{{vidSlot}}</div>
+                <div style="font:400 13px/1.5 'Source Sans 3',sans-serif;color:rgba(255,255,255,.55);max-width:56ch">Fragmento recomendado: {{vidFrag}}</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:12px">
+                <input placeholder="Archivo o URL del video (campo editable)" style="width:100%;border:1px solid #DDE0E5;border-radius:7px;padding:11px 12px;font:400 13.5px/1.3 'Source Sans 3',sans-serif;background:#FAFBFC">
+                <input placeholder="Fuente / licencia o autorización de uso" style="width:100%;border:1px solid #DDE0E5;border-radius:7px;padding:11px 12px;font:400 13.5px/1.3 'Source Sans 3',sans-serif;background:#FAFBFC">
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:14px">
+              <div style="background:#fff;border:1px solid #E2E5E9;border-top:4px solid #D8232A;border-radius:11px;padding:20px">
+                <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#D8232A;margin-bottom:12px">ANTES DE REPRODUCIR · QUÉ DEBES OBSERVAR</div>
+                <sc-for list="{{observar}}" as="o" hint-placeholder-count="3">
+                  <div style="display:flex;gap:11px;padding:9px 0;border-top:1px solid #F0F1F3">
+                    <span style="flex:none;width:18px;height:18px;border-radius:4px;border:1.5px solid #C7CBD1;margin-top:2px"></span>
+                    <span style="font:400 14.5px/1.5 'Source Sans 3',sans-serif;color:#33383F;text-wrap:pretty">{{o}}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background:#fff;border:1px solid #E2E5E9;border-top:4px solid #111214;border-radius:11px;padding:20px">
+                <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#8C929B;margin-bottom:12px">PUNTOS DE PAUSA Y APOYOS EN PANTALLA</div>
+                <sc-for list="{{pausas}}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex;gap:12px;padding:9px 0;border-top:1px solid #F0F1F3">
+                    <span style="flex:none;font:700 12px/1.5 'Archivo',sans-serif;color:#D8232A;white-space:nowrap">{{p.t}}</span>
+                    <span style="font:400 14.5px/1.5 'Source Sans 3',sans-serif;color:#33383F;text-wrap:pretty">{{p.text}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:20px 22px;margin-top:14px">
+              <div style="font:700 12px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#8C929B;margin-bottom:6px">DESPUÉS DEL VIDEO · ACTIVIDAD</div>
+              <sc-for list="{{vqs}}" as="q" hint-placeholder-count="2">
+                <div style="padding:16px 0;border-top:1px solid #EDEFF2">
+                  <div style="font:700 17.5px/1.35 'Archivo',sans-serif;margin-bottom:12px;text-wrap:pretty">{{q.q}}</div>
+                  <div style="display:flex;flex-direction:column;gap:9px">
+                    <sc-for list="{{q.options}}" as="o" hint-placeholder-count="3">
+                      <button onClick="{{o.go}}" style="text-align:left;cursor:pointer;border:1.5px solid {{o.bd}};background:{{o.bg}};border-radius:9px;padding:14px 16px;display:flex;gap:12px;align-items:center">
+                        <span style="flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid {{o.boxBd}};background:{{o.boxBg}};color:#fff;display:grid;place-items:center;font:700 12px/1 'Archivo',sans-serif">{{o.mark}}</span>
+                        <span style="font:600 14.5px/1.4 'Source Sans 3',sans-serif;color:#262B31;text-wrap:pretty">{{o.text}}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{q.fb}}" hint-placeholder-val="{{false}}">
+                    <div style="margin-top:12px;background:{{q.fbBg}};color:#fff;padding:14px 17px;border-radius:8px">
+                      <div style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.14em;margin-bottom:6px;opacity:.85">{{q.fbTitle}}</div>
+                      <div style="font:600 14.5px/1.5 'Source Sans 3',sans-serif;text-wrap:pretty">{{q.fb}}</div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="margin-top:14px;background:#FDF2F2;border-left:4px solid #D8232A;padding:14px 18px;border-radius:0 8px 8px 0;font:400 14px/1.55 'Source Sans 3',sans-serif;color:#4A5058;max-width:90ch;text-wrap:pretty">{{vidNota}}</div>
+          </sc-if>
+
+          <sc-if value="{{t_videoplan}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{plan}}" as="p" hint-placeholder-count="9">
+                <button onClick="{{p.go}}" style="text-align:left;cursor:pointer;background:#fff;border:1px solid #E2E5E9;border-left:4px solid {{p.bar}};border-radius:10px;padding:16px 18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center" style-hover="border-color:#D8232A">
+                  <span style="flex:none;width:44px;height:44px;border-radius:8px;background:#111214;color:#fff;display:grid;place-items:center;font:700 15px/1 'Archivo',sans-serif">▶</span>
+                  <span style="flex:1;min-width:230px">
+                    <span style="display:block;font:700 15.5px/1.3 'Archivo',sans-serif;margin-bottom:4px">{{p.title}}</span>
+                    <span style="display:block;font:400 13.5px/1.45 'Source Sans 3',sans-serif;color:#5A6069">{{p.place}}</span>
+                  </span>
+                  <span style="flex:none;font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#8C929B;background:#F1F2F4;padding:7px 10px;border-radius:20px;white-space:nowrap">{{p.use}}</span>
+                  <span style="flex:none;font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.12em;color:#D8232A;white-space:nowrap">{{p.dur}}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="margin-top:16px;background:#111214;color:#fff;border-radius:11px;padding:20px 22px">
+              <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#D8232A;margin-bottom:10px">CRITERIOS DE INTEGRACIÓN</div>
+              <div style="font:400 15px/1.6 'Source Sans 3',sans-serif;color:rgba(255,255,255,.82);max-width:88ch;text-wrap:pretty">Ningún video es decorativo: todos llevan instrucción previa, foco de observación y actividad posterior. Los materiales externos se recortan a fragmentos de 2 a 5 minutos, con licencia o autorización verificada, sin imágenes sensibles ni mensajes alarmistas. Toda práctica observada en video se marca como <strong>pendiente de validación</strong> hasta que el área de Seguridad de MIRAGE confirme si corresponde al estándar; mientras tanto no se presenta como ejemplo correcto. Cada espacio de video es editable y puede sustituirse sin modificar la estructura del curso.</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_summary}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+              <sc-for list="{{keys}}" as="k" hint-placeholder-count="3">
+                <div style="background:#111214;color:#fff;border-radius:11px;padding:22px;display:flex;flex-direction:column;gap:12px">
+                  <span style="font:800 30px/1 'Archivo',sans-serif;color:#D8232A">{{k.n}}</span>
+                  <span style="font:600 16.5px/1.45 'Source Sans 3',sans-serif;text-wrap:pretty">{{k.text}}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:16px;background:#fff;border:1px solid #E2E5E9;border-left:4px solid #D8232A;border-radius:0 11px 11px 0;padding:18px 22px;font:600 17px/1.45 'Source Sans 3',sans-serif;color:#262B31;text-wrap:pretty">{{phrase}}</div>
+          </sc-if>
+
+          <sc-if value="{{t_editable}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:12px">
+              <sc-for list="{{fields}}" as="f" hint-placeholder-count="4">
+                <div style="background:#fff;border:1.5px dashed #D8232A;border-radius:10px;padding:16px 18px">
+                  <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#D8232A;margin-bottom:9px">CAMPO EDITABLE</div>
+                  <div style="font:700 15px/1.3 'Archivo',sans-serif;margin-bottom:9px">{{f.label}}</div>
+                  <input placeholder="{{f.hint}}" style="width:100%;border:1px solid #DDE0E5;border-radius:7px;padding:11px 12px;font:400 14px/1.3 'Source Sans 3',sans-serif;color:#262B31;background:#FAFBFC">
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:14px;font:400 13.5px/1.5 'Source Sans 3',sans-serif;color:#8C929B;max-width:80ch">Estos datos no se inventan: el área de Seguridad de MIRAGE debe capturar la información oficial de cada centro de trabajo antes de publicar el curso.</div>
+          </sc-if>
+
+          <sc-if value="{{t_results}}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:12px;overflow:hidden">
+              <div style="background:{{resBg}};color:#fff;padding:30px clamp(20px,4vw,34px);display:flex;flex-wrap:wrap;gap:26px;align-items:center">
+                <div style="flex:none;width:126px;height:126px;border-radius:50%;border:7px solid rgba(255,255,255,.28);display:grid;place-items:center">
+                  <div style="text-align:center">
+                    <div style="font:800 34px/1 'Archivo',sans-serif">{{scorePct}}%</div>
+                    <div style="font:600 11px/1 'Source Sans 3',sans-serif;opacity:.8;margin-top:5px">{{score}} de {{scoreTotal}}</div>
+                  </div>
+                </div>
+                <div style="flex:1;min-width:230px">
+                  <div style="font:800 clamp(24px,3.4vw,32px)/1.15 'Archivo',sans-serif;margin-bottom:8px">{{resTitle}}</div>
+                  <div style="font:400 16px/1.5 'Source Sans 3',sans-serif;opacity:.92;max-width:56ch;text-wrap:pretty">{{resMsg}}</div>
+                </div>
+              </div>
+              <div style="padding:22px clamp(20px,4vw,34px)">
+                <div style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#8C929B;margin-bottom:12px">DETALLE POR REACTIVO</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:8px">
+                  <sc-for list="{{resItems}}" as="r" hint-placeholder-count="10">
+                    <button onClick="{{r.go}}" style="text-align:left;cursor:pointer;display:flex;gap:10px;align-items:center;border:1px solid #E6E9ED;background:#FBFCFD;border-radius:8px;padding:11px 13px">
+                      <span style="flex:none;width:22px;height:22px;border-radius:50%;background:{{r.bg}};color:#fff;display:grid;place-items:center;font:700 12px/1 'Archivo',sans-serif">{{r.mark}}</span>
+                      <span style="font:600 13px/1.35 'Source Sans 3',sans-serif;color:#33383F">{{r.label}}</span>
+                    </button>
+                  </sc-for>
+                </div>
+                <div style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px">
+                  <button onClick="{{retry}}" style="cursor:pointer;border:1.5px solid #111214;background:#fff;color:#111214;font:700 13px/1 'Archivo',sans-serif;letter-spacing:.08em;padding:14px 22px;border-radius:7px">REPETIR EVALUACIÓN</button>
+                  <button onClick="{{next}}" style="cursor:pointer;border:0;background:{{resBg}};color:#fff;font:700 13px/1 'Archivo',sans-serif;letter-spacing:.08em;padding:14px 22px;border-radius:7px">{{resCta}}</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_cert}}" hint-placeholder-val="{{false}}">
+            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:12px;padding:clamp(22px,4vw,42px);position:relative;overflow:hidden">
+              <div style="position:absolute;left:0;top:0;bottom:0;width:10px;background:#D8232A"></div>
+              <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:26px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:9px;height:26px;background:#D8232A"></div>
+                  <span style="font:800 17px/1 'Archivo',sans-serif;letter-spacing:.18em">MIRAGE</span>
+                </div>
+                <div style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#8C929B">CONSTANCIA DIGITAL DE PARTICIPACIÓN</div>
+              </div>
+              <div style="font:400 15px/1.5 'Source Sans 3',sans-serif;color:#6B7078">Se otorga la presente constancia a</div>
+              <div style="border-bottom:2px solid #111214;max-width:520px;margin:10px 0 20px;padding-bottom:8px;font:700 clamp(22px,3.6vw,34px)/1.2 'Archivo',sans-serif;color:#B9BEC5">[Nombre del colaborador]</div>
+              <div style="font:400 16px/1.6 'Source Sans 3',sans-serif;color:#33383F;max-width:70ch;text-wrap:pretty">por haber acreditado el curso <strong>Seguridad, Salud y Medio Ambiente</strong> con una calificación mínima de 80%, cubriendo 9 módulos, actividades prácticas y evaluación final.</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:26px">
+                <sc-for list="{{fields}}" as="f" hint-placeholder-count="4">
+                  <div style="border:1.5px dashed #D8232A;border-radius:9px;padding:13px 15px">
+                    <div style="font:700 9.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:#D8232A;margin-bottom:7px">CAMPO EDITABLE</div>
+                    <div style="font:700 13px/1.3 'Archivo',sans-serif;margin-bottom:7px">{{f.label}}</div>
+                    <input placeholder="{{f.hint}}" style="width:100%;border:1px solid #DDE0E5;border-radius:6px;padding:9px 10px;font:400 13px/1.3 'Source Sans 3',sans-serif;background:#FAFBFC">
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_close}}" hint-placeholder-val="{{false}}">
+            <div style="background:#111214;color:#fff;border-radius:12px;padding:clamp(26px,5vw,52px);position:relative;overflow:hidden">
+              <div style="position:absolute;right:-70px;top:-70px;width:280px;height:280px;border:40px solid rgba(216,35,42,.16);border-radius:50%"></div>
+              <div style="position:relative;max-width:min(100%,740px)">
+                <div style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#D8232A;margin-bottom:16px">MENSAJE DE CIERRE</div>
+                <div style="max-width:15em;font:800 clamp(26px,4.4vw,44px)/1.12 'Archivo',sans-serif;letter-spacing:-.02em;text-wrap:balance">Todos somos responsables de regresar seguros a casa.</div>
+                <p style="margin:20px 0 0;font:400 17px/1.6 'Source Sans 3',sans-serif;color:rgba(255,255,255,.78);text-wrap:pretty">Lo que aprendiste solo funciona si lo aplicas hoy: detente, observa, evalúa y actúa. Y si ves algo inseguro, repórtalo.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:28px">
+                  <button onClick="{{restart}}" style="cursor:pointer;border:0;background:#D8232A;color:#fff;font:700 13px/1 'Archivo',sans-serif;letter-spacing:.08em;padding:15px 24px;border-radius:7px">VOLVER AL INICIO</button>
+                  <button onClick="{{goMap}}" style="cursor:pointer;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font:700 13px/1 'Archivo',sans-serif;letter-spacing:.08em;padding:15px 24px;border-radius:7px">REPASAR UN MÓDULO</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{t_nav}}" hint-placeholder-val="{{false}}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:13px">
+              <sc-for list="{{cards}}" as="c" hint-placeholder-count="6">
+                <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:18px;display:flex;gap:13px;align-items:flex-start">
+                  <span style="flex:none;min-width:34px;height:34px;padding:0 9px;border-radius:8px;background:#111214;color:#fff;display:grid;place-items:center;font:700 13px/1 'Archivo',sans-serif">{{c.k}}</span>
+                  <div>
+                    <div style="font:700 15px/1.25 'Archivo',sans-serif;margin-bottom:5px">{{c.title}}</div>
+                    <div style="font:400 13.5px/1.5 'Source Sans 3',sans-serif;color:#5A6069;text-wrap:pretty">{{c.text}}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+
+      <sc-if value="{{narrOpen}}" hint-placeholder-val="{{false}}">
+        <div style="flex:none;background:#1B1D20;color:#fff;border-top:3px solid #D8232A;padding:16px clamp(16px,3.4vw,36px);max-height:34vh;overflow-y:auto">
+          <div style="max-width:1000px;margin:0 auto">
+            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px">
+              <span style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#D8232A">GUION DE NARRACIÓN</span>
+              <button onClick="{{toggleNarr}}" style="cursor:pointer;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;font:600 11px/1 'Archivo',sans-serif;padding:7px 11px;border-radius:5px">CERRAR</button>
+            </div>
+            <div style="font:400 15.5px/1.65 'Source Sans 3',sans-serif;color:rgba(255,255,255,.86);max-width:88ch;text-wrap:pretty">{{narr}}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="flex:none;height:70px;background:#fff;border-top:1px solid #E2E5E9;display:flex;align-items:center;gap:10px;padding:0 clamp(12px,2.6vw,26px)">
+        <button onClick="{{goMap}}" style="cursor:pointer;border:1px solid #DDE0E5;background:#fff;color:#33383F;font:600 12.5px/1 'Archivo',sans-serif;letter-spacing:.04em;padding:13px 15px;border-radius:7px">MENÚ</button>
+        <button onClick="{{repeat}}" style="cursor:pointer;border:1px solid #DDE0E5;background:#fff;color:#33383F;font:600 12.5px/1 'Archivo',sans-serif;letter-spacing:.04em;padding:13px 15px;border-radius:7px">REPETIR</button>
+        <div style="flex:1;text-align:center;font:600 12px/1.3 'Source Sans 3',sans-serif;color:#8C929B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{footLabel}}</div>
+        <button onClick="{{prev}}" style="cursor:pointer;border:1px solid #DDE0E5;background:#fff;color:{{prevFg}};font:700 12.5px/1 'Archivo',sans-serif;letter-spacing:.06em;padding:13px 18px;border-radius:7px">ANTERIOR</button>
+        <button onClick="{{next}}" style="cursor:pointer;border:0;background:#D8232A;color:#fff;font:700 12.5px/1 'Archivo',sans-serif;letter-spacing:.06em;padding:14px 22px;border-radius:7px">SIGUIENTE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;\$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { i: 0, menu: true, narr: false, ans: {}, seen: {} };
+
+  componentDidMount() {
+    const fit = () => { if (window.innerWidth < 980 && this.state.menu) this.setState({ menu: false }); };
+    fit(); window.addEventListener('resize', fit); this._fit = fit;
+    window.addEventListener('keydown', this._key = (e) => {
+      if (e.key === 'ArrowRight') this.go(this.state.i + 1);
+      if (e.key === 'ArrowLeft') this.go(this.state.i - 1);
+    });
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._fit); window.removeEventListener('keydown', this._key); }
+
+  // ---------- CONTENIDO ----------
+  course = [
+    { title: 'Introducción', mins: '6 min', desc: 'Bienvenida, forma de navegar y objetivos generales del curso.', act: 'MAPA DEL CURSO', screens: [
+      { t: 'cover', title: 'Portada', n: 'Bienvenido al curso de Seguridad, Salud y Medio Ambiente de MIRAGE. Aquí aprenderás a identificar riesgos y a cuidarte a ti y a tu equipo. Comencemos.' },
+      { t: 'welcome', title: 'Bienvenido a tu curso de SSMA', lead: 'Trabajas en una operación que se mueve rápido: montacargas, estibas, embarques y recibo. Este curso te da lo necesario para hacerlo sin lastimarte.',
+        foto: 'Vista amplia de un CEDIS en operación: racks altos, pasillos señalizados, colaboradores con casco y chaleco reflejante.',
+        cards: [
+          { k: 'PARA TI', title: 'Práctico, no teórico', text: 'Todo se explica con situaciones reales de almacén, embarques y carga.' },
+          { k: 'TU RITMO', title: 'Lecciones de 5 a 10 min', text: 'Puedes pausar y retomar donde te quedaste desde el menú de módulos.' },
+          { k: 'AL FINAL', title: 'Constancia digital', text: 'Aprobando con 80% obtienes tu constancia de participación.' }],
+        n: 'Este curso dura entre 60 y 90 minutos. Está hecho para el personal operativo de MIRAGE y usa ejemplos de tu día a día.' },
+      { t: 'nav', title: 'Cómo navegar el curso', lead: 'Todo el curso funciona igual en computadora y en celular.',
+        cards: [
+          { k: '›', title: 'Siguiente y Anterior', text: 'Avanza o regresa pantalla por pantalla con los botones inferiores.' },
+          { k: '↺', title: 'Repetir', text: 'Reinicia la actividad de la pantalla actual cuantas veces necesites.' },
+          { k: '☰', title: 'Módulos', text: 'Abre el menú lateral para saltar a cualquier módulo o lección.' },
+          { k: '%', title: 'Barra de avance', text: 'La barra superior muestra tu progreso total del curso.' },
+          { k: '◉', title: 'Actividades', text: 'Toca los puntos, tarjetas y opciones. Siempre recibes retroalimentación.' },
+          { k: '" "', title: 'Guion', text: 'Abre el texto de la narración de cada pantalla para leerlo o locutarlo.' }],
+        n: 'Usa los botones de la parte inferior para avanzar. Si quieres repasar algo, abre el menú de módulos en cualquier momento.' },
+      { t: 'visual', title: 'Al terminar este curso serás capaz de…', lead: 'Estos son los diez resultados de aprendizaje del curso completo.',
+        cards: [
+          { k: '01', title: 'Identificar riesgos', text: 'Reconocer los riesgos presentes en las operaciones de MIRAGE.' },
+          { k: '02', title: 'Distinguir conceptos', text: 'Peligro, riesgo, acto inseguro y condición insegura.' },
+          { k: '03', title: 'Usar el EPP correcto', text: 'Seleccionarlo según la actividad y el riesgo, y mantenerlo en buen estado.' },
+          { k: '04', title: 'Actuar en emergencias', text: 'Evacuar, avisar y seguir indicaciones del personal brigadista.' },
+          { k: '05', title: 'Conocer las brigadas', text: 'Saber qué hace cada brigada y cómo apoyarlas.' },
+          { k: '06', title: 'Aplicar las normas internas', text: 'Cumplir reglas, señalización y zonas delimitadas.' },
+          { k: '07', title: 'Dar respuesta inicial', text: 'Proteger, alertar y auxiliar ante una persona lesionada.' },
+          { k: '08', title: 'Ubicar las NOM', text: 'Reconocer las normas de la STPS aplicables a tu operación.' },
+          { k: '09', title: 'Cuidar el ambiente', text: 'Separar residuos, prevenir derrames y usar bien los recursos.' },
+          { k: '10', title: 'Reportar a tiempo', text: 'Informar riesgos, incidentes, accidentes y casi accidentes.' }],
+        n: 'Estos son los objetivos del curso. Al final los evaluaremos con diez preguntas y un reto práctico.' },
+      { t: 'map', title: 'Mapa general del curso', lead: 'Nueve módulos, un reto final y una evaluación. Puedes iniciar desde cualquier módulo.', n: 'Este es el recorrido completo. Cada módulo dura entre cinco y diez minutos e incluye una actividad interactiva.' },
+      { t: 'videoplan', title: 'Plan de videos del curso', lead: 'Dónde se integra cada video de MIRAGE o material externo, con qué propósito y cuánto debe durar. Toca cualquiera para ir a su pantalla.',
+        n: 'Este plan es la guía de producción de video del curso: define ubicación, propósito, duración y actividad de cada material.' }
+    ]},
+
+    { title: 'La seguridad comienza conmigo', mins: '11 min', desc: 'Por qué la seguridad es responsabilidad de cada quien y cómo funciona la pausa preventiva.', act: 'DECISIÓN EN CEDIS', screens: [
+      { t: 'intro', title: 'La seguridad comienza conmigo', obj: 'Reconocer el impacto real de un accidente y aplicar la pausa preventiva antes de iniciar cualquier tarea.', mins: '11 minutos',
+        bullets: ['Por qué la seguridad importa en la operación', 'Consecuencias humanas y operativas de un accidente', 'Responsabilidad individual y trabajo en equipo', 'Cultura preventiva: detente, observa, evalúa y actúa'],
+        n: 'En este módulo vas a entender por qué la seguridad depende, en primer lugar, de ti.' },
+      { t: 'visual', title: 'Un accidente nunca afecta solo a una persona', lead: 'Cuando algo sale mal, el impacto se multiplica en tres direcciones.',
+        foto: 'Colaborador de CEDIS con casco, chaleco y calzado de seguridad revisando una estiba antes de moverla.',
+        cards: [
+          { k: 'HUMANO', title: 'Personas y familias', text: 'Lesiones, dolor, incapacidad y una familia esperando en casa.' },
+          { k: 'OPERATIVO', title: 'La operación se detiene', text: 'Paros de línea, pedidos retrasados, producto dañado y horas extra para el equipo.' },
+          { k: 'LEGAL', title: 'Responsabilidad', text: 'Investigaciones, sanciones y afectación al centro de trabajo.' }],
+        n: 'Un accidente no es solo un golpe. Detrás hay una familia, un equipo que se queda con la carga y una operación que se frena.' },
+      { t: 'visual', title: 'La pausa preventiva: 4 pasos antes de actuar', lead: 'Toma diez segundos. Diez segundos evitan semanas de incapacidad.',
+        cards: [
+          { k: '1', title: 'Detente', text: 'Antes de iniciar la tarea, haz una pausa breve.' },
+          { k: '2', title: 'Observa', text: 'Mira el piso, la carga, el equipo y quién está cerca de ti.' },
+          { k: '3', title: 'Evalúa', text: 'Pregúntate qué podría salir mal y qué tan grave sería.' },
+          { k: '4', title: 'Actúa', text: 'Corrige lo que puedas, reporta lo que no y avanza de forma segura.' }],
+        n: 'Detente, observa, evalúa y actúa. Cuatro pasos que caben en diez segundos y que cambian el resultado del día.' },
+      { t: 'video', title: 'Video: un turno cualquiera en el CEDIS', lead: 'Antes de continuar, observa cómo se ve un turno normal en nuestra operación.',
+        vid: { use: 'EXPLICACIÓN', dur: '1:30 – 2:00', frag: 'Apertura de turno, recibo y primeros movimientos de montacargas.', slot: 'Video MIRAGE — recorrido general del CEDIS al inicio del turno', valida: 'pendiente' },
+        observar: ['El ritmo real de la operación: cuántas cosas pasan al mismo tiempo.', 'Dónde caminan las personas y por dónde circulan los equipos.', 'Cuántas decisiones de seguridad toma un colaborador en pocos minutos.'],
+        pausas: [{ t: '0:20', text: 'Pausa: texto en pantalla "¿Cuántas personas dependen de que hoy nadie se lesione?".' },
+          { t: '0:55', text: 'Acercamiento al cruce peatón–montacargas; sobreponer la línea peatonal resaltada.' },
+          { t: '1:25', text: 'Congelar imagen final con la frase "En MIRAGE, la seguridad comienza conmigo".' }],
+        qs: [{ q: 'Después de ver el video, ¿de quién depende principalmente la seguridad en esta operación?',
+          options: [{ text: 'Del área de Seguridad, que hace los recorridos.', c: false, fb: 'Seguridad establece el estándar, pero quien decide en el momento eres tú.' },
+            { text: 'De cada persona que toma decisiones en el turno, apoyada por su equipo y su líder.', c: true, fb: 'Correcto. La seguridad es una cadena: tu decisión protege a quien está a tu lado.' },
+            { text: 'Del líder del turno únicamente.', c: false, fb: 'El líder verifica y da el ejemplo, pero no puede estar en todos los puntos a la vez.' }] }],
+        nota: 'Este video se usa como contexto, no como demostración de buenas prácticas. Antes de publicarlo, el área de Seguridad de MIRAGE debe revisar las escenas y confirmar que ninguna práctica visible se interprete como estándar aprobado.',
+        n: 'Observa el video con atención. No busques errores todavía: solo entiende el ritmo de tu operación.' },
+      { t: 'case', title: 'Caso: la prisa del último embarque', foto: 'Andén de embarques al cierre del turno: tarimas listas, un montacarguista esperando y cajas apiladas cerca del pasillo.',
+        caseText: 'Faltan quince minutos para cerrar el embarque. Un colaborador ve una tarima mal estibada, pero decide moverla así "porque ya casi acaba el turno". Al levantarla, la carga se vence sobre el pasillo por donde caminaba un compañero.',
+        takeaway: 'Ninguna actividad es tan urgente como para realizarla de forma insegura. La prisa nunca justifica saltarse un paso.',
+        n: 'Esta situación es común al cierre de turno. La prisa es uno de los factores que más accidentes provoca en almacén.' },
+      { t: 'scenario', title: 'Actividad: tú decides', actLabel: 'ESCENARIO CON DECISIÓN',
+        situation: 'Vas a surtir un pedido y notas que el pasillo tiene una mancha de aceite. Tu líder no está y el pedido es urgente.',
+        question: '¿Qué haces?',
+        options: [
+          { text: 'Paso con cuidado por un lado y sigo surtiendo el pedido.', c: false, fb: 'El riesgo sigue ahí para todos los demás. Esquivarlo no lo elimina y una caída al mismo nivel es de las lesiones más frecuentes en almacén.' },
+          { text: 'Delimito el área, aviso y reporto el derrame antes de continuar.', c: true, fb: 'Correcto. Delimitar, avisar y reportar protege a todo el equipo. Reportar una condición insegura también es prevenir.' },
+          { text: 'Espero a que alguien más lo reporte porque no es mi área.', c: false, fb: 'La seguridad no depende del área. Si tú lo viste primero, a ti te toca avisar.' }],
+        n: 'Piensa qué harías en tu operación. Elige una opción y revisa la retroalimentación.' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 1',
+        question: '¿Cuál es el primer paso de la cultura preventiva?',
+        options: [
+          { text: 'Actuar rápido para no retrasar la operación.', c: false, fb: 'Actuar es el último paso. Primero hay que detenerse y observar.' },
+          { text: 'Detenerse un momento antes de iniciar la tarea.', c: true, fb: 'Así es: detente, observa, evalúa y actúa.' },
+          { text: 'Avisar al líder de cualquier tarea que se realice.', c: false, fb: 'Avisar es importante, pero el primer paso es la pausa preventiva.' }],
+        n: 'Verifiquemos lo aprendido con una pregunta rápida.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: '"En MIRAGE, la seguridad comienza conmigo".',
+        keys: ['Un accidente afecta a tu familia, a tu equipo y a la operación completa.', 'La seguridad es responsabilidad individual y colectiva: nadie está exento.', 'Detente, observa, evalúa y actúa antes de cada tarea.'],
+        n: 'Recuerda estas tres ideas: el impacto es colectivo, la responsabilidad es de todos y la pausa preventiva siempre va primero.' }
+    ]},
+
+    { title: 'Peligros y evaluación de riesgos', mins: '13 min', desc: 'Diferencia entre peligro y riesgo, tipos de riesgo y los más frecuentes en almacén.', act: 'ENCUENTRA LOS RIESGOS', screens: [
+      { t: 'intro', title: 'Identificación de peligros y evaluación de riesgos', obj: 'Distinguir peligro de riesgo, reconocer los tipos de riesgo y detectar los más frecuentes en almacenes y embarques.', mins: '13 minutos',
+        bullets: ['Peligro y riesgo: no son lo mismo', 'Los ocho tipos de riesgo en la operación', 'Peatones, montacargas y vehículos', 'Manipulación manual de cargas y estibas'],
+        n: 'Para prevenir un accidente primero hay que ver el riesgo. En este módulo aprenderás a verlo.' },
+      { t: 'compare', title: 'Peligro y riesgo no son lo mismo', lead: 'El peligro existe. El riesgo depende de qué tan expuesto estás a él.',
+        cols: [
+          { title: 'Peligro', sub: 'La fuente con potencial de causar daño', mark: '!', tone: 'dark', items: ['Un montacargas en operación', 'Una superficie mojada', 'Una carga de 30 kg', 'Un tablero eléctrico abierto'] },
+          { title: 'Riesgo', sub: 'La probabilidad de que ese daño ocurra y su gravedad', mark: '%', tone: 'red', items: ['Caminar por el pasillo del montacargas sin chaleco', 'Cruzar corriendo sobre el piso mojado', 'Levantar los 30 kg solo y con la espalda', 'Trabajar cerca del tablero sin bloqueo'] }],
+        n: 'El peligro es la fuente; el riesgo es la posibilidad de que te dañe. Controlamos el riesgo reduciendo la exposición.' },
+      { t: 'visual', title: 'Ocho tipos de riesgo en tu operación', lead: 'Reconocerlos por nombre te ayuda a reportarlos con claridad.',
+        cards: [
+          { k: 'MECÁNICO', title: 'Equipos en movimiento', text: 'Montacargas, patines, bandas, partes móviles y atrapamientos.' },
+          { k: 'ELÉCTRICO', title: 'Energía', text: 'Cableado expuesto, tableros sin tapa, extensiones dañadas.' },
+          { k: 'ERGONÓMICO', title: 'Posturas y cargas', text: 'Levantar mal, movimientos repetitivos, alcances forzados.' },
+          { k: 'QUÍMICO', title: 'Sustancias', text: 'Solventes, limpiadores, combustibles y vapores.' },
+          { k: 'FÍSICO', title: 'Entorno', text: 'Ruido, iluminación deficiente, temperatura y vibración.' },
+          { k: 'LOCATIVO', title: 'Instalaciones', text: 'Pisos dañados, pasillos obstruidos, escaleras y andenes.' },
+          { k: 'INCENDIO', title: 'Fuego', text: 'Material combustible, cargadores de batería, chispas.' },
+          { k: 'AMBIENTAL', title: 'Impacto al entorno', text: 'Derrames, residuos mal manejados, emisiones.' }],
+        n: 'Cada riesgo tiene nombre. Usarlo correctamente hace que tu reporte se atienda más rápido.' },
+      { t: 'visual', title: 'Peatón y montacargas: la interacción más crítica', lead: 'La mayoría de los eventos graves en un CEDIS ocurren en este cruce.',
+        foto: 'Pasillo de CEDIS con línea peatonal amarilla delimitada y un montacargas circulando en sentido contrario.',
+        cards: [
+          { k: 'MIRA', title: 'Contacto visual', text: 'No cruces si el operador no te vio. Espera su señal.' },
+          { k: 'RUTA', title: 'Camina por el pasillo peatonal', text: 'Respeta las líneas y nunca tomes atajos por zona de tránsito.' },
+          { k: 'DISTANCIA', title: 'Nunca pases bajo la carga', text: 'Mantente lejos del radio de giro y de las horquillas.' },
+          { k: 'ESQUINAS', title: 'Reduce en cruces ciegos', text: 'En esquinas y rampas, alto total y claxon.' }],
+        n: 'Si el operador no te vio, no existes para él. Contacto visual siempre antes de cruzar.' },
+      { t: 'visual', title: 'Manipulación manual de cargas', lead: 'Tu espalda no es una grúa. Estos cuatro pasos la protegen.',
+        cards: [
+          { k: '1', title: 'Evalúa la carga', text: 'Peso, tamaño y agarre. Si dudas, pide apoyo o usa equipo.' },
+          { k: '2', title: 'Pies firmes', text: 'Separa los pies y acércate a la carga antes de levantar.' },
+          { k: '3', title: 'Flexiona rodillas', text: 'Espalda recta, la fuerza sale de las piernas, no de la cintura.' },
+          { k: '4', title: 'No gires el torso', text: 'Mueve los pies para cambiar de dirección con la carga pegada al cuerpo.' }],
+        n: 'Flexiona rodillas, espalda recta, carga pegada al cuerpo y nunca gires la cintura con peso.' },
+      { t: 'video', title: 'Video: de recibo a surtido, ¿qué riesgos ves?', lead: 'Un recorrido real de la mercancía. Tu tarea es detectar, no juzgar a nadie.',
+        vid: { use: 'IDENTIFICACIÓN DE RIESGOS', dur: '2:00 – 2:30', frag: 'Descarga de unidad (0:00–0:50), traslado en pasillo (0:50–1:40), acomodo y estiba (1:40–2:20).', slot: 'Video MIRAGE — recibo, acomodo y surtido de mercancía', valida: 'pendiente' },
+        observar: ['La interacción entre peatones, montacargas y unidades en el andén.', 'Postura y técnica al manipular carga de forma manual.', 'Estado del piso, pasillos y altura de las estibas.', 'EPP visible en cada persona que aparece en pantalla.'],
+        pausas: [{ t: '0:35', text: 'Pausa obligada: "¿Qué debería hacerse antes de iniciar esta maniobra?" con opciones en pantalla.' },
+          { t: '1:10', text: 'Acercamiento al pasillo peatonal; sobreponer flecha y texto "¿Hubo contacto visual?".' },
+          { t: '2:05', text: 'Congelar la estiba y marcar con recuadro rojo la altura y el emplaye.' }],
+        qs: [{ q: 'En el traslado por el pasillo, ¿cuál es el riesgo principal que observaste?',
+            options: [{ text: 'Riesgo químico por la mercancía transportada.', c: false, fb: 'No es lo que domina la escena: revisa quién camina y quién conduce.' },
+              { text: 'Interacción peatón–montacargas sin separación clara ni contacto visual.', c: true, fb: 'Correcto. Es la interacción más crítica del CEDIS: sin contacto visual, el peatón no existe para el operador.' },
+              { text: 'Riesgo eléctrico por la iluminación del pasillo.', c: false, fb: 'La iluminación puede sumar, pero el riesgo dominante es el tránsito.' }] },
+          { q: '¿Qué debería ocurrir antes de iniciar la descarga de la unidad?',
+            options: [{ text: 'Verificar calzas o sistema de sujeción, freno y comunicación con el operador.', c: true, fb: 'Correcto. La verificación previa es lo que evita el desplazamiento de la unidad durante la maniobra.' },
+              { text: 'Iniciar de inmediato si la unidad ya está en posición.', c: false, fb: 'La posición no garantiza que la unidad esté asegurada.' },
+              { text: 'Esperar a que el líder lo indique en cada ocasión.', c: false, fb: 'La verificación es parte del procedimiento, no requiere recordatorio.' }] }],
+        nota: 'Si en la grabación aparece una práctica posiblemente insegura, se marca para revisión y no se presenta como ejemplo correcto. El área de Seguridad de MIRAGE debe validar el corte final antes de su publicación.',
+        n: 'Este video es una actividad de identificación. Anota mentalmente cada riesgo antes de responder.' },
+      { t: 'hotspot', title: 'Actividad: encuentra los riesgos en la operación MIRAGE', lead: 'Toca cada punto para identificar el riesgo. Hay 6 en la escena.',
+        foto: 'Ilustración realista de un CEDIS: zona de recibo con tarimas, montacargas en pasillo, colaboradores surtiendo y salida de emergencia al fondo.',
+        pts: [
+          { x: 18, y: 30, label: 'Estiba inestable', text: 'Tarima estibada por encima del límite y sin emplaye. Riesgo mecánico y locativo: puede vencerse sobre el pasillo.' },
+          { x: 40, y: 62, label: 'Derrame en el piso', text: 'Líquido sin delimitar. Riesgo locativo: caídas al mismo nivel, la lesión más frecuente en almacén.' },
+          { x: 62, y: 40, label: 'Peatón en zona de montacargas', text: 'Colaborador caminando fuera del pasillo peatonal, sin contacto visual con el operador.' },
+          { x: 78, y: 68, label: 'Salida de emergencia obstruida', text: 'Producto colocado frente a la salida. En una evacuación, esos segundos cuentan.' },
+          { x: 30, y: 80, label: 'Carga levantada con la espalda', text: 'Riesgo ergonómico: postura incorrecta al levantar, sin flexionar rodillas.' },
+          { x: 88, y: 24, label: 'Cableado expuesto', text: 'Extensión sobre el piso y contacto sin tapa. Riesgo eléctrico y de tropiezo.' }],
+        n: 'Recorre la escena y toca cada punto. Identificar un riesgo a tiempo puede evitar un accidente.' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 2',
+        question: 'Un pasillo obstruido con tarimas vacías, ¿qué tipo de riesgo representa principalmente?',
+        options: [
+          { text: 'Riesgo químico', c: false, fb: 'No. El riesgo químico se relaciona con sustancias peligrosas.' },
+          { text: 'Riesgo locativo', c: true, fb: 'Correcto. Los pasillos obstruidos son riesgo locativo: tropiezos, caídas y bloqueo de rutas de evacuación.' },
+          { text: 'Riesgo ergonómico', c: false, fb: 'El ergonómico se relaciona con posturas, cargas y movimientos repetitivos.' }],
+        n: 'Comprobemos si distingues los tipos de riesgo.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: '"Identificar un riesgo a tiempo puede evitar un accidente".',
+        keys: ['El peligro existe siempre; el riesgo depende de tu exposición y del control.', 'Peatón y montacargas: contacto visual antes de cruzar, sin excepción.', 'Al levantar carga: rodillas flexionadas, espalda recta y sin girar la cintura.'],
+        n: 'Estas tres ideas resumen el módulo de identificación de peligros.' }
+    ]},
+
+    { title: 'Actos y condiciones inseguras', mins: '10 min', desc: 'Qué depende de las personas y qué del entorno, con ejemplos de la operación.', act: 'CLASIFICA CADA CASO', screens: [
+      { t: 'intro', title: 'Actos y condiciones inseguras', obj: 'Diferenciar un acto inseguro de una condición insegura y reconocer ambos en la operación diaria.', mins: '10 minutos',
+        bullets: ['Definición de acto inseguro', 'Definición de condición insegura', 'Exceso de confianza, prisas y distracciones', 'Ejemplos reales de almacén y embarques'],
+        n: 'Casi todos los accidentes vienen de un acto o una condición insegura. Aprende a distinguirlos.' },
+      { t: 'compare', title: 'La diferencia está en el origen', lead: 'Uno depende de cómo actúa la persona; el otro, de cómo está el entorno.',
+        cols: [
+          { title: 'Acto inseguro', sub: 'Lo que hace (o deja de hacer) una persona', mark: '✱', tone: 'red', items: ['Usar el celular caminando en zona operativa', 'Operar un montacargas sin autorización', 'No usar el EPP requerido', 'Tomar atajos por la zona de tránsito', 'Correr en pasillos o subir a los racks'] },
+          { title: 'Condición insegura', sub: 'Cómo está el área, el equipo o la instalación', mark: '▣', tone: 'dark', items: ['Pasillo bloqueado con mercancía', 'Derrame sin delimitar', 'Cableado expuesto o contacto sin tapa', 'Tarima dañada o estiba mal acomodada', 'Falta de señalización o iluminación'] }],
+        n: 'Acto: lo hace una persona. Condición: así está el entorno. Ambos se reportan.' },
+
+      { t: 'visual', title: 'Qué hay detrás de un acto inseguro', lead: 'Rara vez es descuido. Casi siempre es una de estas cuatro razones.',
+        cards: [
+          { k: 'CONFIANZA', title: 'Exceso de confianza', text: '"Lo he hecho mil veces". La costumbre baja la guardia.' },
+          { k: 'PRISA', title: 'Prisas', text: 'Cierre de turno, pedido urgente, unidad esperando en el andén.' },
+          { k: 'ATENCIÓN', title: 'Distracciones', text: 'Celular, conversación o pensar en otra cosa mientras operas.' },
+          { k: 'PROCESO', title: 'Omisión de procedimiento', text: 'Saltarse un paso "porque tarda" o porque nadie está viendo.' }],
+        n: 'Exceso de confianza, prisas, distracciones y omitir procedimientos: reconoce cuál es la tuya.' },
+      { t: 'video', title: 'Video: la operación en detalle', lead: 'Mismo almacén, mirada distinta: ahora separa lo que hacen las personas de cómo está el entorno.',
+        vid: { use: 'ACTIVIDAD DE IDENTIFICACIÓN', dur: '1:30 – 2:00', frag: 'Tres tomas cortas: surtido, zona de embarque y pasillo de tránsito.', slot: 'Video MIRAGE — actos y condiciones presentes en la operación', valida: 'pendiente' },
+        observar: ['Conductas: uso de celular, prisas, atajos, omisión de pasos.', 'Entorno: pasillos, señalización, estado de tarimas y equipo.', 'Momentos en que una conducta y una condición coinciden.'],
+        pausas: [{ t: '0:25', text: 'Pausa: "¿Esto es un acto o una condición insegura?" con dos botones en pantalla.' },
+          { t: '1:00', text: 'Sobreponer etiqueta "ACTO" o "CONDICIÓN" al revelar la respuesta.' },
+          { t: '1:35', text: 'Texto de cierre: "Reportar una condición insegura también es prevenir".' }],
+        qs: [{ q: 'Un colaborador cruza revisando su celular por un pasillo con señalización correcta. ¿Qué observaste?',
+          options: [{ text: 'Un acto inseguro.', c: true, fb: 'Correcto. El entorno está en condiciones; lo que cambia el riesgo es la conducta.' },
+            { text: 'Una condición insegura.', c: false, fb: 'El pasillo está bien señalizado: el origen del riesgo es la conducta.' },
+            { text: 'Ambas al mismo tiempo.', c: false, fb: 'Solo si el pasillo también estuviera obstruido o sin señalización.' }] }],
+        nota: 'Las personas que aparecen en el video no se señalan ni se identifican. El propósito es aprender a distinguir el tipo de riesgo, no evidenciar a nadie. Requiere validación previa de Seguridad y consentimiento de imagen.',
+        n: 'Ahora sí: busca conductas y condiciones. Separarlas es el objetivo de este módulo.' },
+      { t: 'rows', title: 'Actividad: clasifica cada escena', lead: 'Lee cada situación de la operación y decide si es un acto o una condición insegura.',
+        actLabel: 'CLASIFICACIÓN · ACTO O CONDICIÓN', opts: ['Acto inseguro', 'Condición insegura'],
+        rows: [
+          { text: 'Un colaborador revisa su celular mientras cruza el pasillo de montacargas.', c: 0, fb: 'Acto inseguro: depende de la conducta de la persona.' },
+          { text: 'Hay una tarima con la madera rota en la zona de recibo.', c: 1, fb: 'Condición insegura: es un estado del equipo o del área.' },
+          { text: 'Un compañero sube al segundo nivel del rack para bajar una caja.', c: 0, fb: 'Acto inseguro: trabajo en altura sin equipo ni autorización.' },
+          { text: 'La lámpara del pasillo 4 lleva dos días fundida.', c: 1, fb: 'Condición insegura: falta de iluminación en el área.' },
+          { text: 'Se descarga una unidad sin colocar los calzas o el freno del muelle.', c: 0, fb: 'Acto inseguro: se omitió un paso del procedimiento.' },
+          { text: 'El extintor del área de embarques está bloqueado por cajas.', c: 1, fb: 'Condición insegura: el equipo de emergencia no está accesible.' }],
+        n: 'Clasifica cada caso. Si te equivocas, la retroalimentación te explica por qué.' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 3',
+        question: 'Un colaborador opera un patín hidráulico sin haber recibido capacitación. Esto es…',
+        options: [
+          { text: 'Una condición insegura del equipo.', c: false, fb: 'El equipo puede estar en buen estado; el problema es la conducta.' },
+          { text: 'Un acto inseguro.', c: true, fb: 'Correcto. Realizar una actividad sin autorización ni capacitación es un acto inseguro.' },
+          { text: 'Ninguna de las dos, si no pasó nada.', c: false, fb: 'Que no haya consecuencias no elimina el acto inseguro: es un casi accidente y debe reportarse.' }],
+        n: 'Una pregunta rápida para cerrar el módulo.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: '"Reportar una condición insegura también es prevenir".',
+        keys: ['El acto inseguro depende de la persona; la condición insegura, del entorno.', 'Prisa, confianza y distracción están detrás de la mayoría de los actos inseguros.', 'Ambos se reportan, aunque no haya pasado nada: eso es un casi accidente.'],
+        n: 'Tres ideas clave del módulo tres.' }
+    ]},
+
+    { title: 'Equipo de Protección Personal', mins: '13 min', desc: 'El EPP como última barrera: selección, uso, revisión y reemplazo.', act: 'ELIGE EL EPP CORRECTO', screens: [
+      { t: 'intro', title: 'Equipo de Protección Personal', obj: 'Seleccionar el EPP adecuado según la actividad y el riesgo, y mantenerlo en condiciones de uso.', mins: '13 minutos',
+        bullets: ['Por qué el EPP es la última barrera', 'Selección según el riesgo', 'Revisión, limpieza y reemplazo', 'Consecuencias de usar EPP dañado o incorrecto'],
+        n: 'El EPP no evita el accidente: reduce el daño. Por eso es la última barrera, no la primera.' },
+      { t: 'visual', title: 'El EPP es la última barrera de protección', lead: 'Antes del EPP hay tres controles que siempre van primero.',
+        cards: [
+          { k: '1º', title: 'Eliminar o sustituir', text: 'Quitar el peligro o cambiarlo por algo menos peligroso.' },
+          { k: '2º', title: 'Controles de ingeniería', text: 'Guardas, barreras, ventilación, separación peatón-montacargas.' },
+          { k: '3º', title: 'Controles administrativos', text: 'Procedimientos, señalización, rotación y capacitación.' },
+          { k: '4º', title: 'EPP', text: 'Lo que te protege cuando el riesgo no pudo eliminarse. Última línea.' }],
+        n: 'Primero se elimina el riesgo, luego se controla con ingeniería y procedimientos. El EPP es lo último.' },
+      { t: 'flip', title: 'Tu EPP, pieza por pieza', lead: 'Toca cada tarjeta para ver qué protege y cómo debes revisarla.',
+        fcards: [
+          { title: 'Casco', sub: 'Protege la cabeza', body: 'Contra caída de objetos y golpes. Revisa que no tenga fisuras y que el arnés interno esté completo y ajustado.' },
+          { title: 'Lentes de seguridad', sub: 'Protege los ojos', body: 'Contra partículas, salpicaduras y polvo. Cámbialos si están rayados: si no ves bien, no te protegen.' },
+          { title: 'Guantes', sub: 'Protege las manos', body: 'El tipo depende de la tarea: corte, químico o manejo general. Nunca uses guantes cerca de partes giratorias.' },
+          { title: 'Chaleco reflejante', sub: 'Te hace visible', body: 'Indispensable donde circulan montacargas y vehículos. Si está sucio o sin cintas, ya no cumple su función.' },
+          { title: 'Calzado de seguridad', sub: 'Protege los pies', body: 'Casquillo contra impacto y suela antiderrapante. Revisa desgaste de suela y casquillo expuesto.' },
+          { title: 'Protección auditiva', sub: 'Protege el oído', body: 'Tapones u orejeras en áreas de ruido. El daño auditivo es acumulativo y no se revierte.' },
+          { title: 'Protección respiratoria', sub: 'Protege las vías respiratorias', body: 'Según el contaminante. Requiere ajuste correcto y cambio de filtros conforme al programa.' }],
+        n: 'Revisa cada pieza de tu equipo antes de usarla. Un EPP dañado da una falsa sensación de seguridad.' },
+      { t: 'video', title: 'Video: EPP en carga y descarga', lead: 'Observa qué protege cada pieza en una maniobra real de andén.',
+        vid: { use: 'EJEMPLO', dur: '1:20 – 1:45', frag: 'Preparación del colaborador (0:00–0:40) y maniobra de descarga (0:40–1:30).', slot: 'Video MIRAGE — uso del EPP en carga, descarga y manejo de materiales', valida: 'pendiente' },
+        observar: ['Qué EPP porta cada persona según su actividad.', 'Ajuste y estado del equipo: casco, chaleco, guantes y calzado.', 'Momentos en que el EPP cambia porque cambia el riesgo.'],
+        pausas: [{ t: '0:15', text: 'Congelar al colaborador y etiquetar cada pieza de EPP con líneas guía.' },
+          { t: '0:50', text: 'Pausa: "¿Qué EPP necesita el colaborador para el siguiente paso?".' },
+          { t: '1:20', text: 'Texto en pantalla: "El EPP es la última barrera, no la primera".' }],
+        qs: [{ q: 'Para la maniobra que viste en el andén, ¿qué EPP resulta indispensable?',
+            options: [{ text: 'Casco, chaleco reflejante, calzado de seguridad y guantes acordes a la carga.', c: true, fb: 'Correcto. Visibilidad y protección de manos y pies son lo crítico en andén.' },
+              { text: 'Solo calzado de seguridad, porque la maniobra es breve.', c: false, fb: 'La duración no reduce el riesgo: la selección depende de la actividad.' },
+              { text: 'Casco y protección respiratoria.', c: false, fb: 'La protección respiratoria aplica ante contaminantes en el aire, no en esta maniobra.' }] },
+          { q: 'Si observaste una pieza de EPP en mal estado o mal ajustada, ¿qué corresponde hacer?',
+            options: [{ text: 'Continuar y reportarlo al final del turno.', c: false, fb: 'El equipo dañado se retira de servicio de inmediato: mientras tanto no protege.' },
+              { text: 'Detener la actividad, reportar y solicitar el reemplazo antes de continuar.', c: true, fb: 'Correcto. El EPP dañado se reemplaza, nunca se repara ni se improvisa.' }] }],
+        nota: 'No afirmamos que la maniobra del video sea correcta o segura: el área de Seguridad de MIRAGE debe validarla contra el procedimiento vigente antes de presentarla como ejemplo.',
+        n: 'Fíjate en cada pieza de EPP y en por qué está ahí.' },
+      { t: 'rows', title: 'Actividad: elige el EPP correcto para cada actividad', lead: 'Selecciona el kit que corresponde a cada tarea de la operación.',
+        actLabel: 'SELECCIÓN DE EPP', opts: ['Kit A', 'Kit B', 'Kit C'],
+        legend: true,
+        rows: [
+          { text: 'Circular a pie por el pasillo de montacargas para supervisar surtido.', c: 0, fb: 'Kit A: casco, chaleco reflejante y calzado de seguridad. Visibilidad es lo crítico aquí.' },
+          { text: 'Descarga manual de mercancía con esquinas y flejes metálicos.', c: 1, fb: 'Kit B: Kit A más guantes contra corte y lentes de seguridad.' },
+          { text: 'Trasvase de un producto químico de limpieza en el área de mantenimiento.', c: 2, fb: 'Kit C: guantes químicos, lentes o goggles, protección respiratoria según la hoja de datos de seguridad.' },
+          { text: 'Trabajo cerca del compresor durante mantenimiento, con ruido elevado.', c: 1, fb: 'Kit B más protección auditiva. Recuerda: el daño auditivo se acumula.' }],
+        n: 'Elige el kit adecuado para cada actividad. La selección siempre depende del riesgo, no de la costumbre.' },
+      { t: 'case', title: 'Caso: el guante equivocado', foto: 'Colaborador con guantes de tela manipulando una caja con flejes metálicos en zona de recibo.',
+        caseText: 'Un colaborador usa guantes de tela para cortar flejes metálicos porque los de corte "le quedan grandes". El fleje se libera con tensión y le provoca una herida en la palma que requiere sutura.',
+        takeaway: 'Un EPP incorrecto o de la talla equivocada protege igual que no usar nada. Si no te queda, solicítalo: es tu derecho y tu obligación.',
+        n: 'La talla también es seguridad. Un guante que no ajusta puede ser tan peligroso como no usarlo.' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 4',
+        question: 'Tu casco se cayó desde el segundo nivel del rack y tiene una fisura pequeña. ¿Qué haces?',
+        options: [
+          { text: 'Lo sigo usando: la fisura es mínima.', c: false, fb: 'Un casco fisurado ya no absorbe el impacto. Debe retirarse de uso.' },
+          { text: 'Lo reporto y solicito el reemplazo antes de volver al área.', c: true, fb: 'Correcto. Todo EPP dañado se retira de servicio y se reemplaza antes de continuar.' },
+          { text: 'Lo reparo con cinta y lo uso el resto del turno.', c: false, fb: 'El EPP no se repara ni se improvisa: se reemplaza.' }],
+        n: 'Una decisión que se presenta más seguido de lo que crees.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: '"El EPP es tu última barrera: revísalo antes de cada turno".',
+        keys: ['El EPP se elige por el riesgo de la actividad, no por costumbre.', 'Un EPP dañado, sucio o de talla incorrecta no protege.', 'Revisar, limpiar y reportar tu EPP es parte de tu trabajo.'],
+        n: 'Tres ideas clave sobre el equipo de protección personal.' }
+    ]},
+
+    { title: 'Emergencias', mins: '16 min', desc: 'Antes, durante y después: evacuación, brigadas y puntos de reunión.', act: 'SIMULACIÓN DE EMERGENCIA', screens: [
+      { t: 'intro', title: 'Preparación y respuesta ante emergencias', obj: 'Actuar correctamente antes, durante y después de una emergencia, y reconocer el papel de las brigadas.', mins: '16 minutos',
+        bullets: ['Tipos de emergencia en la operación', 'Alarmas, rutas, salidas y punto de reunión', 'No correr, no gritar, no empujar', 'Funciones de las brigadas'],
+        n: 'En una emergencia no se improvisa: se aplica lo que ya sabías. Por eso este módulo importa.' },
+      { t: 'visual', title: 'Antes, durante y después', lead: 'Tu respuesta empieza mucho antes de que suene la alarma.',
+        cards: [
+          { k: 'ANTES', title: 'Conoce tu ruta', text: 'Ubica salidas, extintores, alarmas y tu punto de reunión. Participa en los simulacros.' },
+          { k: 'DURANTE', title: 'Actúa con calma', text: 'Suspende la actividad, apaga equipo si es seguro, evacúa por la ruta señalizada.' },
+          { k: 'DESPUÉS', title: 'Permanece y reporta', text: 'Quédate en el punto de reunión hasta el pase de lista y la indicación de retorno.' }],
+        n: 'Antes: conoce tu ruta. Durante: evacúa con calma. Después: espera indicaciones en el punto de reunión.' },
+      { t: 'visual', title: 'Tipos de emergencia que pueden ocurrir', lead: 'Cada una tiene una respuesta distinta, pero todas empiezan por dar aviso.',
+        cards: [
+          { k: 'INCENDIO', title: 'Fuego o conato', text: 'Da la alarma. Solo combate si estás capacitado y el fuego es incipiente.' },
+          { k: 'SISMO', title: 'Movimiento telúrico', text: 'Aléjate de racks y estibas. Repliegue en zona segura, luego evacúa.' },
+          { k: 'FUGA', title: 'Gas o vapor', text: 'No generes chispa, no acciones interruptores. Aléjate contra el viento y avisa.' },
+          { k: 'DERRAME', title: 'Líquido peligroso', text: 'Delimita, no lo toques sin EPP y reporta de inmediato.' },
+          { k: 'ACCIDENTE', title: 'Persona lesionada', text: 'Protege la escena, alerta y no muevas a la persona.' },
+          { k: 'MÉDICA', title: 'Emergencia médica', text: 'Solicita apoyo de la brigada de primeros auxilios y despeja el área.' }],
+        n: 'Identifica el tipo de emergencia y da aviso de inmediato. La respuesta correcta cambia según el evento.' },
+      { t: 'visual', title: 'Durante la evacuación: tres reglas', lead: 'Simples, pero son las que evitan lesiones durante el desalojo.',
+        cards: [
+          { k: 'NO', title: 'No corras', text: 'Camina rápido, sin detenerte. Correr provoca caídas y bloqueos.' },
+          { k: 'NO', title: 'No grites', text: 'El grito genera pánico e impide escuchar las indicaciones.' },
+          { k: 'NO', title: 'No empujes', text: 'Respeta el flujo y ayuda a quien lo necesite. Nunca regreses por objetos.' }],
+        n: 'No corras, no grites, no empujes. Y nunca regreses por tus pertenencias.' },
+      { t: 'flip', title: 'Las brigadas de emergencia', lead: 'Toca cada tarjeta para conocer su función. Identifícalos por su distintivo.',
+        fcards: [
+          { title: 'Evacuación', sub: 'Guían el desalojo', body: 'Dirigen el flujo por las rutas seguras, verifican que nadie quede en el área y realizan el pase de lista en el punto de reunión.' },
+          { title: 'Primeros auxilios', sub: 'Atención inicial', body: 'Brindan la atención inmediata a personas lesionadas y coordinan el traslado con los servicios de emergencia.' },
+          { title: 'Búsqueda y rescate', sub: 'Localizan personas', body: 'Recorren áreas para ubicar a quien no llegó al punto de reunión, siempre con equipo y protocolo.' },
+          { title: 'Prevención y combate de incendios', sub: 'Control del fuego', body: 'Atienden conatos con equipo adecuado y mantienen el control hasta la llegada del cuerpo de bomberos.' }],
+        n: 'Cuatro brigadas, cuatro funciones. Sigue siempre sus indicaciones durante una emergencia.' },
+      { t: 'video', title: 'Video: simulacro de evacuación en MIRAGE', lead: 'Un simulacro real de nuestras instalaciones, de la alarma al pase de lista.',
+        vid: { use: 'CASO PRÁCTICO', dur: '2:00 – 2:30', frag: 'Alarma y suspensión de actividades (0:00–0:40), recorrido por ruta (0:40–1:40), punto de reunión y pase de lista (1:40–2:20).', slot: 'Video MIRAGE — simulacro de evacuación, rutas y brigadas', valida: 'pendiente' },
+        observar: ['Cómo se suspende la actividad y qué se hace con el equipo en uso.', 'Señalización de ruta, salidas y comportamiento del grupo.', 'Cómo actúan y se identifican los brigadistas.', 'Qué ocurre en el punto de reunión.'],
+        pausas: [{ t: '0:30', text: 'Pausa: "¿Qué harías tú en este momento?" con tres opciones en pantalla.' },
+          { t: '1:15', text: 'Sobreponer las tres reglas: no correr, no gritar, no empujar.' },
+          { t: '2:10', text: 'Congelar en el punto de reunión y resaltar el pase de lista.' }],
+        qs: [{ q: 'En el punto de reunión, ¿cuándo puede el personal regresar al área?',
+          options: [{ text: 'Cuando el grupo ya está completo.', c: false, fb: 'El pase de lista es un paso, pero el retorno lo autoriza quien coordina.' },
+            { text: 'Cuando el personal brigadista o el responsable da la indicación de retorno.', c: true, fb: 'Correcto. Solo con indicación expresa, después del pase de lista.' },
+            { text: 'Cuando deja de sonar la alarma.', c: false, fb: 'El silencio de la alarma no significa que el área sea segura.' }] }],
+        nota: 'Utilizar preferentemente material de un simulacro coordinado por el área de Seguridad. Si el video muestra desviaciones respecto al procedimiento, señalarlas de forma explícita como oportunidad de mejora y nunca como práctica correcta.',
+        n: 'Observa el simulacro completo: cada paso tiene una razón.' },
+      { t: 'video', title: 'Video externo: uso correcto del extintor', lead: 'Material externo breve para reforzar la respuesta ante un conato de incendio.',
+        vid: { use: 'EXPLICACIÓN · MATERIAL EXTERNO', dur: '2:00 – 4:00', frag: 'Solo el segmento de técnica P.A.S.S. y selección del extintor; omitir escenas de incendios reales o dramatizadas.', slot: 'Video externo con licencia — manejo de extintor portátil (fragmento)', valida: 'pendiente', ext: true },
+        observar: ['Cómo se elige el extintor según el tipo de fuego.', 'La secuencia: jalar, apuntar a la base, presionar y barrer.', 'La distancia de seguridad y la ruta de salida siempre a la espalda.'],
+        pausas: [{ t: 'Inicio', text: 'Texto previo: "Solo combate un conato si estás capacitado y no comprometes tu salida".' },
+          { t: 'Media', text: 'Sobreponer la clasificación de fuegos aplicable a nuestras áreas.' },
+          { t: 'Cierre', text: 'Texto: "Primero da la alarma. Siempre".' }],
+        qs: [{ q: '¿Cuándo debes intentar apagar un conato con extintor?',
+          options: [{ text: 'Siempre que veas fuego, para evitar que crezca.', c: false, fb: 'No. Si el fuego creció o compromete tu salida, evacúa y deja que actúe la brigada.' },
+            { text: 'Solo si estás capacitado, el fuego es incipiente y tienes la salida libre a tu espalda.', c: true, fb: 'Correcto. Y siempre después de dar la alarma.' },
+            { text: 'Solo si tu líder lo autoriza por radio.', c: false, fb: 'La condición es tu capacitación y la seguridad de la escena, no la autorización en el momento.' }] }],
+        nota: 'Verificar antes de integrarlo: pertinencia del contenido, licencia o autorización de reproducción, congruencia con la NOM-002-STPS y con el procedimiento interno de MIRAGE. Descartar cualquier fragmento alarmista o con imágenes sensibles.',
+        n: 'Este material es externo. Fíjate solo en la técnica; el procedimiento interno de MIRAGE siempre tiene prioridad.' },
+      { t: 'editable', title: 'Información oficial de tu centro de trabajo', lead: 'MIRAGE debe capturar estos datos por sede antes de publicar el curso.',
+        fields: [
+          { label: 'Número de emergencias interno', hint: 'Ej. extensión o número directo' },
+          { label: 'Punto de reunión asignado', hint: 'Nombre y ubicación del punto' },
+          { label: 'Responsable de brigadas', hint: 'Nombre y puesto' },
+          { label: 'Números de emergencia externos', hint: 'Bomberos, ambulancia, protección civil' }],
+        n: 'Antes de tomar el curso, confirma cuál es tu punto de reunión y a quién debes avisar.' },
+      { t: 'scenario', title: 'Simulación: ¿qué harías durante una emergencia en MIRAGE?', actLabel: 'SIMULACIÓN INTERACTIVA',
+        situation: 'Estás surtiendo en el pasillo 7 cuando suena la alarma de evacuación. Tu tablet con el pedido está en el rack y hay humo ligero al fondo del pasillo.',
+        question: '¿Cuál es tu primera acción?',
+        options: [
+          { text: 'Tomo la tablet para no perder el pedido y luego salgo.', c: false, fb: 'Nunca regreses ni te detengas por objetos. Ningún pedido vale una vida.' },
+          { text: 'Suspendo la actividad y evacúo por la ruta señalizada hacia el punto de reunión.', c: true, fb: 'Correcto. Suspender, evacuar por la ruta y permanecer en el punto de reunión hasta el pase de lista.' },
+          { text: 'Voy al fondo del pasillo a ver de dónde viene el humo.', c: false, fb: 'Acercarte al origen te expone. Solo el personal capacitado atiende el evento.' }],
+        n: 'Piensa rápido, como en la operación real. ¿Cuál es tu primera acción?' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 5',
+        question: 'Después de evacuar, ¿cuándo puedes regresar a tu área?',
+        options: [
+          { text: 'Cuando ya no escucho la alarma.', c: false, fb: 'El silencio de la alarma no significa que el área sea segura.' },
+          { text: 'Cuando el personal brigadista o el responsable dé la indicación de retorno.', c: true, fb: 'Correcto. Solo se regresa con indicación expresa, después del pase de lista.' },
+          { text: 'Cuando mi líder me pida continuar con el pedido.', c: false, fb: 'La indicación de retorno la da quien coordina la emergencia.' }],
+        n: 'Cierre del módulo con una verificación.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: '"En una emergencia, la calma también se practica".',
+        keys: ['Conoce tu ruta, tu salida y tu punto de reunión antes de que suene la alarma.', 'No corras, no grites, no empujes y nunca regreses por objetos.', 'Sigue siempre las indicaciones del personal brigadista.'],
+        n: 'Tres ideas clave sobre emergencias.' }
+    ]},
+
+    { title: 'Reglamento y normas internas', mins: '10 min', desc: 'Reglas de cumplimiento obligatorio y responsabilidades por rol.', act: 'DECISIONES EN OPERACIÓN', screens: [
+      { t: 'intro', title: 'Reglamento y normas internas de MIRAGE', obj: 'Aplicar las reglas internas de seguridad y reconocer las responsabilidades de cada rol en la operación.', mins: '10 minutos',
+        bullets: ['Reglas de cumplimiento obligatorio', 'Señalización y zonas delimitadas', 'Autorización para operar equipos', 'Responsabilidades del colaborador, del líder y de Seguridad'],
+        n: 'Las reglas internas no son trámite: son la experiencia acumulada de la operación.' },
+      { t: 'visual', title: 'Las reglas que no se negocian', lead: 'Aplican a todo el personal, en todos los turnos y en todas las sedes.',
+        cards: [
+          { k: 'SEÑALES', title: 'Respeta la señalización', text: 'Zonas delimitadas, rutas peatonales y áreas restringidas.' },
+          { k: 'PERMISO', title: 'Solo equipo autorizado', text: 'Opera únicamente lo que tienes autorizado y para lo que estás capacitado.' },
+          { k: 'ALCANCE', title: 'No improvises tareas', text: 'Si no fuiste capacitado para una actividad, no la realices.' },
+          { k: 'ORDEN', title: 'Orden y limpieza', text: 'Área despejada, tarimas en su lugar, residuos en su contenedor.' },
+          { k: 'REPORTE', title: 'Reporta de inmediato', text: 'Riesgos, incidentes, accidentes y casi accidentes. Sin excepción.' },
+          { k: 'CUIDADO', title: 'Cuida el equipo', text: 'Instalaciones, herramientas, equipos y mercancía en buen estado.' }],
+        n: 'Seis reglas básicas. Cumplirlas te protege a ti y a quienes trabajan contigo.' },
+      { t: 'visual', title: 'Cada rol tiene su responsabilidad', lead: 'La seguridad es de todos, pero cada quien responde por algo distinto.',
+        cards: [
+          { k: 'TÚ', title: 'Colaborador', text: 'Cumplir las reglas, usar tu EPP, reportar riesgos y cuidar a tu equipo.' },
+          { k: 'LÍDER', title: 'Líder o supervisor', text: 'Dar la instrucción segura, verificar condiciones, atender reportes y dar el ejemplo.' },
+          { k: 'SSMA', title: 'Área de Seguridad', text: 'Establecer estándares, capacitar, investigar eventos y dar seguimiento a las acciones.' }],
+        n: 'Tú cumples y reportas; tu líder verifica y atiende; Seguridad establece y da seguimiento.' },
+      { t: 'editable', title: 'Documentos oficiales de MIRAGE', lead: 'Los procedimientos y reglas específicas los define la empresa.',
+        fields: [
+          { label: 'Reglamento interno de seguridad vigente', hint: 'Nombre y versión del documento' },
+          { label: 'Canal oficial de reporte', hint: 'App, formato, correo o extensión' },
+          { label: 'Responsable de SSMA por sede', hint: 'Nombre y contacto' },
+          { label: 'Procedimiento de autorización de equipos', hint: 'Clave del procedimiento' }],
+        n: 'Consulta con tu líder cuál es el canal oficial de reporte en tu centro de trabajo.' },
+      { t: 'video', title: 'Video: orden, limpieza y reglas en el piso', lead: 'Cómo se ve un área que cumple el estándar y qué la mantiene así.',
+        vid: { use: 'EJEMPLO', dur: '1:15 – 1:45', frag: 'Estado del área al inicio y al cierre del turno; zonas delimitadas y acomodo de tarimas.', slot: 'Video MIRAGE — orden y limpieza, señalización y zonas delimitadas', valida: 'pendiente' },
+        observar: ['Qué hay dentro y fuera de las zonas delimitadas.', 'Accesibilidad de extintores, salidas y tableros.', 'Qué rutina mantiene el orden: el cierre del turno.'],
+        pausas: [{ t: '0:30', text: 'Comparación lado a lado: área ordenada vs. área con material fuera de zona.' },
+          { t: '1:05', text: 'Pausa: "¿Qué condiciones deben corregirse en esta escena?".' }],
+        qs: [{ q: 'Se coloca mercancía frente a un extintor "solo mientras llega el montacargas". ¿Detendrías la actividad?',
+          options: [{ text: 'Sí: el acceso al equipo de emergencia debe estar libre en todo momento.', c: true, fb: 'Correcto. No hay excepción por tiempo: se libera de inmediato y se reubica la mercancía.' },
+            { text: 'No, si va a retirarse en pocos minutos.', c: false, fb: 'Una emergencia no espera minutos. El acceso debe mantenerse libre siempre.' },
+            { text: 'Solo si el área de Seguridad está presente.', c: false, fb: 'La regla aplica con o sin supervisión.' }] }],
+        nota: 'El video ilustra el estándar esperado, pero cada escena debe contrastarse con el reglamento interno vigente de MIRAGE antes de publicarse como referencia.',
+        n: 'Observa la diferencia entre un área ordenada y una que no lo está. Es más que estética.' },
+      { t: 'rows', title: 'Actividad: ¿decisión correcta o incorrecta?', lead: 'Clasifica cada decisión tomada durante el turno.',
+        actLabel: 'CASOS DE DECISIÓN', opts: ['Correcta', 'Incorrecta'],
+        rows: [
+          { text: 'Un colaborador reporta un casi accidente aunque nadie resultó lesionado.', c: 0, fb: 'Correcta. El casi accidente es la advertencia gratuita: reportarlo evita el accidente real.' },
+          { text: 'Ante la ausencia del montacarguista, otro compañero mueve la tarima con el equipo.', c: 1, fb: 'Incorrecta. Solo personal autorizado y capacitado puede operar el equipo.' },
+          { text: 'El líder detiene la descarga hasta que se coloque el calzo de la unidad.', c: 0, fb: 'Correcta. Detener la actividad ante una condición insegura es siempre la decisión adecuada.' },
+          { text: 'Se deja mercancía frente al extintor "solo mientras llega el montacargas".', c: 1, fb: 'Incorrecta. El equipo contra incendio debe estar accesible en todo momento.' }],
+        n: 'Revisa cada decisión. En la operación real, estas situaciones se presentan todos los días.' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 6',
+        question: '¿Qué debes hacer si detectas una condición insegura y no puedes corregirla tú?',
+        options: [
+          { text: 'Anotarla y comentarla al final del turno.', c: false, fb: 'El reporte debe ser inmediato: el riesgo sigue activo mientras tanto.' },
+          { text: 'Delimitar o advertir si es posible y reportarla de inmediato por el canal oficial.', c: true, fb: 'Correcto. Advertir y reportar de inmediato evita que alguien más se exponga.' },
+          { text: 'Esperar a que Seguridad haga su recorrido.', c: false, fb: 'Los recorridos no sustituyen tu reporte: tú la viste primero.' }],
+        n: 'Cerramos el módulo con una verificación rápida.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: '"Ninguna actividad es tan urgente como para realizarla de forma insegura".',
+        keys: ['Solo realiza actividades para las que estás capacitado y autorizado.', 'El orden y la limpieza son parte de la seguridad, no del aseo.', 'El reporte inmediato es obligatorio, incluso si no hubo consecuencias.'],
+        n: 'Tres ideas clave del reglamento interno.' }
+    ]},
+
+    { title: 'Primeros auxilios', mins: '13 min', desc: 'Respuesta inicial: proteger, alertar y auxiliar sin poner en riesgo a nadie.', act: 'CASO: COMPAÑERO LESIONADO', screens: [
+      { t: 'intro', title: 'Primeros auxilios y respuesta inicial', obj: 'Aplicar la secuencia proteger, alertar y auxiliar ante una persona lesionada, sin exponerte ni agravar la lesión.', mins: '13 minutos',
+        bullets: ['Evaluar la escena antes de acercarte', 'Proteger, alertar y auxiliar', 'Qué hacer y qué evitar', 'Cuándo esperar al personal capacitado'],
+        n: 'Este contenido es introductorio: no sustituye una capacitación práctica ni una certificación en primeros auxilios.' },
+      { t: 'visual', title: 'Proteger, alertar, auxiliar', lead: 'Siempre en este orden. Cambiar el orden pone en riesgo a dos personas en lugar de una.',
+        cards: [
+          { k: 'P', title: 'Proteger', text: 'Evalúa la escena. ¿Sigue el peligro activo? Asegura el área antes de acercarte.' },
+          { k: 'A', title: 'Alertar', text: 'Solicita ayuda de inmediato: brigada de primeros auxilios y servicios de emergencia.' },
+          { k: 'A', title: 'Auxiliar', text: 'Acompaña, tranquiliza y sigue las indicaciones del personal capacitado.' }],
+        n: 'Proteger, alertar y auxiliar. Nunca te conviertas en la segunda víctima.' },
+      { t: 'visual', title: 'Cómo pedir ayuda con información clara', lead: 'Al dar aviso, di estas cuatro cosas en menos de veinte segundos.',
+        cards: [
+          { k: 'DÓNDE', title: 'Ubicación exacta', text: 'Sede, área, pasillo o andén. Sé específico.' },
+          { k: 'QUÉ', title: 'Qué ocurrió', text: 'Caída, golpe, atrapamiento, quemadura, desmayo.' },
+          { k: 'QUIÉN', title: 'Cuántas personas', text: 'Número de lesionados y si están conscientes.' },
+          { k: 'RIESGO', title: 'Peligro presente', text: 'Si sigue habiendo derrame, energía o equipo en movimiento.' }],
+        n: 'Dónde, qué pasó, cuántas personas y si el peligro sigue activo. Con eso la ayuda llega preparada.' },
+      { t: 'compare', title: 'Qué hacer y qué evitar', lead: 'La respuesta inicial correcta puede marcar la diferencia en la recuperación.',
+        cols: [
+          { title: 'Sí hacer', sub: 'Acciones seguras de respuesta inicial', mark: '✓', tone: 'green', items: ['Asegurar la escena antes de acercarte', 'Pedir ayuda de inmediato y con datos claros', 'Mantener a la persona en reposo y abrigada', 'Controlar hemorragias con presión directa y guantes', 'Enfriar quemaduras con agua limpia a temperatura ambiente', 'Acompañar y tranquilizar hasta que llegue la ayuda'] },
+          { title: 'No hacer', sub: 'Acciones que pueden agravar la lesión', mark: '✕', tone: 'red', items: ['Mover a la persona, salvo peligro inmediato', 'Dar agua, alimentos o medicamentos', 'Retirar objetos incrustados', 'Aplicar remedios caseros en quemaduras', 'Reacomodar una posible fractura', 'Realizar maniobras para las que no estás capacitado'] }],
+        n: 'La regla más importante: no muevas a la persona lesionada salvo que exista un peligro inmediato.' },
+      { t: 'video', title: 'Video externo: proteger, alertar, auxiliar', lead: 'Fragmento formativo sobre la respuesta inicial ante una persona lesionada.',
+        vid: { use: 'EXPLICACIÓN · MATERIAL EXTERNO', dur: '2:00 – 4:00', frag: 'Solo la secuencia P.A.S. y la llamada de emergencia; omitir escenas con sangre, maniobras avanzadas o dramatizaciones intensas.', slot: 'Video externo con licencia — respuesta inicial ante una persona lesionada (fragmento)', valida: 'pendiente', ext: true },
+        observar: ['Cómo se evalúa la escena antes de acercarse.', 'Qué información se da al solicitar ayuda.', 'Qué NO hace quien auxilia mientras llega el personal capacitado.'],
+        pausas: [{ t: 'Inicio', text: 'Texto previo: "Contenido introductorio. No sustituye una capacitación práctica ni una certificación".' },
+          { t: 'Media', text: 'Sobreponer la lista dónde / qué pasó / cuántos / peligro activo.' },
+          { t: 'Cierre', text: 'Texto: "No muevas a la persona lesionada salvo peligro inmediato".' }],
+        qs: [{ q: 'Antes de acercarte a una persona lesionada, ¿qué haces primero?',
+          options: [{ text: 'Evaluar la escena y asegurar que el peligro ya no está activo.', c: true, fb: 'Correcto. Proteger va primero: no te conviertas en la segunda víctima.' },
+            { text: 'Preguntarle cómo se siente para saber qué tan grave es.', c: false, fb: 'Antes de eso debes confirmar que acercarte es seguro.' },
+            { text: 'Buscar el botiquín más cercano.', c: false, fb: 'El botiquín no sirve de nada si la escena sigue siendo peligrosa.' }] }],
+        nota: 'Verificar licencia de uso, vigencia técnica del contenido y congruencia con los procedimientos internos de MIRAGE. Adaptar cualquier terminología que difiera de la utilizada por los servicios de emergencia locales.',
+        n: 'Recuerda: este contenido es introductorio y no sustituye una capacitación práctica en primeros auxilios.' },
+      { t: 'scenario', title: 'Caso: un compañero se lesiona durante la carga', actLabel: 'CASO PRÁCTICO',
+        situation: 'Durante la carga de mercancía, un compañero resbala y cae desde el borde del andén. Está consciente, se queja de dolor intenso en la pierna y no puede levantarse. Hay una unidad con el motor encendido a un metro.',
+        question: '¿Cuál es tu primera acción?',
+        options: [
+          { text: 'Lo ayudo a levantarse y lo llevo al área médica.', c: false, fb: 'No lo muevas: puede haber fractura. Moverlo puede agravar la lesión de forma permanente.' },
+          { text: 'Me aseguro de que la unidad se detenga, delimito el área y solicito ayuda de inmediato.', c: true, fb: 'Correcto. Primero proteger la escena, luego alertar. Con la unidad encendida, la escena no es segura.' },
+          { text: 'Le doy agua y espero a que se le pase el dolor.', c: false, fb: 'No des agua ni alimentos a una persona lesionada, y nunca esperes: solicita ayuda de inmediato.' }],
+        n: 'Este caso ocurre en andenes reales. Fíjate en el peligro que sigue activo.' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 7',
+        question: '¿En qué situación sí debes mover a una persona lesionada?',
+        options: [
+          { text: 'Cuando pide que la muevan porque está incómoda.', c: false, fb: 'La incomodidad no justifica el movimiento: puede haber lesión de columna.' },
+          { text: 'Cuando existe un peligro inmediato que amenaza su vida en ese lugar.', c: true, fb: 'Correcto. Solo ante peligro inmediato, como fuego, derrame o riesgo de aplastamiento.' },
+          { text: 'Cuando el área médica está cerca.', c: false, fb: 'La cercanía no es criterio. Espera al personal capacitado.' }],
+        n: 'Una verificación para cerrar el módulo.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: 'Este módulo es introductorio y no sustituye una capacitación práctica o certificación en primeros auxilios.',
+        keys: ['Protege la escena antes de acercarte: no seas la segunda víctima.', 'Alerta con información clara: dónde, qué pasó, cuántos y qué peligro sigue.', 'No muevas a la persona lesionada salvo peligro inmediato.'],
+        n: 'Tres ideas clave de respuesta inicial.' }
+    ]},
+
+    { title: 'Medio ambiente', mins: '10 min', desc: 'Residuos, derrames, sustancias químicas y uso responsable de recursos.', act: 'BUENAS Y MALAS PRÁCTICAS', screens: [
+      { t: 'intro', title: 'Seguridad y cuidado del medio ambiente', obj: 'Adoptar prácticas responsables para prevenir impactos ambientales en la operación diaria.', mins: '10 minutos',
+        bullets: ['Separación y manejo de residuos', 'Prevención de derrames', 'Manejo seguro de sustancias químicas', 'Uso responsable de energía y agua'],
+        n: 'Cuidar el ambiente en la operación es también cuidar la salud de quienes trabajan aquí.' },
+      { t: 'visual', title: 'Separa correctamente los residuos', lead: 'Un residuo en el contenedor equivocado puede volverse un riesgo.',
+        cards: [
+          { k: 'RECICLABLE', title: 'Cartón, plástico, madera', text: 'Limpios y secos. El cartón mojado o contaminado ya no es reciclable.' },
+          { k: 'ORGÁNICO', title: 'Restos de alimentos', text: 'Solo en comedores y áreas designadas, nunca en piso operativo.' },
+          { k: 'PELIGROSO', title: 'Estopas, aceites, solventes', text: 'Contenedor identificado y cerrado. Nunca al drenaje ni a la basura común.' },
+          { k: 'ESPECIAL', title: 'Baterías, electrónicos, filtros', text: 'Punto de acopio designado, con registro de entrega.' }],
+        n: 'Cuatro tipos de residuo, cuatro destinos distintos. Si dudas, pregunta antes de tirar.' },
+      { t: 'visual', title: 'Prevención de derrames y químicos', lead: 'Lo que evita el derrame es la revisión previa, no la limpieza posterior.',
+        cards: [
+          { k: 'REVISA', title: 'Envases y tapas', text: 'Verifica cierre, etiqueta legible y ausencia de fugas antes de mover.' },
+          { k: 'ETIQUETA', title: 'Identificación', text: 'Ningún químico sin etiqueta. Consulta la hoja de datos de seguridad.' },
+          { k: 'CONTÉN', title: 'Kit antiderrames', text: 'Ubica el kit de tu área y conoce cómo delimitar un derrame.' },
+          { k: 'REPORTA', title: 'Aviso inmediato', text: 'Todo derrame se reporta, sin importar el tamaño.' }],
+        n: 'Revisa, identifica, contén y reporta. Un derrame pequeño mal atendido se vuelve grande.' },
+      { t: 'video', title: 'Video: residuos y derrames en la operación', lead: 'Sigue el recorrido de un residuo desde que se genera hasta su contenedor.',
+        vid: { use: 'IDENTIFICACIÓN DE RIESGOS', dur: '1:30 – 2:00', frag: 'Generación de residuo en surtido (0:00–0:40), punto de acopio (0:40–1:20), atención de un derrame menor (1:20–1:50).', slot: 'Video MIRAGE — manejo de residuos y prevención de derrames', valida: 'pendiente' },
+        observar: ['Si el residuo llega al contenedor que le corresponde.', 'Señalización e identificación de los contenedores.', 'Cómo se delimita y reporta un derrame.'],
+        pausas: [{ t: '0:45', text: 'Pausa: "¿En qué contenedor va este residuo?" con cuatro opciones en pantalla.' },
+          { t: '1:30', text: 'Acercamiento al kit antiderrames; etiquetar sus componentes.' }],
+        qs: [{ q: 'En la escena del derrame, ¿cuál es la secuencia correcta?',
+          options: [{ text: 'Limpiar rápido y avisar después para no detener la operación.', c: false, fb: 'No se limpia sin conocer la sustancia ni sin el EPP adecuado.' },
+            { text: 'Delimitar y señalizar, avisar, y atender con el kit solo si estás capacitado.', c: true, fb: 'Correcto. Delimitar y avisar primero; la atención la realiza quien está capacitado.' },
+            { text: 'Colocar cartón encima para absorberlo.', c: false, fb: 'Improvisar absorbentes genera un residuo contaminado adicional y no elimina el riesgo.' }] }],
+        nota: 'Confirmar con Seguridad y con el responsable ambiental que la clasificación de contenedores mostrada en el video corresponde a la vigente en cada sede.',
+        n: 'Sigue el residuo con la mirada: su destino correcto también es seguridad.' },
+      { t: 'rows', title: 'Actividad: buenas y malas prácticas ambientales', lead: 'Clasifica cada práctica observada en el CEDIS.',
+        actLabel: 'CLASIFICACIÓN AMBIENTAL', opts: ['Buena práctica', 'Mala práctica'],
+        rows: [
+          { text: 'Vaciar el residuo de un limpiador en la coladera del pasillo.', c: 1, fb: 'Mala práctica: los químicos nunca van al drenaje. Se manejan como residuo peligroso.' },
+          { text: 'Aplanar y separar el cartón limpio en su contenedor.', c: 0, fb: 'Buena práctica: facilita el reciclaje y libera espacio en el área.' },
+          { text: 'Dejar encendida la iluminación del pasillo al terminar el inventario.', c: 1, fb: 'Mala práctica: el uso responsable de energía también es parte de tu trabajo.' },
+          { text: 'Colocar estopa con aceite en el contenedor de residuos peligrosos.', c: 0, fb: 'Buena práctica: la estopa impregnada es residuo peligroso y ese es su destino correcto.' },
+          { text: 'Reportar una fuga de agua en la toma del área de lavado.', c: 0, fb: 'Buena práctica: reportar evita desperdicio y una posible condición insegura por piso mojado.' }],
+        n: 'Clasifica cada práctica. Muchas de estas las verás hoy mismo en tu área.' },
+      { t: 'scenario', title: 'Verificación de aprendizaje', actLabel: 'VERIFICACIÓN · MÓDULO 8',
+        question: 'Encuentras una estopa impregnada de aceite en el piso del área de mantenimiento. ¿Qué haces?',
+        options: [
+          { text: 'La tiro en la basura común para despejar el área.', c: false, fb: 'Es residuo peligroso: no va a la basura común y además es combustible.' },
+          { text: 'La coloco en el contenedor de residuos peligrosos identificado.', c: true, fb: 'Correcto. Además, evitas un riesgo de incendio en el área.' },
+          { text: 'La dejo, porque el área de limpieza la recogerá.', c: false, fb: 'Dejarla mantiene el riesgo. Manéjala correctamente o repórtala.' }],
+        n: 'Verificación del módulo ambiental.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: '"El orden y la limpieza son la primera medida ambiental y de seguridad".',
+        keys: ['Cada residuo tiene un contenedor: separarlo bien previene riesgos e incendios.', 'Todo derrame se delimita y se reporta, sin importar su tamaño.', 'Energía, agua y material también se cuidan en la operación diaria.'],
+        n: 'Tres ideas clave del módulo ambiental.' }
+    ]},
+
+    { title: 'Marco normativo (NOM-STPS)', mins: '7 min', desc: 'Las NOM aplicables explicadas en tarjetas: qué regulan y qué te toca a ti.', act: 'TARJETAS DE NORMAS', screens: [
+      { t: 'intro', title: 'Marco normativo aplicable', obj: 'Reconocer las principales Normas Oficiales Mexicanas de la STPS aplicables a la operación y su relación con tu trabajo.', mins: '7 minutos',
+        bullets: ['Qué regula cada norma, en lenguaje simple', 'Cómo se relaciona con la operación de MIRAGE', 'Qué te corresponde hacer a ti'],
+        n: 'No necesitas memorizar las normas. Necesitas saber qué protegen y qué te toca hacer.' },
+      { t: 'flip', title: 'Las normas que rigen tu operación', lead: 'Toca cada tarjeta para ver qué regula y qué debes hacer tú.',
+        note: 'Verificar la vigencia de cada NOM ante la STPS antes de publicar la versión definitiva del curso.',
+        fcards: [
+          { title: 'NOM-001-STPS', sub: 'Edificios, locales e instalaciones', body: 'Regula condiciones seguras de pisos, escaleras, rampas y áreas. Tú: reporta pisos dañados, andenes en mal estado y barandales sueltos.' },
+          { title: 'NOM-002-STPS', sub: 'Prevención y protección contra incendios', body: 'Regula extintores, rutas, salidas y simulacros. Tú: mantén libres extintores y salidas, y participa en los simulacros.' },
+          { title: 'NOM-004-STPS', sub: 'Protección en maquinaria y equipo', body: 'Regula guardas y dispositivos de seguridad. Tú: nunca retires una guarda ni operes equipo sin ella.' },
+          { title: 'NOM-005-STPS', sub: 'Sustancias químicas peligrosas', body: 'Regula manejo, transporte y almacenamiento. Tú: usa el EPP indicado y consulta la hoja de datos de seguridad.' },
+          { title: 'NOM-006-STPS', sub: 'Manejo y almacenamiento de materiales', body: 'Regula estibas, montacargas y almacenamiento. Tú: respeta alturas de estiba y la separación peatón-montacargas.' },
+          { title: 'NOM-009-STPS', sub: 'Trabajos en altura', body: 'Regula el trabajo a más de 1.80 m. Tú: no subas a racks ni escaleras sin autorización y equipo adecuado.' },
+          { title: 'NOM-017-STPS', sub: 'Equipo de Protección Personal', body: 'Regula selección y uso del EPP según el riesgo. Tú: úsalo completo, revísalo y solicita reemplazo cuando se dañe.' },
+          { title: 'NOM-018-STPS', sub: 'Comunicación de peligros por químicos', body: 'Regula etiquetas y hojas de datos de seguridad. Tú: no uses envases sin etiqueta y aprende a leer el rombo.' },
+          { title: 'NOM-019-STPS', sub: 'Comisiones de seguridad e higiene', body: 'Regula la comisión mixta y sus recorridos. Tú: atiende sus observaciones y aporta hallazgos.' },
+          { title: 'NOM-025-STPS', sub: 'Condiciones de iluminación', body: 'Regula los niveles de luz por área. Tú: reporta lámparas fundidas o zonas oscuras en pasillos.' },
+          { title: 'NOM-026-STPS', sub: 'Colores y señales de seguridad', body: 'Regula señalización y código de colores. Tú: respeta líneas, señales y áreas delimitadas.' },
+          { title: 'NOM-030-STPS', sub: 'Servicios preventivos de seguridad y salud', body: 'Regula el programa preventivo del centro de trabajo. Tú: participa en capacitaciones y programas de seguridad.' },
+          { title: 'NOM-036-1-STPS', sub: 'Riesgo ergonómico por manejo de cargas', body: 'Regula el levantamiento manual de cargas. Tú: aplica la técnica correcta y pide apoyo o equipo cuando el peso lo exija.' }],
+        n: 'Cada norma protege algo concreto de tu operación. Revisa la tarjeta que más se relaciona con tu puesto.' },
+      { t: 'rows', title: 'Actividad: relaciona la norma con su tema', lead: 'Selecciona el tema que corresponde a cada norma.',
+        actLabel: 'RELACIÓN DE COLUMNAS', opts: ['EPP', 'Incendios', 'Señalización', 'Cargas'],
+        rows: [
+          { text: 'NOM-017-STPS', c: 0, fb: 'NOM-017: Equipo de Protección Personal.' },
+          { text: 'NOM-002-STPS', c: 1, fb: 'NOM-002: prevención y protección contra incendios.' },
+          { text: 'NOM-026-STPS', c: 2, fb: 'NOM-026: colores y señales de seguridad.' },
+          { text: 'NOM-036-1-STPS', c: 3, fb: 'NOM-036-1: factores de riesgo ergonómico por manejo manual de cargas.' }],
+        n: 'Relaciona cada norma con su tema principal.' },
+      { t: 'summary', title: 'Tres ideas para llevarte', phrase: 'Las normas no son trámite: son el mínimo que protege tu integridad.',
+        keys: ['Las NOM-STPS traducen en obligaciones lo que ya practicas en el curso.', 'Extintores, salidas, guardas y señalización están normados: no se bloquean ni se retiran.', 'Cumplir la norma empieza con tu conducta diaria, no con el documento.'],
+        n: 'Tres ideas clave del marco normativo.' }
+    ]},
+
+    { title: 'Reto final', mins: '6 min', desc: 'Escenario completo de almacén: identifica, clasifica y decide.', act: 'PROYECTO INTEGRADOR', screens: [
+      { t: 'hotspot', title: 'Reto final: el turno de las 7:00 en el CEDIS', lead: 'Entras al almacén y tienes que detectar todo lo que está mal. Toca los 7 puntos.',
+        foto: 'Escena integral de almacén MIRAGE: montacargas cerca de peatones, tarima mal estibada, derrame, colaborador sin EPP, salida obstruida, levantamiento incorrecto y residuos mal separados.',
+        pts: [
+          { x: 22, y: 34, label: 'Montacargas circulando cerca de peatones', text: 'Acto y condición combinados: falta separación y no hay contacto visual. Acción: detener el tránsito, respetar pasillo peatonal y señalizar.' },
+          { x: 44, y: 22, label: 'Tarima mal estibada', text: 'Condición insegura. Acción: no moverla, delimitar el área y solicitar reacomodo con el equipo adecuado.' },
+          { x: 58, y: 70, label: 'Derrame en el piso', text: 'Condición insegura. Acción: delimitar, colocar señal de piso mojado, atender con kit y reportar.' },
+          { x: 34, y: 76, label: 'Colaborador sin el EPP correcto', text: 'Acto inseguro. Acción: detener la actividad, dotar el EPP requerido y reforzar el estándar del área.' },
+          { x: 80, y: 46, label: 'Salida de emergencia obstruida', text: 'Condición insegura crítica. Acción: liberar de inmediato y verificar que se mantenga despejada.' },
+          { x: 68, y: 30, label: 'Levantamiento incorrecto de carga', text: 'Acto inseguro con riesgo ergonómico. Acción: corregir técnica, usar ayuda mecánica o apoyo de otra persona.' },
+          { x: 12, y: 62, label: 'Residuos en el contenedor equivocado', text: 'Mala práctica ambiental. Acción: reubicar el residuo en su contenedor y reforzar la señalización de acopio.' }],
+        n: 'Este es el reto final. Recorre toda la escena antes de avanzar: hay siete hallazgos.' },
+      { t: 'rows', title: 'Reto final: clasifica tus hallazgos', lead: 'Cada hallazgo de la escena: ¿acto o condición insegura?',
+        actLabel: 'CLASIFICACIÓN DEL RETO', opts: ['Acto inseguro', 'Condición insegura'],
+        rows: [
+          { text: 'Tarima mal estibada en la zona de recibo', c: 1, fb: 'Condición insegura: es un estado del área y de la carga.' },
+          { text: 'Colaborador operando sin chaleco reflejante', c: 0, fb: 'Acto inseguro: depende de la conducta de la persona.' },
+          { text: 'Salida de emergencia bloqueada con producto', c: 1, fb: 'Condición insegura crítica: compromete la evacuación.' },
+          { text: 'Levantar una caja pesada girando la cintura', c: 0, fb: 'Acto inseguro con riesgo ergonómico.' }],
+        n: 'Clasifica lo que encontraste. Es el mismo criterio que usa el reporte real.' },
+      { t: 'scenario', title: 'Reto final: ¿cuál es tu primera acción?', actLabel: 'DECISIÓN INTEGRADORA',
+        situation: 'Detectaste siete hallazgos en el turno. El montacargas sigue circulando junto a peatones y la salida de emergencia está bloqueada. Tu líder llega en veinte minutos.',
+        question: '¿Por dónde empiezas?',
+        options: [
+          { text: 'Documento todos los hallazgos y espero a mi líder para reportarlos juntos.', c: false, fb: 'Documentar está bien, pero hay riesgos activos que pueden causar daño en esos veinte minutos.' },
+          { text: 'Detengo la exposición inmediata: separo peatones del montacargas, libero la salida y luego reporto todo.', c: true, fb: 'Correcto. Primero se controla lo que puede lesionar ahora, después se reporta la totalidad de los hallazgos.' },
+          { text: 'Corrijo primero los residuos y el derrame porque son los más rápidos de resolver.', c: false, fb: 'Prioriza por gravedad, no por facilidad. El tránsito y la salida bloqueada son los riesgos críticos.' }],
+        n: 'En la vida real priorizas por gravedad: primero lo que puede lesionar ahora mismo.' }
+    ]},
+
+    { title: 'Evaluación final', mins: '10 min', desc: '10 reactivos con retroalimentación inmediata. Mínimo aprobatorio 80%.', act: 'CALIFICACIÓN 80%', screens: [
+      { t: 'scenario', ex: 1, title: 'Evaluación final', actLabel: 'OPCIÓN MÚLTIPLE', qn: 'Pregunta 1 de 10',
+        question: 'Un montacargas en operación dentro del pasillo es, en sí mismo…',
+        options: [
+          { text: 'Un riesgo', c: false, fb: 'El riesgo es la probabilidad de sufrir daño por exponerte a él. El equipo es la fuente: el peligro.' },
+          { text: 'Un peligro', c: true, fb: 'Correcto. El peligro es la fuente con potencial de daño; el riesgo aparece con la exposición.' },
+          { text: 'Una condición insegura', c: false, fb: 'Un montacargas operando correctamente no es una condición insegura; es un peligro controlado.' }],
+        n: 'Comenzamos la evaluación final. Responde con calma; si te equivocas, puedes intentarlo de nuevo.' },
+      { t: 'scenario', ex: 2, title: 'Evaluación final', actLabel: 'VERDADERO O FALSO', qn: 'Pregunta 2 de 10',
+        question: '"El Equipo de Protección Personal es la primera barrera de protección frente a un riesgo."',
+        options: [
+          { text: 'Verdadero', c: false, fb: 'Falso. El EPP es la última barrera: antes van la eliminación, los controles de ingeniería y los administrativos.' },
+          { text: 'Falso', c: true, fb: 'Correcto. El EPP es la última barrera de protección.' }],
+        n: 'Verdadero o falso.' },
+      { t: 'rows', ex: 3, title: 'Evaluación final', actLabel: 'RELACIÓN DE COLUMNAS · Pregunta 3 de 10', qn: 'Pregunta 3 de 10',
+        lead: 'Relaciona cada norma con el tema que regula.', opts: ['EPP', 'Incendios', 'Manejo de materiales'],
+        rows: [
+          { text: 'NOM-017-STPS', c: 0, fb: 'NOM-017: Equipo de Protección Personal.' },
+          { text: 'NOM-002-STPS', c: 1, fb: 'NOM-002: prevención y protección contra incendios.' },
+          { text: 'NOM-006-STPS', c: 2, fb: 'NOM-006: manejo y almacenamiento de materiales.' }],
+        n: 'Relaciona cada norma con su tema.' },
+      { t: 'rows', ex: 4, title: 'Evaluación final', actLabel: 'CLASIFICACIÓN · Pregunta 4 de 10', qn: 'Pregunta 4 de 10',
+        lead: 'Clasifica cada situación observada en el CEDIS.', opts: ['Acto inseguro', 'Condición insegura'],
+        rows: [
+          { text: 'Usar el celular mientras se camina en zona de tránsito de montacargas.', c: 0, fb: 'Acto inseguro: es una conducta de la persona.' },
+          { text: 'Extintor bloqueado por tarimas.', c: 1, fb: 'Condición insegura: el equipo de emergencia no está accesible.' },
+          { text: 'Operar un equipo sin autorización.', c: 0, fb: 'Acto inseguro: falta capacitación y autorización.' }],
+        n: 'Clasifica los tres casos.' },
+      { t: 'pick', ex: 5, title: 'Evaluación final', actLabel: 'SELECCIÓN DE EPP · Pregunta 5 de 10', qn: 'Pregunta 5 de 10',
+        lead: 'Vas a apoyar la descarga manual de una unidad con cajas flejadas, en un andén donde circulan montacargas. Selecciona todo el EPP necesario.',
+        multi: true,
+        options: [
+          { text: 'Casco', c: true }, { text: 'Chaleco reflejante', c: true }, { text: 'Calzado de seguridad', c: true },
+          { text: 'Guantes contra corte', c: true }, { text: 'Protección respiratoria', c: false }, { text: 'Arnés de seguridad', c: false }],
+        fbOk: 'Correcto: casco, chaleco reflejante, calzado de seguridad y guantes contra corte. No se requiere protección respiratoria ni arnés en esta actividad.',
+        fbNo: 'Revisa tu selección. Para esta tarea se requieren casco, chaleco reflejante, calzado de seguridad y guantes contra corte. El arnés es para trabajos en altura y la protección respiratoria para contaminantes en el aire.',
+        n: 'Selecciona todo el equipo necesario y comprueba tu respuesta.' },
+      { t: 'scenario', ex: 6, title: 'Evaluación final', actLabel: 'CASO OPERATIVO · Pregunta 6 de 10', qn: 'Pregunta 6 de 10',
+        situation: 'Encuentras un derrame de líquido desconocido en el pasillo de surtido. No hay nadie cerca.',
+        question: '¿Cuál es la acción correcta?',
+        options: [
+          { text: 'Limpiarlo de inmediato con estopa para evitar caídas.', c: false, fb: 'No lo toques sin saber qué es ni sin el EPP adecuado. Primero delimita y reporta.' },
+          { text: 'Delimitar el área, señalizar y reportar de inmediato.', c: true, fb: 'Correcto. Delimitar, señalizar y reportar; la atención la realiza personal capacitado con el kit adecuado.' },
+          { text: 'Avisar al final del turno para no detener el surtido.', c: false, fb: 'El reporte es inmediato: cada minuto alguien puede resbalar.' }],
+        n: 'Pregunta seis.' },
+      { t: 'scenario', ex: 7, title: 'Evaluación final', actLabel: 'VERDADERO O FALSO', qn: 'Pregunta 7 de 10',
+        question: '"Ante una persona lesionada, siempre debes moverla a un lugar cómodo antes de pedir ayuda."',
+        options: [
+          { text: 'Verdadero', c: false, fb: 'Falso. No se mueve a la persona salvo peligro inmediato; moverla puede agravar la lesión.' },
+          { text: 'Falso', c: true, fb: 'Correcto. Solo se mueve ante un peligro inmediato para su vida.' }],
+        n: 'Verdadero o falso.' },
+      { t: 'scenario', ex: 8, title: 'Evaluación final', actLabel: 'EMERGENCIAS · Pregunta 8 de 10', qn: 'Pregunta 8 de 10',
+        question: 'Durante un sismo dentro del almacén, ¿cuál es la acción correcta?',
+        options: [
+          { text: 'Correr de inmediato hacia la salida más cercana.', c: false, fb: 'Correr entre racks durante el movimiento aumenta el riesgo de caída y de golpe por objetos.' },
+          { text: 'Alejarse de racks y estibas, ubicarse en zona segura y evacuar al terminar el movimiento.', c: true, fb: 'Correcto. Primero repliegue en zona segura, luego evacuación ordenada al punto de reunión.' },
+          { text: 'Sujetar la estiba más cercana para que no caiga.', c: false, fb: 'Nunca intentes detener una carga: aléjate de ella.' }],
+        n: 'Pregunta ocho.' },
+      { t: 'rows', ex: 9, title: 'Evaluación final', actLabel: 'AMBIENTAL · Pregunta 9 de 10', qn: 'Pregunta 9 de 10',
+        lead: 'Clasifica cada práctica ambiental.', opts: ['Buena práctica', 'Mala práctica'],
+        rows: [
+          { text: 'Depositar estopa con aceite en el contenedor de residuos peligrosos.', c: 0, fb: 'Buena práctica: es su destino correcto.' },
+          { text: 'Verter residuo de limpiador en la coladera.', c: 1, fb: 'Mala práctica: los químicos nunca van al drenaje.' },
+          { text: 'Reportar una fuga de agua en el área de lavado.', c: 0, fb: 'Buena práctica: evita desperdicio y piso mojado.' }],
+        n: 'Clasifica las tres prácticas.' },
+      { t: 'scenario', ex: 10, title: 'Evaluación final', actLabel: 'REPORTE · Pregunta 10 de 10', qn: 'Pregunta 10 de 10',
+        question: 'Una tarima cae de un rack sin lesionar a nadie. ¿Qué corresponde hacer?',
+        options: [
+          { text: 'Nada: no hubo lesionados ni daño mayor.', c: false, fb: 'Es un casi accidente y debe reportarse: la próxima vez puede haber alguien debajo.' },
+          { text: 'Reportarlo como casi accidente para que se investigue la causa.', c: true, fb: 'Correcto. El casi accidente es la oportunidad de corregir antes de que ocurra la lesión.' },
+          { text: 'Comentarlo solo con los compañeros del turno.', c: false, fb: 'El comentario informal no genera acciones correctivas: se requiere el reporte formal.' }],
+        n: 'Última pregunta de la evaluación.' },
+      { t: 'results', title: 'Tus resultados', n: 'Aquí ves tu calificación. Si no alcanzaste el ochenta por ciento, puedes repetir la evaluación.' }
+    ]},
+
+    { title: 'Cierre y constancia', mins: '2 min', desc: 'Constancia digital editable y mensaje final del curso.', act: 'CONSTANCIA', screens: [
+      { t: 'cert', title: 'Constancia digital', lead: 'Se genera al acreditar la evaluación final con 80% o más.',
+        fields: [
+          { label: 'Nombre del colaborador', hint: 'Capturado por RH / plataforma' },
+          { label: 'Centro de trabajo', hint: 'CEDIS o sede' },
+          { label: 'Fecha de acreditación', hint: 'DD/MM/AAAA' },
+          { label: 'Folio y firma autorizada', hint: 'Folio interno y responsable de SSMA' }],
+        n: 'Esta constancia acredita tu participación en el curso. Los datos oficiales los completa la empresa.' },
+      { t: 'close', title: 'Mensaje de cierre', n: 'Gracias por completar el curso. Recuerda: todos somos responsables de regresar seguros a casa.' }
+    ]}
+  ];
+
+  flat() {
+    if (this._f) return this._f;
+    const f = [];
+    this.course.forEach((m, mi) => m.screens.forEach((s, si) => f.push({ ...s, mi, si, id: 'm' + mi + 's' + si, modTitle: m.title })));
+    this._f = f; return f;
+  }
+  examScreens() { return this.flat().filter(s => s.ex); }
+
+  go(n) {
+    const f = this.flat(); const i = Math.max(0, Math.min(f.length - 1, n));
+    this.setState(st => ({ i, seen: { ...st.seen, [i]: true }, menu: window.innerWidth < 980 ? false : st.menu }));
+    const sc = document.querySelector('[data-screen-label]'); if (sc && sc.parentElement) sc.parentElement.scrollTop = 0;
+  }
+  a(id) { return this.state.ans[id] || {}; }
+  setA(id, patch) { this.setState(st => ({ ans: { ...st.ans, [id]: { ...(st.ans[id] || {}), ...patch } } })); }
+
+  correct(s) {
+    const a = this.a(s.id);
+    if (s.t === 'scenario') return a.sel != null && !!s.options[a.sel].c;
+    if (s.t === 'rows') return s.rows.every((r, ri) => a[ 'r' + ri ] === r.c);
+    if (s.t === 'pick') { const sel = a.sel || []; return s.options.every((o, oi) => !!o.c === sel.includes(oi)); }
+    return false;
+  }
+
+  renderVals() {
+    const f = this.flat(), i = this.state.i, s = f[i], mod = this.course[s.mi];
+    const V = {
+      pct: Math.round((i / (f.length - 1)) * 100),
+      menuOpen: this.state.menu, narrOpen: this.state.narr, narr: s.n || '',
+      menuBg: this.state.menu ? '#D8232A' : 'transparent', narrBg: this.state.narr ? '#D8232A' : 'transparent',
+      toggleMenu: () => this.setState(st => ({ menu: !st.menu })),
+      toggleNarr: () => this.setState(st => ({ narr: !st.narr })),
+      next: () => this.go(i + 1), prev: () => this.go(i - 1),
+      goMap: () => this.go(4), restart: () => this.go(0),
+      repeat: () => this.setState(st => { const a = { ...st.ans }; delete a[s.id]; return { ans: a }; }),
+      prevFg: i === 0 ? '#B9BEC5' : '#33383F',
+      footLabel: mod.title + ' · pantalla ' + (s.si + 1) + ' de ' + mod.screens.length,
+      kicker: s.mi === 0 ? 'Introducción' : (s.mi <= 9 ? 'Módulo ' + s.mi + ' · ' + mod.title : mod.title),
+      title: s.title, lead: s.lead || '', foto: s.foto || '', screenKey: s.id,
+      showHead: s.t !== 'cover',
+      obj: s.obj, mins: s.mins, bullets: s.bullets || [], keys: (s.keys || []).map((k, n) => ({ n: '0' + (n + 1), text: k })),
+      phrase: s.phrase || '', caseText: s.caseText || '', takeaway: s.takeaway || '',
+      fields: s.fields || [], actLabel: s.actLabel || '', qn: s.qn || '',
+      situation: s.situation || '', question: s.question || ''
+    };
+    ['cover', 'welcome', 'nav', 'map', 'intro', 'visual', 'compare', 'case', 'flip', 'hotspot', 'rows', 'pick', 'scenario', 'summary', 'editable', 'results', 'cert', 'close', 'video', 'videoplan'].forEach(k => V['t_' + k] = s.t === k);
+
+    if (s.t === 'video') {
+      const a = this.a(s.id), v = s.vid;
+      V.vidUse = v.use; V.vidDur = v.dur; V.vidFrag = v.frag; V.vidSlot = v.slot;
+      V.observar = s.observar; V.pausas = s.pausas; V.vidNota = s.nota;
+      const val = v.valida !== 'validado';
+      V.valLabel = val ? 'PENDIENTE DE VALIDACIÓN SSMA' : 'VALIDADO POR SSMA';
+      V.valBg = val ? '#FDF2F2' : '#EAF6F0'; V.valFg = val ? '#D8232A' : '#0E7A4A'; V.valBd = val ? '#F3C7C9' : '#B9E0CC';
+      V.vqs = s.qs.map((q, qi) => {
+        const sel = a['q' + qi];
+        const out = { q: q.q, fb: '', fbBg: '#0E7A4A', fbTitle: '',
+          options: q.options.map((o, oi) => {
+            const on = sel === oi;
+            return { text: o.text, mark: on ? (o.c ? '✓' : '✕') : '',
+              bg: on ? (o.c ? '#EAF6F0' : '#FDF2F2') : '#fff', bd: on ? (o.c ? '#0E7A4A' : '#D8232A') : '#E2E5E9',
+              boxBg: on ? (o.c ? '#0E7A4A' : '#D8232A') : '#fff', boxBd: on ? 'transparent' : '#C7CBD1',
+              go: () => this.setA(s.id, { ['q' + qi]: oi }) };
+          }) };
+        if (sel != null) { const o = q.options[sel]; out.fb = o.fb; out.fbBg = o.c ? '#0E7A4A' : '#D8232A'; out.fbTitle = o.c ? 'RESPUESTA CORRECTA' : 'INTÉNTALO DE NUEVO'; }
+        return out;
+      });
+    }
+    if (s.t === 'videoplan') {
+      V.plan = f.filter(x => x.t === 'video').map(x => ({
+        title: x.title, place: (x.mi === 0 ? 'Introducción' : 'Módulo ' + x.mi + ' · ' + x.modTitle) + ' · pantalla ' + (x.si + 1),
+        use: x.vid.use, dur: x.vid.dur, bar: x.vid.ext ? '#111214' : '#D8232A', go: () => this.go(f.indexOf(x))
+      }));
+    }
+
+    V.menu = this.course.map((m, mi) => ({
+      badge: mi === 0 ? '·' : String(mi), title: m.title, mins: m.mins,
+      bg: mi === s.mi ? '#FBFBFC' : '#fff', bar: mi === s.mi ? '#D8232A' : 'transparent',
+      badgeBg: mi === s.mi ? '#D8232A' : '#EDEFF2', badgeFg: mi === s.mi ? '#fff' : '#6B7078',
+      go: () => this.go(f.findIndex(x => x.mi === mi)),
+      items: mi === s.mi ? m.screens.map((sc, si) => {
+        const gi = f.findIndex(x => x.mi === mi && x.si === si);
+        return { label: sc.title, bg: gi === i ? '#FDF2F2' : '#fff', dot: gi === i ? '#D8232A' : (this.state.seen[gi] ? '#0E7A4A' : '#D3D7DC'),
+          fg: gi === i ? '#111214' : '#5A6069', font: gi === i ? '600' : '400', go: () => this.go(gi) };
+      }) : []
+    }));
+
+    V.mapCards = this.course.map((m, mi) => ({
+      num: mi === 0 ? '00' : (mi < 10 ? '0' + mi : String(mi)), title: m.title, mins: m.mins, desc: m.desc, act: m.act,
+      bar: mi === s.mi ? '#D8232A' : '#111214', numFg: '#D8232A', go: () => this.go(f.findIndex(x => x.mi === mi))
+    }));
+
+    if (s.t === 'welcome' || s.t === 'nav') V.cards = s.cards;
+    if (s.t === 'visual') V.cards = s.cards.map(c => ({ ...c, badgeBg: '#FDF2F2', badgeFg: '#D8232A' }));
+    if (s.t === 'compare') {
+      const tone = { red: '#D8232A', dark: '#111214', green: '#0E7A4A' };
+      V.cols = s.cols.map(c => ({ ...c, bar: tone[c.tone] || '#111214' }));
+    }
+    if (s.t === 'flip') {
+      const open = this.a(s.id).open;
+      V.fcards = s.fcards.map((c, ci) => ({ ...c, open: open === ci, arrow: open === ci ? '−' : '+',
+        bd: open === ci ? '#111214' : '#E2E5E9', abg: open === ci ? '#111214' : '#F1F2F4', afg: open === ci ? '#fff' : '#6B7078',
+        go: () => this.setA(s.id, { open: open === ci ? null : ci }) }));
+    }
+    if (s.t === 'hotspot') {
+      const a = this.a(s.id), found = a.found || [], open = a.open;
+      V.pts = s.pts.map((p, pi) => ({ x: p.x, y: p.y, mark: found.includes(pi) ? '✓' : '!',
+        bg: open === pi ? '#111214' : (found.includes(pi) ? '#0E7A4A' : '#D8232A'),
+        anim: found.includes(pi) ? 'none' : 'pulseDot 2.2s infinite',
+        go: () => this.setA(s.id, { open: pi, found: found.includes(pi) ? found : found.concat(pi) }) }));
+      V.foundCount = found.length; V.ptTotal = s.pts.length; V.allFound = found.length === s.pts.length;
+      V.openPt = open != null; V.openPtLabel = open != null ? s.pts[open].label : ''; V.openPtText = open != null ? s.pts[open].text : '';
+    }
+    if (s.t === 'rows') {
+      const a = this.a(s.id);
+      V.rows = s.rows.map((r, ri) => {
+        const sel = a['r' + ri], ok = sel === r.c;
+        return { text: r.text, fb: sel == null ? '' : (ok ? '✓ ' + r.fb : '✕ Revisa: ' + r.fb), fbFg: ok ? '#0E7A4A' : '#D8232A',
+          opts: s.opts.map((label, oi) => {
+            const chosen = sel === oi;
+            const bg = chosen ? (ok ? '#0E7A4A' : '#D8232A') : '#fff';
+            return { label, bg, bd: chosen ? bg : '#DDE0E5', fg: chosen ? '#fff' : '#33383F', go: () => this.setA(s.id, { ['r' + ri]: oi }) };
+          }) };
+      });
+      const done = s.rows.every((r, ri) => a['r' + ri] != null);
+      V.rowsDone = done; const allOk = this.correct(s);
+      V.doneBg = allOk ? '#0E7A4A' : '#D8232A';
+      V.doneMsg = allOk ? 'Excelente: clasificaste correctamente todos los casos.' : 'Casi. Corrige los casos marcados en rojo y vuelve a intentarlo.';
+    }
+    if (s.t === 'pick') {
+      const a = this.a(s.id), sel = a.sel || [];
+      V.options = s.options.map((o, oi) => {
+        const on = sel.includes(oi), ok = a.checked ? (!!o.c === on) : true;
+        return { text: o.text, radius: '6px', mark: on ? '✓' : '',
+          bg: on ? (a.checked ? (o.c ? '#EAF6F0' : '#FDF2F2') : '#FDF2F2') : '#fff',
+          bd: on ? (a.checked ? (o.c ? '#0E7A4A' : '#D8232A') : '#D8232A') : '#E2E5E9',
+          boxBg: on ? (a.checked && !o.c ? '#D8232A' : (a.checked ? '#0E7A4A' : '#D8232A')) : '#fff',
+          boxBd: on ? 'transparent' : '#C7CBD1', fg: '#262B31',
+          go: () => this.setA(s.id, { sel: on ? sel.filter(x => x !== oi) : sel.concat(oi), checked: false }) };
+      });
+      V.check = () => this.setA(s.id, { checked: true });
+      V.pickHint = 'Puedes seleccionar varias opciones.';
+      if (a.checked) { const ok = this.correct(s); V.fb = ok ? s.fbOk : s.fbNo; V.fbBg = ok ? '#0E7A4A' : '#D8232A'; V.fbTitle = ok ? 'RESPUESTA CORRECTA' : 'INTÉNTALO DE NUEVO'; }
+      else { V.fb = ''; }
+    }
+    if (s.t === 'scenario') {
+      const sel = this.a(s.id).sel;
+      V.options = s.options.map((o, oi) => {
+        const on = sel === oi;
+        return { text: o.text, mark: on ? (o.c ? '✓' : '✕') : '',
+          bg: on ? (o.c ? '#EAF6F0' : '#FDF2F2') : '#fff', bd: on ? (o.c ? '#0E7A4A' : '#D8232A') : '#E2E5E9',
+          boxBg: on ? (o.c ? '#0E7A4A' : '#D8232A') : '#fff', boxBd: on ? 'transparent' : '#C7CBD1', fg: '#262B31',
+          go: () => this.setA(s.id, { sel: oi }) };
+      });
+      if (sel != null) { const o = s.options[sel]; V.fb = o.fb; V.fbBg = o.c ? '#0E7A4A' : '#D8232A'; V.fbTitle = o.c ? 'RESPUESTA CORRECTA' : 'INTÉNTALO DE NUEVO'; }
+      else V.fb = '';
+    }
+    if (s.t === 'results') {
+      const ex = this.examScreens(), okCount = ex.filter(q => this.correct(q)).length;
+      const pctS = Math.round((okCount / ex.length) * 100), pass = pctS >= 80;
+      V.score = okCount; V.scoreTotal = ex.length; V.scorePct = pctS;
+      V.resBg = pass ? '#0E7A4A' : '#D8232A';
+      V.resTitle = pass ? '¡Evaluación acreditada!' : 'Aún no acreditas';
+      V.resMsg = pass ? 'Alcanzaste el mínimo aprobatorio de 80%. Puedes descargar tu constancia digital de participación.'
+                      : 'Necesitas 80% para acreditar. Repasa los reactivos marcados en rojo, repite la evaluación y vuelve a intentarlo.';
+      V.resCta = pass ? 'VER MI CONSTANCIA' : 'CONTINUAR';
+      V.resItems = ex.map((q, qi) => { const ok = this.correct(q); const gi = f.indexOf(q);
+        return { label: 'Pregunta ' + (qi + 1), mark: ok ? '✓' : '✕', bg: ok ? '#0E7A4A' : '#D8232A', go: () => this.go(gi) }; });
+      V.retry = () => this.setState(st => { const a = { ...st.ans }; ex.forEach(q => delete a[q.id]); return { ans: a, i: f.indexOf(ex[0]) }; });
+      if (pass && !this._ssmaNotified) {
+        this._ssmaNotified = true;
+        try { window.parent.postMessage({ type: 'COURSE_COMPLETED', courseId: 'ssma_mirage' }, '*'); } catch (e) {}
+      }
+    }
+    return V;
+  }
+}
+
+</script>
+</body>
+</html>
