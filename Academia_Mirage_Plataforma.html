@@ -961,6 +961,11 @@ const COURSES = [
     desc:"Diez modulos con los modelos de Drucker, Kotter, Goleman, Hersey y Blanchard, Burns, Bass y Avolio, Sinek, Schein, Lencioni y Collins, aplicados a la operacion diaria.",
     tag:'Liderazgo', icon:'🧭', bg:'rgba(234,0,41,.07)', time:'10 h', mods:10, level:'Avanzado',
     file:'liderazgo_organizacional.html', req:false },
+  { id:'ssma_mirage', name:"Seguridad, Salud y Medio Ambiente",
+    full:"Seguridad, Salud y Medio Ambiente",
+    desc:"Identificacion de riesgos, EPP, respuesta a emergencias, primeros auxilios, normativa STPS y cuidado ambiental en la operacion de MIRAGE.",
+    tag:'Seguridad', icon:'\u{1F9BA}', bg:'rgba(234,0,41,.07)', time:'60-90 min', mods:9, level:'Basico',
+    file:'ssma_mirage/index.html', req:true },
 ];
 
 const IS_FB = () => FB_URL !== 'TU_FIREBASE_URL_AQUI';
@@ -1647,7 +1652,7 @@ function getConstMaps(){
     '5s_seguridad':  '5S y Seguridad',
     'safestart':     'SAFESTART - Excelencia Segura',
     'ciberseguridad': 'Ciberseguridad en el Trabajo',
-  'cultura_legalidad': 'Cultura de la Legalidad', 'liderazgo_organizacional': 'Liderazgo Organizacional', });
+  'cultura_legalidad': 'Cultura de la Legalidad', 'liderazgo_organizacional': 'Liderazgo Organizacional', 'ssma_mirage': 'Seguridad, Salud y Medio Ambiente', });
   return {imgs:imgs, names:names};
 }
 function showConstancia(courseId){
