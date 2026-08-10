@@ -344,7 +344,8 @@ button{font-family:inherit}
               <span style="font:700 10.5px/1 'Archivo',sans-serif;letter-spacing:.14em;color:{{valFg}};background:{{valBg}};border:1px solid {{valBd}};padding:8px 11px;border-radius:5px">{{valLabel}}</span>
             </div>
 
-            <div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:16px;margin-bottom:14px">
+            <sc-if value="{{!vidUrl}}" hint-placeholder-val="{{true}}">
+<div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:16px;margin-bottom:14px">
               <div style="position:relative;border:2px dashed #D8232A;border-radius:9px;background:#111214;aspect-ratio:16/9;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;padding:22px;text-align:center">
                 <div style="width:64px;height:64px;border-radius:50%;background:#D8232A;display:grid;place-items:center;color:#fff;font:700 22px/1 'Archivo',sans-serif">▶</div>
                 <div style="font:700 11px/1 'Archivo',sans-serif;letter-spacing:.16em;color:#D8232A">ESPACIO EDITABLE PARA VIDEO</div>
@@ -356,6 +357,12 @@ button{font-family:inherit}
                 <input placeholder="Fuente / licencia o autorización de uso" style="width:100%;border:1px solid #DDE0E5;border-radius:7px;padding:11px 12px;font:400 13.5px/1.3 'Source Sans 3',sans-serif;background:#FAFBFC">
               </div>
             </div>
+</sc-if>
+<sc-if value="{{vidUrl}}" hint-placeholder-val="{{false}}">
+<div style="background:#fff;border:1px solid #E2E5E9;border-radius:11px;padding:16px;margin-bottom:14px">
+<video src="{{vidUrl}}" controls playsinline preload="metadata" style="width:100%;aspect-ratio:16/9;border-radius:9px;background:#000;display:block"></video>
+</div>
+</sc-if>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:14px">
               <div style="background:#fff;border:1px solid #E2E5E9;border-top:4px solid #D8232A;border-radius:11px;padding:20px">
@@ -633,7 +640,7 @@ class Component extends DCLogic {
           { k: '4', title: 'Actúa', text: 'Corrige lo que puedas, reporta lo que no y avanza de forma segura.' }],
         n: 'Detente, observa, evalúa y actúa. Cuatro pasos que caben en diez segundos y que cambian el resultado del día.' },
       { t: 'video', title: 'Video: un turno cualquiera en el CEDIS', lead: 'Antes de continuar, observa cómo se ve un turno normal en nuestra operación.',
-        vid: { use: 'EXPLICACIÓN', dur: '1:30 – 2:00', frag: 'Apertura de turno, recibo y primeros movimientos de montacargas.', slot: 'Video MIRAGE — recorrido general del CEDIS al inicio del turno', valida: 'pendiente' },
+        vid: { use: 'EXPLICACIÓN', dur: '1:30 – 2:00', frag: 'Apertura de turno, recibo y primeros movimientos de montacargas.', slot: 'Video MIRAGE — recorrido general del CEDIS al inicio del turno', url: 'https://airesmirage09-cmyk.github.io/academia-mirage/Seguridad_y_salud_trabajo_comprimido.mp4', valida: 'pendiente' },
         observar: ['El ritmo real de la operación: cuántas cosas pasan al mismo tiempo.', 'Dónde caminan las personas y por dónde circulan los equipos.', 'Cuántas decisiones de seguridad toma un colaborador en pocos minutos.'],
         pausas: [{ t: '0:20', text: 'Pausa: texto en pantalla "¿Cuántas personas dependen de que hoy nadie se lesione?".' },
           { t: '0:55', text: 'Acercamiento al cruce peatón–montacargas; sobreponer la línea peatonal resaltada.' },
@@ -1297,7 +1304,7 @@ class Component extends DCLogic {
 
     if (s.t === 'video') {
       const a = this.a(s.id), v = s.vid;
-      V.vidUse = v.use; V.vidDur = v.dur; V.vidFrag = v.frag; V.vidSlot = v.slot;
+      V.vidUse = v.use; V.vidDur = v.dur; V.vidFrag = v.frag; V.vidSlot = v.slot; V.vidUrl = v.url;
       V.observar = s.observar; V.pausas = s.pausas; V.vidNota = s.nota;
       const val = v.valida !== 'validado';
       V.valLabel = val ? 'PENDIENTE DE VALIDACIÓN SSMA' : 'VALIDADO POR SSMA';
