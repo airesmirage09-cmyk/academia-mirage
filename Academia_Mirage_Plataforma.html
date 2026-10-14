@@ -530,16 +530,6 @@ tbody tr:hover td{background:#FAFAFA;}
   .footer-main{grid-template-columns:1fr;gap:2rem;}
 }
 
-/* Curso destacado Servicio al Cliente */
-.sc-feature{display:grid;grid-template-columns:1fr 42%;gap:1rem;align-items:center;background:linear-gradient(125deg,#09090c,#22242a);color:#fff;border-left:5px solid #EA0029;border-radius:14px;padding:1.4rem 1.6rem;margin:1.1rem 0 1.5rem;overflow:hidden;min-height:230px}
-.sc-feature-eyebrow{font-size:10px;color:#ff536e;font-weight:800;letter-spacing:1.2px}
-.sc-feature h2{font-size:clamp(22px,3vw,34px);color:#fff;margin:.45rem 0 .2rem;font-weight:900}
-.sc-feature p{font-size:15px;font-weight:700;color:#fff;margin-bottom:.5rem}
-.sc-feature-sub{display:block;font-size:12px;color:#c7c8cb;max-width:460px;line-height:1.65}
-.sc-feature button{border:0;background:#EA0029;color:#fff;border-radius:8px;padding:.75rem 1.3rem;font-weight:800;cursor:pointer;margin-top:1.2rem}
-.sc-feature button:hover{background:#c8001f}
-.sc-feature-art img{width:100%;border-radius:8px;display:block}
-@media(max-width:650px){.sc-feature{grid-template-columns:1fr}.sc-feature-art{display:none}}
 </style>
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="cards.css">
@@ -548,6 +538,43 @@ tbody tr:hover td{background:#FAFAFA;}
   <link rel="stylesheet" href="rh-dashboard.css">
   <link rel="stylesheet" href="knowledge.css">
 <link rel="stylesheet" href="mirage-ai.css">
+  <!-- Ajuste visual compacto del inicio: carrusel y miniaturas de cursos -->
+  <style id="mirage-home-compact-2026">
+    /* Altura estable: el JS del carrusel no puede agrandarlo segun la imagen. */
+    #mh-featured.mh-featured {
+      height: 265px !important;
+      min-height: 0 !important;
+      aspect-ratio: auto !important;
+      max-width: 100%;
+      margin-bottom: 1.3rem;
+    }
+    #mh-featured .mh-feat-slide {
+      background-size: contain;
+      background-position: center;
+    }
+    #mh-featured .mh-feat-body { padding: 1.15rem 1.5rem; max-width: 500px; }
+    #mh-featured .mh-feat-body h2 { font-size: clamp(1.05rem, 2vw, 1.35rem); }
+    #mh-featured .mh-feat-body p { font-size: .78rem; line-height: 1.4; margin-bottom: .65rem; }
+    #mh-featured .mh-feat-btn { padding: .52rem .95rem; font-size: .78rem; }
+    /* Curso disponible: tarjeta mas compacta sin recortar datos ni botones. */
+    #view-home .cc-thumb, #view-catalog .cc-thumb { height: 120px; }
+    #view-home .cc-body, #view-catalog .cc-body { padding: .95rem; }
+    #view-home .cc-name, #view-catalog .cc-name { font-size: 13px; }
+    @media (max-width: 900px) {
+      #mh-featured.mh-featured { height: 225px !important; }
+    }
+    @media (max-width: 600px) {
+      #mh-featured.mh-featured { height: 190px !important; }
+      #mh-featured .mh-feat-body { padding: .75rem .9rem; max-width: 88%; }
+      #mh-featured .mh-feat-body h2 { font-size: 1rem; }
+      #mh-featured .mh-feat-body p { display: none; }
+      #mh-featured .mh-feat-tag { font-size: .58rem; padding: .2rem .5rem; margin-bottom: .35rem; }
+      #mh-featured .mh-feat-btn { padding: .4rem .7rem; font-size: .7rem; }
+      #mh-featured .mh-feat-dots { right: .8rem; bottom: .7rem; }
+      #view-home .cc-thumb, #view-catalog .cc-thumb { height: 135px; }
+    }
+  </style>
+
 </head>
 <body>
 
@@ -666,14 +693,7 @@ tbody tr:hover td{background:#FAFAFA;}
             <div class="sec-txt"><h2>Cursos disponibles</h2><p>Catálogo Academia Mirage</p></div>
           </div>
         </div>
-        <section id="servicio-cliente-feature" class="sc-feature" aria-label="Curso destacado: Servicio al Cliente Mirage">
-  <div class="sc-feature-copy"><span class="sc-feature-eyebrow">NUEVO CURSO · ACADEMIA MIRAGE</span>
-  <h2>Servicio al Cliente</h2><p>Creando experiencias extraordinarias</p>
-  <span class="sc-feature-sub">Desarrolla tu empatía, comunicación y habilidades para transformar cada interacción.</span>
-  <button type="button" onclick="openCourse('servicio_cliente_mirage')">Iniciar curso <span aria-hidden="true">→</span></button></div>
-  <div class="sc-feature-art" aria-hidden="true"><img src="Banner_Servicio_al_Cliente_Mirage.svg" alt=""></div>
-</section>
-<div class="cc-grid" id="d-all-grid"></div>
+        <div class="cc-grid" id="d-all-grid"></div>
 
       <!-- Logros (nuevo) -->
       <div id="mh-achievements" class="mh-ach mh-animate"></div>
